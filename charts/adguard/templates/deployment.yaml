@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "adguard.name" . }}-deployment
+  labels:
+    {{- include "adguard.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "adguard.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "adguard.selectorLabels" . | nindent 8 }}
+    spec:
+      hostNetwork: {{ .Values.hostNetwork }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: TZ
+              value: "UTC"
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+            - name: dhcp-67
+              containerPort: 67
+              protocol: UDP
+            - name: dhcp-68-http
+              containerPort: 68
+              protocol: TCP
+            - name: dhcp-68-udp
+              containerPort: 68
+              protocol: UDP
+            - name: dhcp-853
+              containerPort: 853
+              protocol: TCP
+            - name: dhcp-784-udp
+              containerPort: 784
+              protocol: UDP
+            - name: dhcp-5443-udp
+              containerPort: 5443
+              protocol: UDP
+            - name: dhcp-5443
+              containerPort: 5443
+              protocol: TCP
+          volumeMounts:
+            - name: {{ include "adguard.name" . }}-data
+              mountPath: /opt/adguardhome/work
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+            - name: {{ include "adguard.name" . }}-data
+              mountPath: /opt/adguardhome/conf
+              {{- if .Values.storage.conf.subPath }}
+              subPath: {{ .Values.storage.conf.subPath }}
+              {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: {{ include "adguard.name" . }}-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.data.claimName }}

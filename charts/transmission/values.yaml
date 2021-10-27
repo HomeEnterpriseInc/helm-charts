@@ -1,0 +1,65 @@
+# Default values for transmission.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: linuxserver/transmission
+  pullPolicy: IfNotPresent
+  tag: "3.00-r2-ls92"
+
+hostNetwork: false
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+transmission:
+  username: admin
+  password: admin
+  PUID: "1000"
+  PGID: "1000"
+  TZ: "UTC"
+  webHome: "/combustion-release/"
+
+storage:
+  data:
+    claimName: internal-media-pvc
+    subPath: Media/Downloads
+  config:
+    claimName: internal-data-pvc
+    subPath: transmission
+
+service:
+  type: ClusterIP
+  port: 9091
+
+securityContext: {}
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: transmission.example.com
+      paths:
+        - path: /
+          backend:
+            servicePort: 80
+  tls:
+    - secretName: transmission-letsencrypt-certificate
+      hosts:
+        - transmission.example.com
+
+probe:
+  enable: false
+
+resources: {}
+#  limits:
+#    cpu: "100m"
+#    memory: "128Mi"
+#  requests:
+#    cpu: "100m"
+#    memory: "128Mi"
+

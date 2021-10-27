@@ -1,0 +1,53 @@
+replicaCount: 1
+
+image:
+  repository: adguard/adguardhome
+  pullPolicy: IfNotPresent
+  tag: "v0.107.0-b.5"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+hostNetwork: true
+
+storage:
+  data:
+    claimName: internal-data-pvc
+    subPath: data
+  conf:
+    claimName: internal-data-pvc
+    subPath: conf
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8010
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: dns.example.com
+      paths:
+        - path: /
+  tls:
+    - secretName: dns-letsencrypt-certificate
+      hosts:
+        - dns.example.com
+
+resources: {}
+#  limits:
+#    cpu: "100m"
+#    memory: "128Mi"
+#  requests:
+#    cpu: "50m"
+#    memory: "64Mi"
+
+affinity: {}

@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "opencart.name" . }}-deployment
+  labels:
+    {{- include "opencart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "opencart.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "opencart.selectorLabels" . | nindent 8 }}
+    spec:
+      hostNetwork: {{ .Values.hostNetwork }}
+      restartPolicy: Always
+      containers:
+        - name: {{ include "opencart.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: OPENCART_HOST
+              value: {{ .Values.opencart.host }}
+            - name: OPENCART_DATABASE_HOST
+              value: {{ .Values.opencart.database.host }}
+            - name: OPENCART_DATABASE_USER
+              value: {{ .Values.opencart.database.username }}
+            - name: OPENCART_DATABASE_NAME
+              value: {{ .Values.opencart.database.name }}
+            - name: MYSQL_CLIENT_FLAVOR
+              value: {{ .Values.opencart.database.flavour }}
+            - name: OPENCART_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencart.name" . }}-secret
+                  key: OPENCART_DATABASE_PASSWORD
+            - name: OPENCART_SMTP_HOST
+              value: {{ .Values.opencart.smtp.host }}
+            - name: OPENCART_SMTP_PORT
+              value: {{ .Values.opencart.smtp.port | quote }}
+            - name: OPENCART_SMTP_USER
+              value: {{ .Values.opencart.smtp.username }}
+            - name: OPENCART_HOST
+              value: {{ .Values.opencart.host }}
+            - name: OPENCART_ENABLE_HTTPS
+              value: {{ .Values.opencart.https.enable | quote }}
+            - name: PHP_UPLOAD_MAX_FILESIZE
+              value: {{ .Values.opencart.uploadSize | quote }}
+            - name: PHP_POST_MAX_SIZE
+              value: {{ .Values.opencart.postSize | quote }}
+            - name: OPENCART_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencart.name" . }}-secret
+                  key: OPENCART_SMTP_PASSWORD
+          volumeMounts:
+          - name: data
+            mountPath: /bitnami/opencart
+            {{- if .Values.storage.data.subPath }}
+            subPath: {{ .Values.storage.data.subPath }}
+            {{- end }}
+          - name: data
+            mountPath: /bitnami/opencart_storage/
+            {{- if .Values.storage.storageData.subPath }}
+            subPath: {{ .Values.storage.storageData.subPath }}
+            {{- end }}
+      securityContext:
+        {}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.claimName }}

@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nextcloud.name" . }}-deployment
+  labels:
+    {{- include "nextcloud.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "nextcloud.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "nextcloud.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ include "nextcloud.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: PUID
+            value: "10000"
+          - name: PGID
+            value: "10000"
+          - name: TZ
+            value: "UTC"
+          - name: NEXTCLOUD_DATA_DIR
+            value: /data
+          readinessProbe:
+            httpGet:
+              httpHeaders:
+                - name: Host
+                  value: 127.0.0.1
+              path: /status.php
+              port: 80
+              scheme: HTTP
+            periodSeconds: 60
+          livenessProbe:
+            httpGet:
+              httpHeaders:
+                - name: Host
+                  value: 127.0.0.1
+              path: /status.php
+              port: 80
+              scheme: HTTP
+            periodSeconds: 60
+          startupProbe:
+            httpGet:
+              httpHeaders:
+                - name: Host
+                  value: 127.0.0.1
+              path: /status.php
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 30
+            failureThreshold: 5
+            periodSeconds: 10
+          volumeMounts:
+          - name: data
+            mountPath: /data
+            {{- if .Values.storage.data.subPath }}
+            subPath: {{ .Values.storage.data.subPath }}
+            {{- end }}
+          - name: config
+            mountPath: /var/www/html
+            {{- if .Values.storage.config.subPath }}
+            subPath: {{ .Values.storage.config.subPath }}
+            {{- end }}
+      securityContext:
+      {{- toYaml .Values.securityContext | nindent 8 }}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.data.claimName }}
+      - name: config
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.config.claimName }}

@@ -1,0 +1,75 @@
+# wg-access-server config
+config: {}
+
+web:
+  config:
+    adminUsername: "admin"
+    adminPassword: "admin"
+    privateKey: ""
+  service:
+    type: ClusterIP
+
+wireguard:
+  config:
+    privateKey: ""
+  service:
+    type: ClusterIP
+
+persistence:
+  enabled: false
+  size: 100Mi
+  annotations: {}
+  accessModes:
+    - ReadWriteOnce
+  subPath: ""
+
+hostNetwork: true
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+     - vpn.example.com
+  tls:
+    - secretName: wireguard-letsencrypt-certificate
+      hosts:
+        - vpn.example.com
+
+nameOverride: ""
+
+fullnameOverride: ""
+
+imagePullSecrets: []
+
+image:
+  repository: place1/wg-access-server
+  pullPolicy: IfNotPresent
+  tag: "v0.4.6"
+
+# multiple replicas is only supported when using
+# a supported highly-available storage backend (i.e. postgresql)
+replicas: 1
+
+strategy: {}
+  # the deployment strategy type will default to "Recreate" when persistence is enabled
+  # or "RollingUpdate" when persistence is not enabled.
+  # type: Recreate
+
+resources: {}
+#  limits:
+#    cpu: 100m
+#    memory: 128Mi
+#  requests:
+#    cpu: 100m
+#    memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

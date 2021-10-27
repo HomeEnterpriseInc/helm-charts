@@ -1,0 +1,6 @@
+apiVersion: v2
+name: photoprism
+description: A photo server
+type: application
+version: 0.1
+appVersion: "20211010"

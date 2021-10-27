@@ -1,0 +1,4 @@
+cloudflair:
+  email: example@example.com
+  keyRef: example_com_private_key
+  apiToken: XXXxxxXXxxXXX

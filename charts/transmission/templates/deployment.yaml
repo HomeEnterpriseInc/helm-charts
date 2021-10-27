@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "transmission.name" . }}-deployment
+  labels:
+    {{- include "transmission.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "transmission.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "transmission.selectorLabels" . | nindent 8 }}
+    spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PUID
+              value: {{ .Values.transmission.PUID | quote }}
+            - name: PGID
+              value: {{ .Values.transmission.PGID | quote }}
+            - name: TZ
+              value: {{ .Values.transmission.TZ | quote }}
+            - name: TRANSMISSION_WEB_HOME
+              value: {{ .Values.transmission.webHome | quote }}
+            - name: USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "transmission.name" . }}-secret
+                  key: username
+            - name: PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "transmission.name" . }}-secret
+                  key: password
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              {{- if .Values.storage.config.subPath }}
+              subPath: {{ .Values.storage.config.subPath }}
+              {{- end }}
+            - name: data
+              mountPath: /downloads
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- if .Values.probe.enable }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.config.claimName }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.data.claimName }}

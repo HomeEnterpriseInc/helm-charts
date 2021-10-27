@@ -1,0 +1,84 @@
+# Default values for bitwarden.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: vaultwarden/server
+  pullPolicy: IfNotPresent
+  tag: "1.22.2"
+
+hostNetwork: false
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+bitwarden:
+  mysql:
+    host: mysql-svc.internal.svc.cluster.local
+    database: vaultwarden
+    userName: bitwarden
+    password: bitwarden%40321
+  smtp:
+    host: smtp.gmail.com
+    port: 587
+    ssl: true
+    userName:
+    password:
+    fromEmail:
+  signup:
+    allowed: false
+  domain: https://bw.example.com
+
+storage:
+  data:
+    claimName: internal-data-pvc
+    subPath: bitwarden
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+probe:
+  enable: "true"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: bw.example.com
+      paths:
+        - path: /
+          backend:
+            servicePort: 80
+  tls:
+    - secretName: bitwarden-letsencrypt-certificate
+      hosts:
+        - bw.example.com
+
+resources: {}
+#  limits:
+#    cpu: "1"
+#    memory: "1024Mi"
+#  requests:
+#    cpu: "500m"
+#    memory: "512Mi"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

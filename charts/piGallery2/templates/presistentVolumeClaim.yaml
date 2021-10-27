@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "pi-gallery2.name" . }}-config-pvc
+  labels:
+    {{- include "pi-gallery2.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "5Gi"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "pi-gallery2.name" . }}-data-pvc
+  labels:
+    {{- include "pi-gallery2.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "2Ti"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "pi-gallery2.name" . }}-image-pvc
+  labels:
+    {{- include "pi-gallery2.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "2Ti"

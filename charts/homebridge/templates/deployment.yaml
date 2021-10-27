@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "homebridge.name" . }}-deployment
+  labels:
+    {{- include "homebridge.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "homebridge.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "homebridge.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      hostNetwork: {{ .Values.hostNetwork }}
+      containers:
+        - name: {{ include "homebridge.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: PUID
+            value: {{ .Values.homebridge.puid | quote }}
+          - name: PGID
+            value: {{ .Values.homebridge.pgid | quote }}
+          - name: HOMEBRIDGE_CONFIG_UI
+            value: {{ .Values.homebridge.configUI | quote }}
+          - name: HOMEBRIDGE_CONFIG_UI_PORT
+            value: {{ .Values.service.port | quote }}
+          - name: TZ
+            value: {{ .Values.homebridge.timezone }}
+          ports:
+          - name: http
+            containerPort: {{ .Values.service.port }}
+            protocol: TCP
+          {{- if .Values.probe.enable }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 30
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /homebridge
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+      securityContext:
+        {}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.data.claimName }}

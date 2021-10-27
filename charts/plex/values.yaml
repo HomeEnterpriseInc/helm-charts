@@ -1,0 +1,67 @@
+# Default values for plex.
+
+replicaCount: 1
+revisionHistoryLimit: 5
+image:
+  repository: plexinc/pms-docker
+  tag: 1.23.6.4881-e2e58f321
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+hostNetwork: true
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+plex:
+  claimRef: # https://www.plex.tv/claim/
+  server:
+    timeZone: "UTC"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext:
+  privileged: false
+
+service:
+  type: ClusterIP
+  port: 32400
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: plex.example.com
+      paths:
+      - path: /
+  tls:
+    - secretName: plex-letsencrypt-certificate
+      hosts:
+        - plex.example.com
+
+resources: {}
+#  limits:
+#    cpu: "1"
+#    memory: "2048Mi"
+#  requests:
+#    cpu: "500m"
+#    memory: "1024Mi"
+
+storage:
+  config:
+    claimName: external-data-pvc
+    subPath: plex
+  media:
+    claimName: external-media-pvc
+    subPath: Media
+
+tolerations: []
+
+affinity: {}

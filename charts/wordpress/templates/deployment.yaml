@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wordpress.name" . }}-deployment
+  labels:
+    {{- include "wordpress.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "wordpress.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "wordpress.selectorLabels" . | nindent 8 }}
+    spec:
+      hostNetwork: {{ .Values.hostNetwork }}
+      restartPolicy: Always
+      containers:
+        - name: {{ include "wordpress.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          ports:
+          - containerPort: 80
+            name: http
+          env:
+          - name: WORDPRESS_DB_HOST
+            value: {{ .Values.wordpress.mysql.host }}
+          - name: WORDPRESS_DB_USER
+            value: {{ .Values.wordpress.mysql.username }}
+          - name: WORDPRESS_DB_NAME
+            value: {{ .Values.wordpress.mysql.dbName }}
+          - name: WORDPRESS_TABLE_PREFIX
+            value: {{ .Values.wordpress.mysql.tablePrefix }}
+          - name: WORDPRESS_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "wordpress.name" . }}-secret
+                key: WORDPRESS_DB_PASSWORD
+          readinessProbe:
+            httpGet:
+              path: /
+              scheme: HTTP
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              scheme: HTTP
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /
+              scheme: HTTP
+              port: {{ .Values.service.port }}
+            failureThreshold: 30
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /var/www/html
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+      securityContext:
+        {}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.data.claimName }}

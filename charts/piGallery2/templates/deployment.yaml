@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pi-gallery2.name" . }}-deployment
+  labels:
+    {{- include "pi-gallery2.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "pi-gallery2.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "pi-gallery2.selectorLabels" . | nindent 8 }}
+    spec:
+      hostNetwork: {{ .Values.hostNetwork }}
+      restartPolicy: Always
+      containers:
+        - name: {{ include "pi-gallery2.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: NODE_ENV
+            value: "production"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 30            
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+          - name: data
+            mountPath: /app/data/db
+          - name: config
+            mountPath: /app/data/config
+          - name: image
+            mountPath: /app/data/images
+          - name: tmp-volume
+            mountPath: /app/data/tmp
+      securityContext:
+        {}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: '{{ include "pi-gallery2.name" . }}-data-pvc'
+      - name: config
+        persistentVolumeClaim:
+          claimName: '{{ include "pi-gallery2.name" . }}-config-pvc'
+      - name: image
+        persistentVolumeClaim:
+          claimName: '{{ include "pi-gallery2.name" . }}-image-pvc'
+      - name: tmp-volume
+        emptyDir: {}

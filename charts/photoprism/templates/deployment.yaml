@@ -1,0 +1,114 @@
+{{- $root := . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "photoprism.name" . }}-deployment
+  labels:
+    {{- include "photoprism.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "photoprism.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "photoprism.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ include "photoprism.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: "PHOTOPRISM_ADMIN_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "photoprism.name" . }}-secret
+                  key: photoprism-admin-password
+            - name: "PHOTOPRISM_ORIGINALS_LIMIT"
+              value: {{ .Values.photoprism.uploadLimits | quote }}
+            - name: "PHOTOPRISM_HTTP_COMPRESSION"
+              value: "gzip"
+            - name: "PHOTOPRISM_DEBUG"
+              value: "false"
+            - name: "PHOTOPRISM_PUBLIC"
+              value: "false"
+            - name: "PHOTOPRISM_READONLY"
+              value: "false"
+            - name: "PHOTOPRISM_EXPERIMENTAL"
+              value: "false"
+            - name: "PHOTOPRISM_DISABLE_CHOWN"
+              value: "false"
+            - name: "PHOTOPRISM_DISABLE_WEBDAV"
+              value: "false"
+            - name: "PHOTOPRISM_DISABLE_SETTINGS"
+              value: "false"
+            - name: "PHOTOPRISM_DISABLE_TENSORFLOW"
+              value: "false"
+            - name: "PHOTOPRISM_DISABLE_FACES"
+              value: "false"
+            - name: "PHOTOPRISM_DISABLE_CLASSIFICATION"
+              value: "false"
+            - name: "PHOTOPRISM_DARKTABLE_PRESETS"
+              value: "false"
+            - name: "PHOTOPRISM_DETECT_NSFW"
+              value: "false"
+            - name: "PHOTOPRISM_UPLOAD_NSFW"
+              value: "true"
+            - name: "PHOTOPRISM_DATABASE_DRIVER"
+              value: "mysql"
+            - name: "PHOTOPRISM_DATABASE_SERVER"
+              value: {{ .Values.photoprism.mysql.database | quote }}
+            - name: "PHOTOPRISM_DATABASE_NAME"
+              value: {{ .Values.photoprism.mysql.name | quote }}
+            - name: "PHOTOPRISM_DATABASE_USER"
+              value: {{ .Values.photoprism.mysql.user | quote }}
+            - name: "PHOTOPRISM_DATABASE_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "photoprism.name" . }}-secret
+                  key: photoprism-mysql-password
+            - name: "PHOTOPRISM_SITE_URL"
+              value: {{ .Values.photoprism.url | quote }}
+            - name: "PHOTOPRISM_SITE_TITLE"
+              value: "Home Photos"
+            - name: "PHOTOPRISM_SITE_CAPTION"
+              value: "Photos"
+            - name: "PHOTOPRISM_SITE_DESCRIPTION"
+              value: ""
+            - name: "PHOTOPRISM_SITE_AUTHOR"
+              value: ""
+            - name: "PHOTOPRISM_UID"
+              value: "1000"
+            - name: "PHOTOPRISM_GID"
+              value: "1000"
+            - name: "PHOTOPRISM_UMASK"
+              value: "0000"
+            - name: "HOME"
+              value: "/photoprism"
+          volumeMounts:
+            {{- range .Values.storage.data.mounts }}
+            - name: {{ $root.Values.storage.data.claimName | quote }}
+              mountPath: /photoprism/originals/{{ .name }}
+              {{- if .subPath }}
+              subPath: {{ .subPath }}
+              {{- end }}
+            {{- end }}
+            - name: {{ .Values.storage.cache.claimName | quote }}
+              mountPath: /photoprism/storage
+              subPath: {{ .Values.storage.cache.subPath }}
+      securityContext:
+      {{- toYaml .Values.securityContext | nindent 8 }}
+      volumes:
+        - name: {{ .Values.storage.data.claimName | quote }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.data.claimName | quote }}
+        - name: {{ .Values.storage.cache.claimName | quote }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.cache.claimName | quote }}

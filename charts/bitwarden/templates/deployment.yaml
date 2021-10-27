@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bitwarden.name" . }}-deployment
+  labels:
+    {{- include "bitwarden.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "bitwarden.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "bitwarden.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ include "bitwarden.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: DATABASE_URL
+              value: "mysql://{{ .Values.bitwarden.mysql.userName }}:{{ .Values.bitwarden.mysql.password }}@{{ .Values.bitwarden.mysql.host }}/{{ .Values.bitwarden.mysql.database }}"
+            - name: SMTP_HOST
+              value: {{ .Values.bitwarden.smtp.host | quote }}
+            - name: SMTP_PORT
+              value: {{ .Values.bitwarden.smtp.port | quote }}
+            - name: SMTP_SSL
+              value: {{ .Values.bitwarden.smtp.ssl | quote }}
+            - name: SMTP_USERNAME
+              value: {{ .Values.bitwarden.smtp.userName | quote }}
+            - name: SMTP_PASSWORD
+              value: {{ .Values.bitwarden.smtp.password | quote }}
+            - name: SMTP_FROM
+              value: {{ .Values.bitwarden.smtp.fromEmail | quote }}
+            - name: SIGNUPS_ALLOWED
+              value: {{ .Values.bitwarden.signup.allowed | quote }}
+            - name: DOMAIN
+              value: {{ .Values.bitwarden.domain | quote }}
+          {{- if .Values.probe.enable }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 30
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+      securityContext:
+        {}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.data.claimName }}

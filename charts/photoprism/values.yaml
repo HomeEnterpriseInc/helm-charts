@@ -1,0 +1,65 @@
+# Default values for photoprism.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+hostNetwork: false
+image:
+  repository: photoprism/photoprism
+  pullPolicy: IfNotPresent
+  tag: "20211010"
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+storage:
+  data:
+    claimName: internal-media-pvc
+    mounts:
+      - name: family
+        subPath: photos/family
+      - name: holidays
+        subPath: photos/holiday
+  cache:
+    claimName: internal-data-pvc
+    subPath: photoprism
+
+
+photoprism:
+  adminPassword: QWRtaW5AMTIz
+  uploadLimits: 5000 #in MB
+  url: https://photos.example.com/
+  mysql:
+    database: mysql-svc.internal.svc.cluster.local:3306
+    name: photoprism
+    user: photoprism
+    password: cGhvdG9wcmlzbUAxMjM=
+
+service:
+  type: ClusterIP
+  port: 2342
+
+ingress:
+  enabled: true
+  hosts:
+    - host: photos.example.com
+      paths:
+        - path: /
+  tls:
+    - secretName: photoprism-letsencrypt-certificate
+      hosts:
+        - photos.example.com
+
+resources: {}

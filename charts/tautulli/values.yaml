@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image:
+  repository: tautulli/tautulli
+  pullPolicy: IfNotPresent
+  tag: "v2.7.5"
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8181
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+storage:
+  config:
+    claimName: internal-data-pvc
+    subPath: tautulli
+
+ingress:
+  enabled: true
+  annotations:
+  hosts:
+    - host: tautulli.example.com
+      paths:
+        - path: /
+  tls:
+    - secretName: tautulli-letsencrypt-certificate
+      hosts:
+        - tautulli.example.com
+
+resources: {}
+#  limits:
+#    cpu: 100m
+#    memory: 128Mi
+#  requests:
+#    cpu: 50m
+#    memory: 64Mi

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: opencart
+description: Ecommerce Solution
+type: application
+version: 0.1
+appVersion: "3.0.3-8"

@@ -1,0 +1,55 @@
+replicaCount: 1
+revisionHistoryLimit: 5
+hostNetwork: false
+
+image:
+  repository: jboss/keycloak
+  pullPolicy: IfNotPresent
+  tag: "14.0.0"
+
+podSecurityContext:
+  fsGroup: 33
+
+probe:
+  enable: true
+
+service:
+  type: ClusterIP
+  port: 8080
+
+storage:
+  data:
+    claimName: external-data-pvc
+    subPath: keycloak
+
+keycloak:
+  admin:
+    user: admin
+    password: YWRtaW4=
+  proxyAddressForwarding: true
+  javaOpts: "-server -Xms512m -Xmx768m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true   --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED"
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: sso.example.com
+      paths:
+        - path: /
+  tls:
+    - secretName: keycloak-letsencrypt-certificate
+      hosts:
+        - sso.example.com
+
+resources: {}
+#  requests:
+#    cpu: "250m"
+#    memory: "1024Mi"
+#  limits:
+#    cpu: "500m"
+#    memory: "1536Mi"

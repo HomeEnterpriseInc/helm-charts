@@ -1,0 +1,64 @@
+# Default values for plex.
+
+replicaCount: 1
+revisionHistoryLimit: 5
+image:
+  repository: bpatrik/pi-gallery2
+  tag: 1.9.0-debian-buster
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+hostNetwork: false
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext:
+  privileged: false
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: photos.example.com
+      paths:
+        - path: /
+          backend:
+            serviceName: pi-gallery2-SVC
+            servicePort: 80
+  tls:
+    - secretName: pi-gallery2-letsencrypt-certificate
+      hosts:
+        - photos.example.com
+
+resources: {}
+#  limits:
+#    cpu: "1"
+#    memory: "2048Mi"
+#  requests:
+#    cpu: "500m"
+#    memory: "1024Mi"
+
+storage:
+  configDir: /opt/data/pi-gallery2/config
+  dataDir: /opt/data/pi-gallery2/data
+  imageDir: /mnt/
+  affirmative:
+    nodeName: example
+
+tolerations: []
+
+affinity: {}

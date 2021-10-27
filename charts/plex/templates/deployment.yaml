@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "plex.name" . }}-deployment
+  labels:
+    {{- include "plex.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "plex.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "plex.selectorLabels" . | nindent 8 }}
+    spec:
+      hostNetwork: {{ .Values.hostNetwork }}
+      restartPolicy: Always
+      containers:
+        - name: {{ include "plex.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: TZ
+            value: {{ .Values.plex.server.timeZone | quote }}
+          - name: PLEX_CLAIM
+            valueFrom:
+              secretKeyRef:
+                name: plex-secret
+                key: claim-ref
+          readinessProbe:
+            httpGet:
+              path: /identity
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /identity
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /identity
+              port: {{ .Values.service.port }}
+            failureThreshold: 30            
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+          - name: data
+            mountPath: /movies
+            {{- if .Values.storage.media.subPath }}
+            subPath: {{ .Values.storage.media.subPath }}
+            {{- end }}
+          - name: config
+            mountPath: /config
+            {{- if .Values.storage.config.subPath }}
+            subPath: {{ .Values.storage.config.subPath }}
+            {{- end }}
+          - name: transcode-volume
+            mountPath: /transcode
+      securityContext:
+        {}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.media.claimName }}
+      - name: config
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.config.claimName }}
+      - name: transcode-volume
+        emptyDir: { }

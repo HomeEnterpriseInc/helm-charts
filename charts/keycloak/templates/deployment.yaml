@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "keycloak.name" . }}-deployment
+  labels:
+    {{- include "keycloak.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "keycloak.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "keycloak.selectorLabels" . | nindent 8 }}
+    spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: KEYCLOAK_USER
+            value: {{ .Values.keycloak.admin.user }}
+          - name: PROXY_ADDRESS_FORWARDING
+            value: {{ .Values.keycloak.proxyAddressForwarding | quote }}
+          - name: JAVA_OPTS
+            value: {{ .Values.keycloak.javaOpts | quote }}
+          - name: DB_VENDOR
+            value: h2
+          - name: KEYCLOAK_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: keycloak-secret
+                key: keycloak-password
+          volumeMounts:
+            - name: data
+              mountPath: /opt/jboss/keycloak/standalone/data
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- if .Values.probe.enable }}
+          readinessProbe:
+            httpGet:
+              path: /auth/realms/home
+              port: http
+              scheme: HTTP
+            periodSeconds: 60
+          livenessProbe:
+            httpGet:
+              path: /auth/realms/home
+              port: http
+              scheme: HTTP
+            periodSeconds: 60
+          startupProbe:
+            httpGet:
+              path: /auth/realms/home
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            failureThreshold: 5
+            periodSeconds: 10
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.data.claimName }}

@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "timemachine.name" . }}-deployment
+  labels:
+    {{- include "timemachine.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "timemachine.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "timemachine.selectorLabels" . | nindent 8 }}
+    spec:
+      hostNetwork: {{ .Values.hostNetwork }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: ADVERTISED_HOSTNAME
+            value: {{ .Values.timeMachine.advertisedHostname | quote }}
+          - name: CUSTOM_SMB_CONF
+            value: {{ .Values.timeMachine.custom.smb.conf | quote }}
+          - name: CUSTOM_USER
+            value: {{ .Values.timeMachine.custom.user | quote}}
+          - name: DEBUG_LEVEL
+            value: {{ .Values.timeMachine.custom.debugLevel | quote}}
+          - name: MIMIC_MODEL
+            value: {{ .Values.timeMachine.mimicModel | quote}}
+          - name: EXTERNAL_CONF
+            value: {{ .Values.timeMachine.externalConf | quote}}
+          - name: HIDE_SHARES
+            value: {{ .Values.timeMachine.hideShares | quote}}
+          - name: TM_USERNAME
+            value: {{ .Values.timeMachine.userName | quote}}
+          - name: TM_GROUPNAME
+            value: {{ .Values.timeMachine.groupName | quote}}
+          - name: TM_UID
+            value: {{ .Values.timeMachine.uid | quote}}
+          - name: TM_GID
+            value: {{ .Values.timeMachine.gid | quote}}
+          - name: PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "timemachine.name" . }}-secret
+                key: timemachine-password
+          - name: SET_PERMISSIONS
+            value: {{ .Values.timeMachine.setPermissions | quote}}
+          - name: SHARE_NAME
+            value: {{ .Values.timeMachine.shareName | quote}}
+          - name: SMB_INHERIT_PERMISSIONS
+            value: {{ .Values.timeMachine.smb.inheritPermission | quote}}
+          - name: SMB_NFS_ACES
+            value: {{ .Values.timeMachine.smb.nfsAces | quote}}
+          - name: SMB_METADATA
+            value: {{ .Values.timeMachine.smb.metadata | quote}}
+          - name: SMB_PORT
+            value: {{ .Values.timeMachine.smb.port | quote}}
+          - name: SMB_VFS_OBJECTS
+            value: {{ .Values.timeMachine.smb.vfsPbjects | quote}}
+          - name: VOLUME_SIZE_LIMIT
+            value: {{ .Values.timeMachine.volumeSizeLimit | quote}}
+          - name: WORKGROUP
+            value: {{ .Values.timeMachine.workgroup | quote}}
+          volumeMounts:
+            - name: conf
+              mountPath: /var/lib/samba
+              {{- if .Values.storage.conf.samba.lib.subPath }}
+              subPath: {{ .Values.storage.conf.samba.lib.subPath }}
+              {{- end }}
+            - name: conf
+              mountPath: /var/cache/samba
+              {{- if .Values.storage.conf.samba.cache.subPath }}
+              subPath: {{ .Values.storage.conf.samba.cache.subPath }}
+              {{- end }}
+            - name: conf
+              mountPath: /run/samba
+              {{- if .Values.storage.conf.samba.subPath }}
+              subPath: {{ .Values.storage.conf.samba.subPath }}
+              {{- end }}
+            - name: data
+              mountPath: /opt
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.data.claimName }}
+        - name: conf
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.conf.claimName }}

@@ -1,0 +1,59 @@
+# Default values for wordpress.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+revisionHistoryLimit: 5
+hostNetwork: false
+image:
+  repository: wordpress
+  pullPolicy: IfNotPresent
+  tag: "5.8.0-php8.0-apache"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: blog.example.com
+      paths:
+        - path: /
+  tls:
+    - secretName: wordpress-letsencrypt-certificate
+      hosts:
+        - blog.example.com
+
+wordpress:
+  mysql:
+    host: mysql-svc.internal.svc.cluster.local
+    username: wordpress
+    password: d29yZHByZXNz
+    dbName: wordpress
+    tablePrefix: "wp_"
+
+resources: {}
+#  limits:
+#    cpu: "500m"
+#    memory: "1024Mi"
+#  requests:
+#    cpu: "100m"
+#    memory: "512Mi"
+
+storage:
+  data:
+    claimName: external-data-pvc
+    subPath: wordpress
