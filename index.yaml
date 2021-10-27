@@ -1,0 +1,189 @@
+apiVersion: v1
+entries:
+  adguard:
+  - apiVersion: v2
+    appVersion: v0.107.0-b.5
+    created: "2021-10-27T17:09:36.30650544Z"
+    description: DNS server
+    digest: e0bd8177200346082889e382c40e56e11821654f42c0acdceae2c4c450ba9a47
+    name: adguard
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/adguard-0.1/adguard-0.1.tgz
+    version: "0.1"
+  bitwarden:
+  - apiVersion: v2
+    appVersion: 1.22.2
+    created: "2021-10-27T17:09:36.50964946Z"
+    description: A Helm chart for Kubernetes
+    digest: 57c5c5e34d18bdb7dae7c79b86b644c07136add7189991506715882092b65b0e
+    name: bitwarden
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/bitwarden-0.1/bitwarden-0.1.tgz
+    version: "0.1"
+  cert-manager:
+  - apiVersion: v2
+    appVersion: v1.5.3
+    created: "2021-10-27T17:09:36.700644655Z"
+    description: Cert Manager
+    digest: 92d4ce66fee6e30fad85fd6a75085256dbff277b507ef0a5df24da8a563099a1
+    name: cert-manager
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/cert-manager-1.5.3/cert-manager-1.5.3.tgz
+    version: 1.5.3
+  cloudbeaver:
+  - apiVersion: v2
+    appVersion: 21.1.4
+    created: "2021-10-27T17:09:36.881597797Z"
+    description: DB Client
+    digest: 69aef82158b60d3cf3c4d61380c1bf760b42e13c546db18b19cc63392888f187
+    name: cloudbeaver
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/cloudbeaver-0.1/cloudbeaver-0.1.tgz
+    version: "0.1"
+  homebridge:
+  - apiVersion: v2
+    appVersion: ubuntu
+    created: "2021-10-27T17:09:37.094680065Z"
+    description: A Helm chart for Kubernetes
+    digest: 99974e20b973b10f0bd05afaa53f0671c03b06bdfeae6ab75c40f9066f293e63
+    name: homebridge
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/homebridge-0.1/homebridge-0.1.tgz
+    version: "0.1"
+  keycloak:
+  - apiVersion: v2
+    appVersion: 14.0.0
+    created: "2021-10-27T17:09:37.265684059Z"
+    description: A Helm chart for Kubernetes
+    digest: 5587155e93552dc5dacd3f61458a90cd7e7314fbcba1774cc392365961f4ee0c
+    name: keycloak
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/keycloak-0.1/keycloak-0.1.tgz
+    version: "0.1"
+  mysql:
+  - apiVersion: v2
+    appVersion: 8.0.26
+    created: "2021-10-27T17:09:37.43919204Z"
+    description: MySQL Database Server
+    digest: 27071e061060f1a8a281f704ad77b7ca5f6ccf2b92337a193be938aaeaaa8539
+    name: mysql
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/mysql-0.1/mysql-0.1.tgz
+    version: "0.1"
+  nextcloud:
+  - apiVersion: v2
+    appVersion: 22.0.0-apache
+    created: "2021-10-27T17:09:37.61692497Z"
+    description: file server
+    digest: d065328575f56934d2698c62865aae1127b8613e768a2fe74489edfc03fff97e
+    name: nextcloud
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/nextcloud-0.1/nextcloud-0.1.tgz
+    version: "0.1"
+  opencart:
+  - apiVersion: v2
+    appVersion: 3.0.3-8
+    created: "2021-10-27T17:09:37.795427626Z"
+    description: Ecommerce Solution
+    digest: 0eaac8f4144701bdacb944b1ee84de7498f2bed32ef8da85fe1ab0488702bb6b
+    name: opencart
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/opencart-0.1/opencart-0.1.tgz
+    version: "0.1"
+  photoprism:
+  - apiVersion: v2
+    appVersion: "20211010"
+    created: "2021-10-27T17:09:37.989365624Z"
+    description: A photo server
+    digest: 156cb335caf4fda824d8940aa6de985fa4a826b3599df8566c0926cf89e85773
+    name: photoprism
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/photoprism-0.1/photoprism-0.1.tgz
+    version: "0.1"
+  pi-gallery2:
+  - apiVersion: v2
+    appVersion: 1.9.0-debian-buster
+    created: "2021-10-27T17:09:38.179596691Z"
+    description: A Helm chart for Kubernetes
+    digest: 11592b4efc0ff77fcac3cfe0df1d2b990d3325f773c8b89133695a49436526a3
+    name: pi-gallery2
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/pi-gallery2-0.1/pi-gallery2-0.1.tgz
+    version: "0.1"
+  plex:
+  - apiVersion: v2
+    appVersion: 1.23.5.4862-0f739d462
+    created: "2021-10-27T17:09:38.370557084Z"
+    description: A media streaming server
+    digest: 104c9df0685c1811feabc0dd2b7a64300434401f8935dcf56c6774f19338c14b
+    name: plex
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/plex-0.1/plex-0.1.tgz
+    version: "0.1"
+  tautulli:
+  - apiVersion: v2
+    appVersion: v2.7.5
+    created: "2021-10-27T17:09:38.547810697Z"
+    description: A Helm chart for Kubernetes
+    digest: 6bd1b29e33515061c01bc5af8f88e8867da59ecf00c64c31d7ad791233421585
+    name: tautulli
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/tautulli-0.1/tautulli-0.1.tgz
+    version: "0.1"
+  timemachine:
+  - apiVersion: v2
+    appVersion: smb-20211019
+    created: "2021-10-27T17:09:38.729772574Z"
+    description: A Helm chart for Kubernetes
+    digest: aaeb4508220e506a57949836dacc24268b7307bbc6ee14515a1357e73bdf5b0a
+    name: timemachine
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/timemachine-0.2/timemachine-0.2.tgz
+    version: "0.2"
+  transmission:
+  - apiVersion: v2
+    appVersion: 3.00-r2-ls92
+    created: "2021-10-27T17:09:38.91604822Z"
+    description: A Helm chart for Kubernetes
+    digest: d5f2e0882d7fb19818d6baa873e099cfe7c086fc25d142fecd12791e8f8939cf
+    name: transmission
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/transmission-0.1/transmission-0.1.tgz
+    version: "0.1"
+  wg-access-server:
+  - apiVersion: v2
+    appVersion: "0.1"
+    created: "2021-10-27T17:09:39.11399331Z"
+    description: A Wireguard VPN Access Server
+    digest: e13fd7f1992d4349e39ce145bd0d8b90bfcf9e299b2ef6d553e556a7be252a0c
+    name: wg-access-server
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wg-access-server-0.1/wg-access-server-0.1.tgz
+    version: "0.1"
+  wordpress:
+  - apiVersion: v2
+    appVersion: 5.8.0-php8.0-apache
+    created: "2021-10-27T17:09:39.277939578Z"
+    description: Blog server
+    digest: 89d575adf6d8019e18cd39d7b89f9e1747b4b0308cb67322c5834a7a357618c7
+    name: wordpress
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
+    version: "0.1"
+generated: "2021-10-27T17:09:39.277946378Z"
