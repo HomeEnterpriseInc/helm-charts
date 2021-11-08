@@ -132,6 +132,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/plex-0.1/plex-0.1.tgz
     version: "0.1"
+  postgres:
+  - apiVersion: v2
+    appVersion: "14.0"
+    created: "2021-11-08T13:38:27.139384228Z"
+    description: A Helm chart for Kubernetes
+    digest: cb75e4881f9db38ed7d75bcc2b8f261389422dfb325960cb735a465cff567806
+    name: postgres
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/postgres-0.1.0/postgres-0.1.0.tgz
+    version: 0.1.0
   tautulli:
   - apiVersion: v2
     appVersion: v2.7.5
@@ -186,4 +197,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2021-10-27T17:09:39.277946378Z"
+generated: "2021-11-08T13:38:27.139392128Z"
