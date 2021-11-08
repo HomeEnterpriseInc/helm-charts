@@ -34,8 +34,8 @@ ingress:
 
 restya:
   db:
-    port: postgres-svc
-    host: 5432
+    port: 5432
+    host: postgres-svc
     username: restya
     password: cmVzdHlhQDEyMw==
 

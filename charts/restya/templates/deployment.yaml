@@ -28,7 +28,7 @@ spec:
           - name: POSTGRES_HOST
             value: {{ .Values.restya.db.host }}
           - name: POSTGRES_PORT
-            value: {{ .Values.restya.db.port }}
+            value: {{ .Values.restya.db.port | quote }}
           - name: RESTYA_DB_USERNAME
             value: {{ .Values.restya.db.username }}
           - name: RESTYA_DB_USERPASS
