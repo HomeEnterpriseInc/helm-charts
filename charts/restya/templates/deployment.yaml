@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "restya.name" . }}-deployment
+  labels:
+    {{- include "restya.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "restya.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "restya.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ include "restya.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: POSTGRES_HOST
+            value: {{ .Values.restya.db.host }}
+          - name: POSTGRES_PORT
+            value: {{ .Values.restya.db.port }}
+          - name: RESTYA_DB_USERNAME
+            value: {{ .Values.restya.db.username }}
+          - name: RESTYA_DB_USERPASS
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "restya.name" . }}-secret
+                key: restya-password
+          volumeMounts:
+          - name: data
+            mountPath: /var/lib/nginx/html/media
+            {{- if .Values.storage.media.subPath }}
+            subPath: {{ .Values.storage.media.subPath }}
+            {{- end }}
+          - name: data
+            mountPath: /var/lib/nginx/html/client/apps
+            {{- if .Values.storage.apps.subPath }}
+            subPath: {{ .Values.storage.apps.subPath }}
+            {{- end }}
+      securityContext:
+      {{- toYaml .Values.securityContext | nindent 8 }}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.media.claimName }}

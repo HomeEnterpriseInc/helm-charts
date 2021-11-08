@@ -1,0 +1,50 @@
+replicaCount: 1
+hostNetwork: false
+image:
+  repository: restyaplatform/restyaboard
+  pullPolicy: IfNotPresent
+  tag: "v1.7"
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+storage:
+  apps:
+    subPath: restya/apps
+  media:
+    claimName: internal-data-pvc
+    subPath: restya/media
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  hosts:
+    - host: pm.example.com
+      paths:
+        - path: /
+  tls:
+    - secretName: restya-letsencrypt-certificate
+      hosts:
+        - pm.example.com
+
+restya:
+  db:
+    port: postgres-svc
+    host: 5432
+    username: restya
+    password: cmVzdHlhQDEyMw==
+
+
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
