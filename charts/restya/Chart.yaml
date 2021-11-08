@@ -2,5 +2,5 @@ apiVersion: v2
 name: restya
 description: project management tool
 type: application
-version: "0.2"
+version: "0.3"
 appVersion: "v1.7"

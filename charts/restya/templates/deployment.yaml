@@ -36,6 +36,13 @@ spec:
               secretKeyRef:
                 name: {{ include "restya.name" . }}-secret
                 key: restya-password
+          - name: POSTGRES_ADMIN_USER
+            value: {{ .Values.restya.db.admin.username }}
+          - name: POSTGRES_ADMIN_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: { { include "restya.name" . } }-secret
+                  key: restya-admin-password
           volumeMounts:
           - name: data
             mountPath: /var/lib/nginx/html/media
