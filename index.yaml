@@ -143,6 +143,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/postgres-0.1.0/postgres-0.1.0.tgz
     version: 0.1.0
+  restya:
+  - apiVersion: v2
+    appVersion: v1.7
+    created: "2021-11-08T16:25:06.694772562Z"
+    description: project management tool
+    digest: bc6460891c2df8019fa97f230bfcb112e31f3af48c8ae8f2f3de80c8e0c9558a
+    name: restya
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/restya-0.1/restya-0.1.tgz
+    version: "0.1"
   tautulli:
   - apiVersion: v2
     appVersion: v2.7.5
@@ -197,4 +208,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2021-11-08T13:38:27.139392128Z"
+generated: "2021-11-08T16:25:06.694780662Z"
