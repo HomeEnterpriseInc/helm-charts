@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "postgres.name" . }}-statefuleset
+  labels:
+    {{- include "postgres.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "postgres.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "postgres.name" . }}-svc
+  template:
+    metadata:
+      labels:
+        {{- include "postgres.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "postgres.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: postgres-root-password
+          - name: POSTGRES_USER
+            value: {{ .Values.postgres.user }}
+          ports:
+          - name: postgres
+            containerPort: {{ .Values.service.port }}
+          volumeMounts:
+          - name: data
+            mountPath: /var/lib/postgresql/data
+            {{- if .Values.storage.data.subPath }}
+            subPath: {{ .Values.storage.data.subPath }}
+            {{- end }}
+      securityContext:
+      {{- toYaml .Values.securityContext | nindent 8 }}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.data.claimName }}
