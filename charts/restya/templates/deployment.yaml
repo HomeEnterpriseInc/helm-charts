@@ -49,11 +49,6 @@ spec:
             {{- if .Values.storage.media.subPath }}
             subPath: {{ .Values.storage.media.subPath }}
             {{- end }}
-          - name: data
-            mountPath: /var/lib/nginx/html/client/apps
-            {{- if .Values.storage.apps.subPath }}
-            subPath: {{ .Values.storage.apps.subPath }}
-            {{- end }}
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:

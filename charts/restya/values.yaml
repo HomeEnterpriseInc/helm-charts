@@ -11,8 +11,6 @@ certManager:
     issuerRef: letsencrypt
 
 storage:
-  apps:
-    subPath: restya/apps
   media:
     claimName: internal-data-pvc
     subPath: restya/media
