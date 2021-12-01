@@ -1,0 +1,43 @@
+# Default values for wikijs.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: requarks/wiki
+  pullPolicy: IfNotPresent
+  tag: "canary-2.5.243"
+
+service:
+  type: ClusterIP
+  port: 3000
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+ingress:
+  enabled: true
+  hosts:
+    - host: wiki.example.com
+      paths:
+        - path: /
+  tls:
+    - secretName: wikijs-letsencrypt-certificate
+      hosts:
+        - wiki.example.com
+
+storage:
+  data:
+    claimName: internal-media-pvc
+    subPath: wikijs
+
+wikijs:
+  db:
+    host: postgres-svc
+    port: 5432
+    username: wikijs
+    password: d2lraWpzQDMyMQ==
+    name: wikijs

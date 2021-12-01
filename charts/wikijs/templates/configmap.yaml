@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "wikijs.name" . }}-config
+  labels:
+    {{- include "wikijs.labels" . | nindent 4 }}
+data:
+  config.yaml: |-
+    port: {{ .Values.service.port }}
+    db:
+      type: postgres
+      host: {{ .Values.wikijs.db.host }}
+      port: {{ .Values.wikijs.db.port }}
+      user: {{ .Values.wikijs.db.username }}
+      db: {{ .Values.wikijs.db.name }}
+      ssl: false
+      sslOptions:
+        auto: true
+      schema: public
+    ssl:
+      enabled: false
+    pool:
+      # min: 2
+      # max: 10
+    bindIP: 0.0.0.0
+    logLevel: info
+    offline: false
+    ha: false
+    dataPath: ./data
