@@ -32,7 +32,8 @@ spec:
                 key: wikijs-password
           volumeMounts:
           - name: config
-            mountPath: /wiki/
+            mountPath: /wiki/config.yaml
+            subPath: config.yaml
           - name: data
             mountPath: /wiki/data
             {{- if .Values.storage.data.subPath }}
