@@ -237,6 +237,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wg-access-server-0.1/wg-access-server-0.1.tgz
     version: "0.1"
+  wikijs:
+  - apiVersion: v2
+    appVersion: canary-2.5.243
+    created: "2021-12-01T16:59:53.485739395Z"
+    description: Wiki.js helm chart
+    digest: 45ce4bea229bc66c12fff36c8d4a96d6dd82f5d38dba41f13eb6e5c613e4f3c5
+    name: wikijs
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wikijs-0.1.0/wikijs-0.1.0.tgz
+    version: 0.1.0
   wordpress:
   - apiVersion: v2
     appVersion: 5.8.0-php8.0-apache
@@ -248,4 +259,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2021-11-09T16:26:33.533932595Z"
+generated: "2021-12-01T16:59:53.485756995Z"
