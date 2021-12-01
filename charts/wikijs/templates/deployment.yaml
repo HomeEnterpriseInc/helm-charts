@@ -33,7 +33,6 @@ spec:
           volumeMounts:
           - name: config
             mountPath: /wiki/
-            subPath: config.yaml
           - name: data
             mountPath: /wiki/data
             {{- if .Values.storage.data.subPath }}
