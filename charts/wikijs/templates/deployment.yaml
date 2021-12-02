@@ -33,13 +33,13 @@ spec:
           - name: DB_TYPE
             value: postgres
           - name: DB_HOST
-            value: {{ .Vaues.wikijs.db.host }}
+            value: {{ .Values.wikijs.db.host }}
           - name: DB_PORT
-            value: {{ .Vaues.wikijs.db.port | quote }}
+            value: {{ .Values.wikijs.db.port | quote }}
           - name: DB_USER
-            value: {{ .Vaues.wikijs.db.username }}
+            value: {{ .Values.wikijs.db.username }}
           - name: DB_NAME
-            value: {{ .Vaues.wikijs.db.name }}
+            value: {{ .Values.wikijs.db.name }}
           volumeMounts:
           - name: data
             mountPath: /wiki/data
