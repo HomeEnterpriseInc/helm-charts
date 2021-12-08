@@ -1,0 +1,56 @@
+replicaCount: 1
+hostNetwork: false
+
+image:
+  repository: openproject/community
+  pullPolicy: IfNotPresent
+  tag: "12.0.2"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.org/client-max-body-size: "50m"
+  hosts:
+    - host: pm.example.com
+      paths:
+        - path: /
+  tls:
+    - secretName: openproject-letsencrypt-certificate
+      hosts:
+        - pm.example.com
+
+storage:
+  data:
+    claimName: internal-data-pvc
+    subPath: openproject
+
+resources: {}
+
+environment:
+ # - name: RAILS_CACHE_STORE
+ #   value: "memcache"
+ # - name: OPENPROJECT_CACHE__MEMCACHE__SERVER
+ #   value: "openproject-memcached:11211"
+  - name: OPENPROJECT_RAILS__RELATIVE__URL__ROOT
+    value: ""
+  - name: DATABASE_URL
+    value: "postgres://user:password@postgres-svc/openproject?pool=20&encoding=unicode&reconnect=true"
+  - name: RAILS_MIN_THREADS
+    value: "4"
+  - name: RAILS_MAX_THREADS
+    value: "16"
+  - name: USE_PUMA
+    value: "true"
+  # set to true to enable the email receiving feature. See ./docker/cron for more options
+  - name: IMAP_ENABLED
+    value: "false"

@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openproject.name" . }}-deployment
+  labels:
+    {{- include "openproject.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "openproject.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "openproject.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      initContainers:
+        - name: {{ include "openproject.name" . }}-seeder
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ['./docker/prod/seeder']
+          env:
+            {{- toYaml .Values.environment | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/openproject/assets
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+      containers:
+        - name: {{ include "openproject.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ './docker/prod/proxy' ]
+          ports:
+          - containerPort: {{ .Values.service.port }}
+          env:
+            {{- toYaml .Values.environment | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/openproject/assets
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+        #- name: {{ include "openproject.name" . }}-memcached
+        #  image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        #  imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ include "openproject.name" . }}-web
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ['./docker/prod/web']
+          env:
+            {{- toYaml .Values.environment | nindent 12 }}
+          volumeMounts:
+          - name: data
+            mountPath: /var/openproject/assets
+            {{- if .Values.storage.data.subPath }}
+            subPath: {{ .Values.storage.data.subPath }}
+            {{- end }}
+        - name: {{ include "openproject.name" . }}-worker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ['./docker/prod/worker']
+          env:
+            {{- toYaml .Values.environment | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/openproject/assets
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+        - name: {{ include "openproject.name" . }}-cron
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ['./docker/prod/cron']
+          env:
+            {{- toYaml .Values.environment | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/openproject/assets
+              {{- if .Values.storage.data.subPath }}
+              subPath: {{ .Values.storage.data.subPath }}
+              {{- end }}
+      securityContext:
+      {{- toYaml .Values.securityContext | nindent 8 }}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.data.claimName }}
