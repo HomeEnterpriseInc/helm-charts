@@ -99,6 +99,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/opencart-0.1/opencart-0.1.tgz
     version: "0.1"
+  openproject:
+  - apiVersion: v2
+    appVersion: 12.0.2
+    created: "2021-12-08T10:08:08.844990738Z"
+    description: Project Management Tool
+    digest: 93722e6b447fad3d2d59d1afab37379cd9bc94a118486fa427a8634960e49893
+    name: openproject
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/openproject-0.1.0/openproject-0.1.0.tgz
+    version: 0.1.0
   photoprism:
   - apiVersion: v2
     appVersion: "20211010"
@@ -299,4 +310,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2021-12-02T14:39:06.332869082Z"
+generated: "2021-12-08T10:08:08.84501574Z"
