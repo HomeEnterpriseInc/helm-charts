@@ -56,17 +56,13 @@ spec:
           volumeMounts:
             - name: {{ include "adguard.name" . }}-data
               mountPath: /opt/adguardhome/work
-              {{- if .Values.storage.data.subPath }}
-              subPath: {{ .Values.storage.data.subPath }}
-              {{- end }}
+              subPath: data
             - name: {{ include "adguard.name" . }}-data
               mountPath: /opt/adguardhome/conf
-              {{- if .Values.storage.conf.subPath }}
-              subPath: {{ .Values.storage.conf.subPath }}
-              {{- end }}
+              subPath: conf
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         - name: {{ include "adguard.name" . }}-data
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.data.claimName }}
+            claimName: {{ include "adguard.name" . }}-pvc

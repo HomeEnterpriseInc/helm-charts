@@ -12,12 +12,12 @@ fullnameOverride: ""
 hostNetwork: true
 
 storage:
-  data:
-    claimName: internal-data-pvc
-    subPath: data
-  conf:
-    claimName: internal-data-pvc
-    subPath: conf
+  storageClassName: local-path
+  capacity: 5G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/adguard"
+    nodeAffinityHostName: "example-node"
 
 certManager:
   enabled: true
