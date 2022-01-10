@@ -69,12 +69,10 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data
-              {{- if .Values.storage.data.subPath }}
-              subPath: {{ .Values.storage.data.subPath }}
-              {{- end }}
+              subPath: bitwarden
       securityContext:
         {}
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.data.claimName }}
+            claimName: {{ include "bitwarden.name" . }}-pvc

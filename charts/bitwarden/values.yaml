@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: vaultwarden/server
   pullPolicy: IfNotPresent
-  tag: "1.22.2"
+  tag: "1.23.1"
 
 hostNetwork: false
 
@@ -34,9 +34,12 @@ bitwarden:
   domain: https://bw.example.com
 
 storage:
-  data:
-    claimName: internal-data-pvc
-    subPath: bitwarden
+  storageClassName: local-path
+  capacity: 5G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/bitwarden"
+    nodeAffinityHostName: "example-node"
 
 imagePullSecrets: []
 nameOverride: ""
