@@ -43,12 +43,10 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /wiki/data
-            {{- if .Values.storage.data.subPath }}
-            subPath: {{ .Values.storage.data.subPath }}
-            {{- end }}
+            subPath: wikijs
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: {{ .Values.storage.data.claimName }}
+          claimName: {{ include "wikijs.name" . }}-pvc

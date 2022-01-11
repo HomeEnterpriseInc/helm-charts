@@ -30,9 +30,12 @@ ingress:
         - wiki.example.com
 
 storage:
-  data:
-    claimName: internal-media-pvc
-    subPath: wikijs
+  storageClassName: local-path
+  capacity: 15G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/wikijs"
+    nodeAffinityHostName: "example-node"
 
 wikijs:
   db:
