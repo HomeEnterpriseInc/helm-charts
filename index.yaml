@@ -371,6 +371,16 @@ entries:
   wikijs:
   - apiVersion: v2
     appVersion: canary-2.5.243
+    created: "2022-01-11T16:06:26.972167674Z"
+    description: Wiki.js helm chart
+    digest: c1abc6b1f7948319513049122d355acb972f5760bb0b365c73db52480583f335
+    name: wikijs
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wikijs-0.7.0/wikijs-0.7.0.tgz
+    version: 0.7.0
+  - apiVersion: v2
+    appVersion: canary-2.5.243
     created: "2022-01-11T16:03:06.888525685Z"
     description: Wiki.js helm chart
     digest: 55d89621c4ef6bd3f57ae6bf4fc22087042cff47a0ea50cf88cac283fbdc271e
@@ -440,4 +450,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-11T16:03:06.888606089Z"
+generated: "2022-01-11T16:06:26.972242273Z"
