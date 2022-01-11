@@ -7,14 +7,9 @@ hostNetwork: false
 image:
   repository: dbeaver/cloudbeaver
   pullPolicy: IfNotPresent
-  tag: "21.1.4"
+  tag: "21.3.0"
 
 securityContext: {}
-
-storage:
-  data:
-    claimName: internal-data-pvc
-    subPath: cloudbeaver
 
 certManager:
   enabled: true
@@ -35,6 +30,14 @@ ingress:
     - secretName: cloudbeaver-letsencrypt-certificate
       hosts:
         - cloudbeaver.example.com
+
+storage:
+  storageClassName: local-path
+  capacity: 5G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/cloudbeaver"
+    nodeAffinityHostName: "example-node"
 
 resources: {}
 #  requests:

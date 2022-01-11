@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "cloudbeaver.name" . }}-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if .Values.storage.persistenentVolume.create }}
+  volumeName: {{ include "cloudbeaver.name" . }}-pv
+  {{ end }}
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.capacity | quote }}
