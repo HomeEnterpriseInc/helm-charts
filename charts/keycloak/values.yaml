@@ -18,9 +18,12 @@ service:
   port: 8080
 
 storage:
-  data:
-    claimName: external-data-pvc
-    subPath: keycloak
+  storageClassName: local-path
+  capacity: 5G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/bitwarden"
+    nodeAffinityHostName: "example-node"
 
 keycloak:
   admin:
