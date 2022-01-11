@@ -11,9 +11,12 @@ certManager:
     issuerRef: letsencrypt
 
 storage:
-  media:
-    claimName: internal-data-pvc
-    subPath: restya/media
+  storageClassName: local-path
+  capacity: 15G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/restya"
+    nodeAffinityHostName: "example-node"
 
 service:
   type: ClusterIP

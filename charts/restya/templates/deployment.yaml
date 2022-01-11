@@ -46,12 +46,10 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /var/lib/nginx/html/media
-            {{- if .Values.storage.media.subPath }}
-            subPath: {{ .Values.storage.media.subPath }}
-            {{- end }}
+            subPath: restya
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: {{ .Values.storage.media.claimName }}
+          claimName: {{ include "restya.name" . }}-pvc
