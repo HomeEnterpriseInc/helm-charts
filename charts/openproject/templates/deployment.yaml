@@ -82,12 +82,10 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/openproject/assets
-              {{- if .Values.storage.data.subPath }}
-              subPath: {{ .Values.storage.data.subPath }}
-              {{- end }}
+              subPath: openproject
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: {{ .Values.storage.data.claimName }}
+          claimName: {{ include "openproject.name" . }}-pvc
