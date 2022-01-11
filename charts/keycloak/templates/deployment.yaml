@@ -41,7 +41,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /opt/jboss/keycloak/standalone/data
-              subPath: homebridge
+              subPath: keycloak
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
