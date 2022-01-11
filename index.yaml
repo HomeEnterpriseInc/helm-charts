@@ -318,6 +318,16 @@ entries:
   tautulli:
   - apiVersion: v2
     appVersion: v2.7.5
+    created: "2022-01-11T15:53:43.314533573Z"
+    description: A Helm chart for Kubernetes
+    digest: ff22c71e4e3c4bb65d7d050b89b4dfc60d79c7c6c10519ffbf0d458817139203
+    name: tautulli
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/tautulli-0.2/tautulli-0.2.tgz
+    version: "0.2"
+  - apiVersion: v2
+    appVersion: v2.7.5
     created: "2021-10-27T17:09:38.547810697Z"
     description: A Helm chart for Kubernetes
     digest: 6bd1b29e33515061c01bc5af8f88e8867da59ecf00c64c31d7ad791233421585
@@ -420,4 +430,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-11T15:43:42.762288454Z"
+generated: "2022-01-11T15:53:43.314583674Z"
