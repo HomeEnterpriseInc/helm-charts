@@ -10,15 +10,18 @@ image:
   repository: mysql
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "8.0.26"
+  tag: "8.0.27"
 
 mysql:
   rootPassword: dG9vcg==
 
 storage:
-  data:
-    claimName: internal-media-pvc
-    subPath: mysql
+  storageClassName: local-path
+  capacity: 15G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/mysql"
+    nodeAffinityHostName: "example-node"
 
 securityContext: {}
 
