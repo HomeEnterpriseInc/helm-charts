@@ -17,9 +17,12 @@ certManager:
     issuerRef: letsencrypt
 
 storage:
-  config:
-    claimName: internal-data-pvc
-    subPath: tautulli
+  storageClassName: local-path
+  capacity: 1G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/tautulli"
+    nodeAffinityHostName: "example-node"
 
 ingress:
   enabled: true
