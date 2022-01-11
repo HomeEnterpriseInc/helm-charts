@@ -28,9 +28,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/openproject/assets
-              {{- if .Values.storage.data.subPath }}
-              subPath: {{ .Values.storage.data.subPath }}
-              {{- end }}
+              subPath: openproject
       containers:
         - name: {{ include "openproject.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -43,9 +41,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/openproject/assets
-              {{- if .Values.storage.data.subPath }}
-              subPath: {{ .Values.storage.data.subPath }}
-              {{- end }}
+              subPath: openproject
         #- name: {{ include "openproject.name" . }}-memcached
         #  image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         #  imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -58,9 +54,7 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /var/openproject/assets
-            {{- if .Values.storage.data.subPath }}
-            subPath: {{ .Values.storage.data.subPath }}
-            {{- end }}
+            subPath: openproject
         - name: {{ include "openproject.name" . }}-worker
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -70,9 +64,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/openproject/assets
-              {{- if .Values.storage.data.subPath }}
-              subPath: {{ .Values.storage.data.subPath }}
-              {{- end }}
+              subPath: openproject
         - name: {{ include "openproject.name" . }}-cron
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
