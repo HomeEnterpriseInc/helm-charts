@@ -172,6 +172,16 @@ entries:
   openproject:
   - apiVersion: v2
     appVersion: 12.0.2
+    created: "2022-01-11T15:26:27.427161497Z"
+    description: Project Management Tool
+    digest: ec2db6dc72b2c033ef84247eb1c12a8e2fb20d97face2f51608c2821e62d934a
+    name: openproject
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/openproject-0.2.0/openproject-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 12.0.2
     created: "2021-12-08T10:08:08.844990738Z"
     description: Project Management Tool
     digest: 93722e6b447fad3d2d59d1afab37379cd9bc94a118486fa427a8634960e49893
@@ -390,4 +400,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-11T11:07:27.766678161Z"
+generated: "2022-01-11T15:26:27.427412499Z"
