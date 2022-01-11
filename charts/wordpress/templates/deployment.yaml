@@ -69,12 +69,10 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/www/html
-              {{- if .Values.storage.data.subPath }}
-              subPath: {{ .Values.storage.data.subPath }}
-              {{- end }}
+              subPath: wordpress
       securityContext:
         {}
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.data.claimName }}
+            claimName: {{ include "wordpress.name" . }}-pvc

@@ -54,6 +54,9 @@ resources: {}
 #    memory: "512Mi"
 
 storage:
-  data:
-    claimName: external-data-pvc
-    subPath: wordpress
+  storageClassName: local-path
+  capacity: 15G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/wordpress"
+    nodeAffinityHostName: "example-node"
