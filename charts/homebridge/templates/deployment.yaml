@@ -66,12 +66,10 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /homebridge
-              {{- if .Values.storage.data.subPath }}
-              subPath: {{ .Values.storage.data.subPath }}
-              {{- end }}
+              subPath: homebridge
       securityContext:
         {}
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.data.claimName }}
+            claimName: {{ include "homebridge.name" . }}-pvc

@@ -9,7 +9,7 @@ hostNetwork: true
 image:
   repository: oznu/homebridge
   pullPolicy: IfNotPresent
-  tag: "ubuntu"
+  tag: "2021-12-19-ubuntu"
 
 probe:
   enable: "true"
@@ -19,9 +19,12 @@ service:
   port: 8581
 
 storage:
-  data:
-    claimName: internal-data-pvc
-    subPath: homebridge
+  storageClassName: local-path
+  capacity: 5G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/homebridge"
+    nodeAffinityHostName: "example-node"
 
 homebridge:
   puid: "1000"
