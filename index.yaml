@@ -389,6 +389,16 @@ entries:
   timemachine:
   - apiVersion: v2
     appVersion: smb-20211019
+    created: "2022-01-12T21:28:45.411816995Z"
+    description: A Helm chart for Kubernetes
+    digest: 19778c6ffce3a0d9f3f8dbf19834ebb70f72c81def7bb34d2fc34bf7d53e4179
+    name: timemachine
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/timemachine-0.4/timemachine-0.4.tgz
+    version: "0.4"
+  - apiVersion: v2
+    appVersion: smb-20211019
     created: "2022-01-12T21:15:33.755303237Z"
     description: A Helm chart for Kubernetes
     digest: 47311bfbc07a1130b007f64a7189aeaa73179ba91ca2d2b94e315bc527e00ae9
@@ -520,4 +530,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-12T21:15:33.755372936Z"
+generated: "2022-01-12T21:28:45.412080098Z"
