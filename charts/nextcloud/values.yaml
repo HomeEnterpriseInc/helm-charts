@@ -34,6 +34,7 @@ storage:
       localPath: "/opt/data/plex/conf"
       nodeAffinityHostName: "example-node"
   data:
+    useConfStorage: false
     storageClassName: local-path
     capacity: 15G
     persistenentVolume:

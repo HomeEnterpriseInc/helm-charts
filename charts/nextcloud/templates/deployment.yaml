@@ -63,18 +63,26 @@ spec:
             failureThreshold: 5
             periodSeconds: 10
           volumeMounts:
+          {{- if .Values.storage.data.useConfStorage }}
+          - name: config
+            mountPath: /data
+            subPath: data
+          {{ else }}
           - name: data
             mountPath: /data
             subPath: data
+          {{ end }}
           - name: config
             mountPath: /var/www/html
             subPath: conf
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
+      {{- if .Values.storage.data.useConfStorage }}
       - name: data
         persistentVolumeClaim:
           claimName: {{ include "nextcloud.name" . }}-data-pvc
+      {{ end }}
       - name: config
         persistentVolumeClaim:
           claimName: {{ include "nextcloud.name" . }}-config-pvc

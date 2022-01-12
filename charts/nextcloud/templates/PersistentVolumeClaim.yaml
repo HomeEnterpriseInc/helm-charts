@@ -13,6 +13,7 @@ spec:
     requests:
       storage: {{ .Values.storage.config.capacity | quote }}
 ---
+{{- if .Values.storage.data.useConfStorage }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -27,3 +28,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.storage.data.capacity | quote }}
+{{ end }}
