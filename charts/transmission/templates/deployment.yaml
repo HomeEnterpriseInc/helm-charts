@@ -50,8 +50,8 @@ spec:
               mountPath: /config
               subPath: transmission
             - name: data
-              mountPath: /Media
-              subPath: downloads
+              mountPath: /downloads
+              subPath: Media
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
