@@ -150,6 +150,16 @@ entries:
   nextcloud:
   - apiVersion: v2
     appVersion: 22.0.0-apache
+    created: "2022-01-12T17:48:47.506324957Z"
+    description: file server
+    digest: ac4f72c87204ae8833cc224858bd8a033334204da6851d144096703f9536a022
+    name: nextcloud
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/nextcloud-0.4/nextcloud-0.4.tgz
+    version: "0.4"
+  - apiVersion: v2
+    appVersion: 22.0.0-apache
     created: "2022-01-12T17:41:27.983862768Z"
     description: file server
     digest: 5c89305c892daaa5f9d8185a9efb15aad9f0f32952df1aefaa6da31bee7ddb18
@@ -500,4 +510,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-12T17:41:27.983924269Z"
+generated: "2022-01-12T17:48:47.506401358Z"
