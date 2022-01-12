@@ -225,6 +225,16 @@ entries:
   plex:
   - apiVersion: v2
     appVersion: 1.23.5.4862-0f739d462
+    created: "2022-01-12T16:32:09.003832431Z"
+    description: A media streaming server
+    digest: 42f82923fa4bac0ef2521f8dcf6da7bbb348fd94feb0d3386e6b7da9819a01d3
+    name: plex
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/plex-0.2/plex-0.2.tgz
+    version: "0.2"
+  - apiVersion: v2
+    appVersion: 1.23.5.4862-0f739d462
     created: "2021-10-27T17:09:38.370557084Z"
     description: A media streaming server
     digest: 104c9df0685c1811feabc0dd2b7a64300434401f8935dcf56c6774f19338c14b
@@ -460,4 +470,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-11T16:35:30.792536985Z"
+generated: "2022-01-12T16:32:09.003902833Z"
