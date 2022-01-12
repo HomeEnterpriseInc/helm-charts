@@ -1,0 +1,51 @@
+{{- if .Values.storage.config.persistenentVolume.create }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "nextcloud.name" . }}-config-pv
+spec:
+  volumeMode: Filesystem
+  capacity:
+    storage: {{ .Values.storage.config.capacity | quote }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.storage.config.storageClassName }}
+  local:
+    fsType: ""
+    path: {{ .Values.storage.config.persistenentVolume.localPath }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - {{ .Values.storage.config.persistenentVolume.nodeAffinityHostName }}
+{{- end }}
+---
+{{- if .Values.storage.data.persistenentVolume.create }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "nextcloud.name" . }}-data-pv
+spec:
+  volumeMode: Filesystem
+  capacity:
+    storage: {{ .Values.storage.data.capacity | quote }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.storage.data.storageClassName }}
+  local:
+    fsType: ""
+    path: {{ .Values.storage.data.persistenentVolume.localPath }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - {{ .Values.storage.data.persistenentVolume.nodeAffinityHostName }}
+  {{- end }}

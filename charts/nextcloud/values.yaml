@@ -27,11 +27,19 @@ securityContext:
 
 storage:
   config:
-    claimName: internal-data-pvc
-    subPath: nextcloud
+    storageClassName: local-path
+    capacity: 1G
+    persistenentVolume:
+      create: false
+      localPath: "/opt/data/plex/conf"
+      nodeAffinityHostName: "example-node"
   data:
-    claimName: internal-media-pvc
-    subPath: FilesCloudDrive
+    storageClassName: local-path
+    capacity: 15G
+    persistenentVolume:
+      create: false
+      localPath: "/opt/data/plex/media"
+      nodeAffinityHostName: "example-node"
 
 service:
   type: ClusterIP

@@ -65,20 +65,16 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /data
-            {{- if .Values.storage.data.subPath }}
-            subPath: {{ .Values.storage.data.subPath }}
-            {{- end }}
+            subPath: data
           - name: config
             mountPath: /var/www/html
-            {{- if .Values.storage.config.subPath }}
-            subPath: {{ .Values.storage.config.subPath }}
-            {{- end }}
+            subPath: conf
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: {{ .Values.storage.data.claimName }}
+          claimName: {{ include "nextcloud.name" . }}-data-pvc
       - name: config
         persistentVolumeClaim:
-          claimName: {{ .Values.storage.config.claimName }}
+          claimName: {{ include "nextcloud.name" . }}-config-pvc
