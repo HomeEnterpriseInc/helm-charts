@@ -48,14 +48,10 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-              {{- if .Values.storage.config.subPath }}
-              subPath: {{ .Values.storage.config.subPath }}
-              {{- end }}
+              subPath: transmission
             - name: data
               mountPath: /downloads
-              {{- if .Values.storage.data.subPath }}
-              subPath: {{ .Values.storage.data.subPath }}
-              {{- end }}
+              subPath: downloads
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
