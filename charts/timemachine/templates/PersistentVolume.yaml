@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "transmission.name" . }}-config-pv
+  name: {{ include "timemachine.name" . }}-config-pv
 spec:
   volumeMode: Filesystem
   capacity:
@@ -28,7 +28,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "transmission.name" . }}-data-pv
+  name: {{ include "timemachine.name" . }}-data-pv
 spec:
   volumeMode: Filesystem
   capacity:

@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "transmission.name" . }}-config-pvc
+  name: {{ include "timemachine.name" . }}-config-pvc
 spec:
   accessModes:
     - ReadWriteOnce
   {{- if .Values.storage.config.persistenentVolume.create }}
-  volumeName: {{ include "transmission.name" . }}-config-pv
+  volumeName: {{ include "timemachine.name" . }}-config-pv
   {{ end }}
   storageClassName: {{ .Values.storage.config.storageClassName }}
   resources:
@@ -16,12 +16,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "transmission.name" . }}-data-pvc
+  name: {{ include "timemachine.name" . }}-data-pvc
 spec:
   accessModes:
     - ReadWriteOnce
   {{- if .Values.storage.data.persistenentVolume.create }}
-  volumeName: {{ include "transmission.name" . }}-data-pv
+  volumeName: {{ include "timemachine.name" . }}-data-pv
   {{ end }}
   storageClassName: {{ .Values.storage.data.storageClassName }}
   resources:

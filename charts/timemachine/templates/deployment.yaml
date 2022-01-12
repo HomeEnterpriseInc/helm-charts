@@ -87,7 +87,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ include "transmission.name" . }}-data-pvc
+            claimName: {{ include "timemachine.name" . }}-data-pvc
         - name: conf
           persistentVolumeClaim:
-            claimName: {{ include "transmission.name" . }}-config-pvc
+            claimName: {{ include "timemachine.name" . }}-config-pvc
