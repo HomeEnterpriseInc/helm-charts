@@ -78,7 +78,7 @@ spec:
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
-      {{- if .Values.storage.data.useConfStorage }}
+      {{- if not .Values.storage.data.useConfStorage }}
       - name: data
         persistentVolumeClaim:
           claimName: {{ include "nextcloud.name" . }}-data-pvc

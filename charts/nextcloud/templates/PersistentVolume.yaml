@@ -24,7 +24,7 @@ spec:
                 - {{ .Values.storage.config.persistenentVolume.nodeAffinityHostName }}
 {{- end }}
 ---
-{{- if .Values.storage.data.useConfStorage }}
+{{- if not .Values.storage.data.useConfStorage }}
 {{- if .Values.storage.data.persistenentVolume.create }}
 apiVersion: v1
 kind: PersistentVolume
