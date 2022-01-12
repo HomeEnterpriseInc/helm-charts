@@ -25,12 +25,20 @@ transmission:
   webHome: "/combustion-release/"
 
 storage:
-  data:
-    claimName: internal-media-pvc
-    subPath: Media/Downloads
   config:
-    claimName: internal-data-pvc
-    subPath: transmission
+    storageClassName: local-path
+    capacity: 1G
+    persistenentVolume:
+      create: false
+      localPath: "/opt/data/transmission/conf"
+      nodeAffinityHostName: "example-node"
+  data:
+    storageClassName: local-path
+    capacity: 1G
+    persistenentVolume:
+      create: false
+      localPath: "/opt/data/transmission/media"
+      nodeAffinityHostName: "example-node"
 
 service:
   type: ClusterIP

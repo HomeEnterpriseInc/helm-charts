@@ -75,7 +75,7 @@ spec:
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.config.claimName }}
+            claimName: {{ include "transmission.name" . }}-config-pvc
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.data.claimName }}
+            claimName: {{ include "transmission.name" . }}-data-pvc
