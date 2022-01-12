@@ -8,7 +8,7 @@ spec:
   capacity:
     storage: {{ .Values.storage.config.capacity | quote }}
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ .Values.storage.config.storageClassName }}
   local:
@@ -34,7 +34,7 @@ spec:
   capacity:
     storage: {{ .Values.storage.media.capacity | quote }}
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ .Values.storage.media.storageClassName }}
   local:
