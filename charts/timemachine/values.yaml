@@ -14,17 +14,20 @@ nameOverride: ""
 fullnameOverride: ""
 
 storage:
-  conf:
-    claimName: internal-data-pvc
-    samba:
-      subPath: timemachine/samba/run
-      cache:
-        subPath: timemachine/samba/cache
-      lib:
-        subPath: timemachine/samba/lib
+  config:
+    storageClassName: local-path
+    capacity: 1G
+    persistenentVolume:
+      create: false
+      localPath: "/opt/data/timemachine/conf"
+      nodeAffinityHostName: "example-node"
   data:
-    claimName: internal-timemachine-backup-pvc
-    subPath:
+    storageClassName: local-path
+    capacity: 15G
+    persistenentVolume:
+      create: false
+      localPath: "/opt/data/timemachine/media"
+      nodeAffinityHostName: "example-node"
 
 timeMachine:
   advertisedHostname: ""

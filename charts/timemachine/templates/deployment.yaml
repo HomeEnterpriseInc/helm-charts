@@ -74,28 +74,20 @@ spec:
           volumeMounts:
             - name: conf
               mountPath: /var/lib/samba
-              {{- if .Values.storage.conf.samba.lib.subPath }}
-              subPath: {{ .Values.storage.conf.samba.lib.subPath }}
-              {{- end }}
+              subPath: samba/lib
             - name: conf
               mountPath: /var/cache/samba
-              {{- if .Values.storage.conf.samba.cache.subPath }}
-              subPath: {{ .Values.storage.conf.samba.cache.subPath }}
-              {{- end }}
+              subPath: samba/cache
             - name: conf
               mountPath: /run/samba
-              {{- if .Values.storage.conf.samba.subPath }}
-              subPath: {{ .Values.storage.conf.samba.subPath }}
-              {{- end }}
+              subPath: samba/run
             - name: data
               mountPath: /opt
-              {{- if .Values.storage.data.subPath }}
-              subPath: {{ .Values.storage.data.subPath }}
-              {{- end }}
+              subPath: timemachine
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.data.claimName }}
+            claimName: {{ include "transmission.name" . }}-data-pvc
         - name: conf
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.conf.claimName }}
+            claimName: {{ include "transmission.name" . }}-config-pvc
