@@ -50,7 +50,7 @@ spec:
               mountPath: /config
               subPath: transmission
             - name: data
-              mountPath: /downloads
+              mountPath: /Media
               subPath: downloads
           ports:
             - name: http
