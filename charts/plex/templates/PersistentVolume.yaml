@@ -1,0 +1,51 @@
+{{- if .Values.storage.config.persistenentVolume.create }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "plex.name" . }}-config-pv
+spec:
+  volumeMode: Filesystem
+  capacity:
+    storage: {{ .Values.storage.config.capacity | quote }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.storage.config.storageClassName }}
+  local:
+    fsType: ""
+    path: {{ .Values.storage.config.persistenentVolume.localPath }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - {{ .Values.storage.config.persistenentVolume.nodeAffinityHostName }}
+{{- end }}
+---
+{{- if .Values.storage.media.persistenentVolume.create }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "plex.name" . }}-media-pv
+spec:
+  volumeMode: Filesystem
+  capacity:
+    storage: {{ .Values.storage.media.capacity | quote }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.storage.media.storageClassName }}
+  local:
+    fsType: ""
+    path: {{ .Values.storage.media.persistenentVolume.localPath }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - {{ .Values.storage.media.persistenentVolume.nodeAffinityHostName }}
+  {{- end }}

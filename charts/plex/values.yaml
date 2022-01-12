@@ -56,11 +56,19 @@ resources: {}
 
 storage:
   config:
-    claimName: external-data-pvc
-    subPath: plex
+    storageClassName: local-path
+    capacity: 1G
+    persistenentVolume:
+      create: false
+      localPath: "/opt/data/plex/conf"
+      nodeAffinityHostName: "example-node"
   media:
-    claimName: external-media-pvc
-    subPath: Media
+    storageClassName: local-path
+    capacity: 1G
+    persistenentVolume:
+      create: true
+      localPath: "/opt/data/plex/media"
+      nodeAffinityHostName: "example-node"
 
 tolerations: []
 

@@ -55,26 +55,22 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
           volumeMounts:
-          - name: data
+          - name: media
             mountPath: /movies
-            {{- if .Values.storage.media.subPath }}
-            subPath: {{ .Values.storage.media.subPath }}
-            {{- end }}
+            subPath: Media
           - name: config
             mountPath: /config
-            {{- if .Values.storage.config.subPath }}
-            subPath: {{ .Values.storage.config.subPath }}
-            {{- end }}
+            subPath: plex
           - name: transcode-volume
             mountPath: /transcode
       securityContext:
         {}
       volumes:
-      - name: data
+      - name: media
         persistentVolumeClaim:
-          claimName: {{ .Values.storage.media.claimName }}
+          claimName: {{ include "plex.name" . }}-media-pvc
       - name: config
         persistentVolumeClaim:
-          claimName: {{ .Values.storage.config.claimName }}
+          claimName: {{ include "plex.name" . }}-config-pvc
       - name: transcode-volume
         emptyDir: { }

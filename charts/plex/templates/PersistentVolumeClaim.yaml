@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "plex.name" . }}-config-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if .Values.storage.config.persistenentVolume.create }}
+  volumeName: {{ include "plex.name" . }}-config-pv
+  {{ end }}
+  storageClassName: {{ .Values.storage.config.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.config.capacity | quote }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "plex.name" . }}-media-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if .Values.storage.media.persistenentVolume.create }}
+  volumeName: {{ include "plex.name" . }}-media-pv
+  {{ end }}
+  storageClassName: {{ .Values.storage.media.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.media.capacity | quote }}
