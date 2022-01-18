@@ -2,5 +2,5 @@ apiVersion: v2
 name: wordpress
 description: Blog server
 type: application
-version: "0.2"
+version: "0.3"
 appVersion: "5.8.0-php8.0-apache"

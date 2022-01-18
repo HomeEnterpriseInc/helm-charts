@@ -32,6 +32,7 @@ ingress:
     - host: blog.example.com
       paths:
         - path: /
+          pathType: Prefix
   tls:
     - secretName: wordpress-letsencrypt-certificate
       hosts:
