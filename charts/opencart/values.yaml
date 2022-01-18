@@ -51,6 +51,7 @@ ingress:
     - host: cart.example.com
       paths:
         - path: /
+          pathType: Prefix
   tls:
     - secretName: opencart-letsencrypt-certificate
       hosts:
