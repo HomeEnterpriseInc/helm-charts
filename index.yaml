@@ -621,6 +621,16 @@ entries:
   wikijs:
   - apiVersion: v2
     appVersion: canary-2.5.243
+    created: "2022-01-18T17:40:45.050936332Z"
+    description: Wiki.js helm chart
+    digest: 0c1a7f83f0cbc581d346f8dc56eb5d7504ec20d3c18e67e414f7e7899e5f6586
+    name: wikijs
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wikijs-0.8.0/wikijs-0.8.0.tgz
+    version: 0.8.0
+  - apiVersion: v2
+    appVersion: canary-2.5.243
     created: "2022-01-11T16:06:26.972167674Z"
     description: Wiki.js helm chart
     digest: c1abc6b1f7948319513049122d355acb972f5760bb0b365c73db52480583f335
@@ -692,6 +702,16 @@ entries:
   wordpress:
   - apiVersion: v2
     appVersion: 5.8.0-php8.0-apache
+    created: "2022-01-18T17:40:45.203416998Z"
+    description: Blog server
+    digest: 44a574acee13ed28e38e095ac1aeef42da3e223af7622dfb57b658c45b064bbd
+    name: wordpress
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.3/wordpress-0.3.tgz
+    version: "0.3"
+  - apiVersion: v2
+    appVersion: 5.8.0-php8.0-apache
     created: "2022-01-11T16:35:30.792457077Z"
     description: Blog server
     digest: b391ebf44f3cfe96bf7668f7251edbc7d3b908c78a22486ad16ee16b9e636739
@@ -710,4 +730,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-18T16:57:14.247093873Z"
+generated: "2022-01-18T17:40:45.203527299Z"
