@@ -76,6 +76,16 @@ entries:
   cloudbeaver:
   - apiVersion: v2
     appVersion: 21.3.0
+    created: "2022-01-18T15:26:31.038252607Z"
+    description: DB Client
+    digest: b8b335428c941383172b9e133566011790885a204a07c8a10b85fa44875983d2
+    name: cloudbeaver
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/cloudbeaver-0.3/cloudbeaver-0.3.tgz
+    version: "0.3"
+  - apiVersion: v2
+    appVersion: 21.3.0
     created: "2022-01-11T10:21:26.724921634Z"
     description: DB Client
     digest: df5b5af667bd3b3efcd385e3e03fba968086fcf7e3618f0b914e8a422e2f064b
@@ -590,4 +600,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-18T15:23:09.761865936Z"
+generated: "2022-01-18T15:26:31.038345009Z"
