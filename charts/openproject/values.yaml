@@ -24,6 +24,7 @@ ingress:
     - host: pm.example.com
       paths:
         - path: /
+          pathType: Prefix
   tls:
     - secretName: openproject-letsencrypt-certificate
       hosts:
