@@ -107,6 +107,16 @@ entries:
   homebridge:
   - apiVersion: v2
     appVersion: 2021-12-19-ubuntu
+    created: "2022-01-18T15:50:59.573298323Z"
+    description: A Helm chart for Kubernetes
+    digest: ebeee24751984dabd6654d22000252dc92a021fb8f026b2678ea06bc2fa0d07c
+    name: homebridge
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/homebridge-0.3/homebridge-0.3.tgz
+    version: "0.3"
+  - apiVersion: v2
+    appVersion: 2021-12-19-ubuntu
     created: "2022-01-11T10:46:33.914102834Z"
     description: A Helm chart for Kubernetes
     digest: 8359251b160a9fc31ee7a605cb2239e5213928e8807b5bdd08f02b9887d29486
@@ -600,4 +610,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-18T15:26:31.038345009Z"
+generated: "2022-01-18T15:50:59.573490929Z"
