@@ -550,6 +550,16 @@ entries:
   transmission:
   - apiVersion: v2
     appVersion: 3.00-r2-ls92
+    created: "2022-01-18T16:57:14.24672586Z"
+    description: A Helm chart for Kubernetes
+    digest: 6614b926b74e17f9ace1dbb3fd66f31c99dd2b3c82278801d8c8fc7990b3e2ab
+    name: transmission
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/transmission-0.6/transmission-0.6.tgz
+    version: "0.6"
+  - apiVersion: v2
+    appVersion: 3.00-r2-ls92
     created: "2022-01-12T22:26:34.732426645Z"
     description: A Helm chart for Kubernetes
     digest: bf0c8746cf7abfb40ad467ed14363f4c57d481e1a4e73e80e6d834b2cc392877
@@ -700,4 +710,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-18T16:33:20.596701561Z"
+generated: "2022-01-18T16:57:14.247093873Z"
