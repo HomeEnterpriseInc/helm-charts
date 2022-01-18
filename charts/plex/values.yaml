@@ -41,6 +41,7 @@ ingress:
     - host: plex.example.com
       paths:
       - path: /
+        pathType: Prefix
   tls:
     - secretName: plex-letsencrypt-certificate
       hosts:
