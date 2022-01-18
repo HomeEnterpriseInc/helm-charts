@@ -36,6 +36,7 @@ ingress:
     - host: photos.example.com
       paths:
         - path: /
+          pathType: Prefix
           backend:
             serviceName: pi-gallery2-SVC
             servicePort: 80
