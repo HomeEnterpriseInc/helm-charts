@@ -251,6 +251,16 @@ entries:
   opencart:
   - apiVersion: v2
     appVersion: 3.0.3-8
+    created: "2022-01-18T16:09:56.66967961Z"
+    description: Ecommerce Solution
+    digest: 4e489771df005850dcac387efefd32321c435ca33760621f7b783333317693be
+    name: opencart
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/opencart-0.2/opencart-0.2.tgz
+    version: "0.2"
+  - apiVersion: v2
+    appVersion: 3.0.3-8
     created: "2021-10-27T17:09:37.795427626Z"
     description: Ecommerce Solution
     digest: 0eaac8f4144701bdacb944b1ee84de7498f2bed32ef8da85fe1ab0488702bb6b
@@ -640,4 +650,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-18T16:07:29.172971623Z"
+generated: "2022-01-18T16:09:56.66978961Z"
