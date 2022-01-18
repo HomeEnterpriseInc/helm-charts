@@ -26,6 +26,7 @@ ingress:
     - host: cloudbeaver.example.com
       paths:
         - path: /
+          pathType: Prefix
   tls:
     - secretName: cloudbeaver-letsencrypt-certificate
       hosts:
