@@ -3,6 +3,16 @@ entries:
   adguard:
   - apiVersion: v2
     appVersion: v0.108.0-b.1
+    created: "2022-01-18T15:20:13.296930642Z"
+    description: DNS server
+    digest: dbba6d248c495766b295e3479bd32a8f40d4a2763477223a016d73b0f3ded55d
+    name: adguard
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/adguard-0.3/adguard-0.3.tgz
+    version: "0.3"
+  - apiVersion: v2
+    appVersion: v0.108.0-b.1
     created: "2022-01-10T17:43:09.284074663Z"
     description: DNS server
     digest: 10824f6c958601b4adc0c5fa73357ad2b3de406b037e92a9b6e5f41074c19d96
@@ -570,4 +580,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-12T22:26:34.732590947Z"
+generated: "2022-01-18T15:20:13.297026443Z"
