@@ -45,6 +45,7 @@ ingress:
     - host: homebridge.example.com
       paths:
         - path: /
+          pathType: Prefix
           backend:
             servicePort: 80
   tls:
