@@ -53,6 +53,7 @@ ingress:
     - host: transmission.example.com
       paths:
         - path: /
+          pathType: Prefix
           backend:
             servicePort: 80
   tls:
