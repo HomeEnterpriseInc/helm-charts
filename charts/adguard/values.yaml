@@ -37,6 +37,7 @@ ingress:
     - host: dns.example.com
       paths:
         - path: /
+          pathType: Prefix
   tls:
     - secretName: dns-letsencrypt-certificate
       hosts:
