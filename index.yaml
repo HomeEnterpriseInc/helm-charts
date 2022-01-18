@@ -417,6 +417,16 @@ entries:
   restya:
   - apiVersion: v2
     appVersion: v1.7
+    created: "2022-01-18T16:30:13.19462216Z"
+    description: project management tool
+    digest: 92a07713f7130e66041f4ea4000418b49716461062ddc7233222274d76f8132a
+    name: restya
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/restya-0.7/restya-0.7.tgz
+    version: "0.7"
+  - apiVersion: v2
+    appVersion: v1.7
     created: "2022-01-11T15:43:42.762237153Z"
     description: project management tool
     digest: 9abb45327c955f7f07f2e17e14e711d0d656ede101e3e3fa3cee33fc723d8471
@@ -680,4 +690,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-18T16:14:07.322366041Z"
+generated: "2022-01-18T16:30:13.194743365Z"
