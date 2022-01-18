@@ -2,7 +2,7 @@
 {{- $name := include "restya.name" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 {{- else -}}
 apiVersion: extensions/v1beta1
 {{- end }}
@@ -33,9 +33,12 @@ spec:
         paths:
           {{- range .paths }}
           - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
-              serviceName: {{ $name }}-svc
-              servicePort: {{ $svcPort }}
+              service:
+                name: {{ $name }}-svc
+                port:
+                  number: {{ $svcPort }}
           {{- end }}
     {{- end }}
   {{- end }}
