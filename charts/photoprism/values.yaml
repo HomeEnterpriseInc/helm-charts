@@ -57,6 +57,7 @@ ingress:
     - host: photos.example.com
       paths:
         - path: /
+          pathType: Prefix
   tls:
     - secretName: photoprism-letsencrypt-certificate
       hosts:
