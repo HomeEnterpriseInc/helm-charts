@@ -138,6 +138,16 @@ entries:
   keycloak:
   - apiVersion: v2
     appVersion: 14.0.0
+    created: "2022-01-18T15:56:43.620542268Z"
+    description: A Helm chart for Kubernetes
+    digest: 26cf53a7c139835023ddee35299fefe65520b655b6cb2256c5fa473316d144e4
+    name: keycloak
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/keycloak-0.4/keycloak-0.4.tgz
+    version: "0.4"
+  - apiVersion: v2
+    appVersion: 14.0.0
     created: "2022-01-11T11:07:27.766633861Z"
     description: A Helm chart for Kubernetes
     digest: 6a5014e3dfa3c743eadde0641770e45eae3465d1706bb71eb32d430e1526989b
@@ -610,4 +620,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-18T15:50:59.573490929Z"
+generated: "2022-01-18T15:56:43.620629468Z"
