@@ -55,6 +55,7 @@ ingress:
     - host: files.example.com
       paths:
         - path: /
+          pathType: Prefix
   tls:
     - secretName: nextcloud-letsencrypt-certificate
       hosts:
