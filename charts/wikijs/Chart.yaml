@@ -3,4 +3,4 @@ name: wikijs
 description: "Wiki.js helm chart"
 type: application
 version: 0.8.0
-appVersion: "canary-2.5.243"8
+appVersion: "canary-2.5.243"
