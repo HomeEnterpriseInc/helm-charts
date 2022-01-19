@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sonarr.name" . }}-deployment
+  labels:
+    {{- include "sonarr.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "sonarr.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "sonarr.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ include "sonarr.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: UTC
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              subPath: sonarr/config
+            - name: config
+              mountPath: /tvseries
+              subPath: sonarr/tvseries
+            - name: config
+              mountPath: /downloads
+              subPath: sonarr/downloads
+      securityContext:
+      {{- toYaml .Values.securityContext | nindent 8 }}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ include "sonarr.name" . }}-pvc

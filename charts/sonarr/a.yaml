@@ -1,0 +1,140 @@
+---
+# Source: sonarr/templates/PersistentVolumeClaim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: "1G"
+---
+# Source: sonarr/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr-svc
+  labels:
+    helm.sh/chart: sonarr-0.1
+    app-name: sonarr
+    component: "media-monitoring-server"
+    managed-by: chynten
+    created-by: chynten
+    version: "3.2.2"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 7878
+      targetPort: 7878
+  selector:
+    app-name: sonarr
+---
+# Source: sonarr/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr-deployment
+  labels:
+    helm.sh/chart: sonarr-0.1
+    app-name: sonarr
+    component: "media-monitoring-server"
+    managed-by: chynten
+    created-by: chynten
+    version: "3.2.2"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 
+  selector:
+    matchLabels:
+      app-name: sonarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app-name: sonarr
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: sonarr
+          image: "linuxserver/sonarr:3.2.2"
+          imagePullPolicy: IfNotPresent
+          resources:
+            {}
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: UTC
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              subPath: sonarr/config
+            - name: config
+              mountPath: /movies
+              subPath: sonarr/movies
+            - name: config
+              mountPath: /downloads
+              subPath: sonarr/downloads
+      securityContext:
+        {}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: sonarr-pvc
+---
+# Source: sonarr/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sonarr-ingress
+  labels:
+    helm.sh/chart: sonarr-0.1
+    app-name: sonarr
+    component: "media-monitoring-server"
+    managed-by: chynten
+    created-by: chynten
+    version: "3.2.2"
+spec:
+  tls:
+    - hosts:
+        - "sonarr.example.com"
+      secretName: sonarr-letsencrypt-certificate
+  rules:
+    - host: "sonarr.example.com"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sonarr-svc
+                port:
+                  number: 7878
+---
+# Source: sonarr/templates/certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: sonarr-certificate
+  labels:
+    helm.sh/chart: sonarr-0.1
+    app-name: sonarr
+    component: "media-monitoring-server"
+    managed-by: chynten
+    created-by: chynten
+    version: "3.2.2"
+spec:
+  dnsNames:
+    - "sonarr.example.com"
+  secretName: sonarr-letsencrypt-certificate
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt

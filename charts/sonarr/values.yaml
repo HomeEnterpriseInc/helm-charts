@@ -1,0 +1,46 @@
+replicaCount: 1
+
+image:
+  repository: linuxserver/sonarr
+  pullPolicy: IfNotPresent
+  tag: "3.0.6"
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8989
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+storage:
+  storageClassName: local-path
+  capacity: 1G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/sonarr"
+    nodeAffinityHostName: "example-node"
+
+ingress:
+  enabled: true
+  annotations:
+  hosts:
+    - host: sonarr.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: sonarr-letsencrypt-certificate
+      hosts:
+        - sonarr.example.com
+
+resources: {}
+#  limits:
+#    cpu: 100m
+#    memory: 128Mi
+#  requests:
+#    cpu: 50m
+#    memory: 64Mi
