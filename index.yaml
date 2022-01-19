@@ -135,6 +135,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/homebridge-0.1/homebridge-0.1.tgz
     version: "0.1"
+  jackett:
+  - apiVersion: v2
+    appVersion: 0.20.399
+    created: "2022-01-19T16:26:02.311754215Z"
+    description: A Helm chart for Kubernetes
+    digest: bd7627b1926abb1a837e0d87b2e7c32e2b1874a86d2e1547591eadfe972fd8cb
+    name: jackett
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/jackett-0.1/jackett-0.1.tgz
+    version: "0.1"
   keycloak:
   - apiVersion: v2
     appVersion: 14.0.0
@@ -730,4 +741,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-18T17:40:45.203527299Z"
+generated: "2022-01-19T16:26:02.311877915Z"
