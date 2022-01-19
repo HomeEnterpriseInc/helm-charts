@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jackett.name" . }}-deployment
+  labels:
+    {{- include "jackett.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "jackett.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "jackett.selectorLabels" . | nindent 8 }}
+    spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PUID
+              value: {{ .Values.jackett.PUID | quote }}
+            - name: PGID
+              value: {{ .Values.jackett.PGID | quote }}
+            - name: TZ
+              value: {{ .Values.jackett.TZ | quote }}
+            - name: AUTO_UPDATE
+              value: {{ .Values.jackett.autoUpdate | quote }}
+          volumeMounts:
+            {{- if .Values.storage.data.useConfStorage }}
+            - name: config
+              mountPath: /downloads
+              subPath: jackett/data
+            {{ else }}
+            - name: data
+              mountPath: /downloads
+              subPath: jackett/data
+            {{ end }}
+            - name: config
+              mountPath: /config
+              subPath: jackett/config
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- if .Values.probe.enable }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ include "jackett.name" . }}-config-pvc
+        {{- if not .Values.storage.data.useConfStorage }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "jackett.name" . }}-data-pvc
+        {{- end }}

@@ -1,0 +1,72 @@
+# Default values for jackett.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: linuxserver/jackett
+  pullPolicy: IfNotPresent
+  tag: "0.20.399"
+
+hostNetwork: false
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+jackett:
+  PUID: "1000"
+  PGID: "1000"
+  TZ: "UTC"
+  autoupdate: true
+storage:
+  config:
+    storageClassName: local-path
+    capacity: 1G
+    persistenentVolume:
+      create: false
+      localPath: "/opt/data/jackett/conf"
+      nodeAffinityHostName: "example-node"
+  data:
+    useConfStorage: true
+    storageClassName: local-path
+    capacity: 1G
+    persistenentVolume:
+      create: false
+      localPath: "/opt/data/jackett/media"
+      nodeAffinityHostName: "example-node"
+
+service:
+  type: ClusterIP
+  port: 9117
+
+securityContext: {}
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: jackett.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            servicePort: 80
+  tls:
+    - secretName: jackett-letsencrypt-certificate
+      hosts:
+        - jackett.example.com
+
+probe:
+  enable: false
+
+resources: {}
+#  limits:
+#    cpu: "100m"
+#    memory: "128Mi"
+#  requests:
+#    cpu: "100m"
+#    memory: "128Mi"
+
