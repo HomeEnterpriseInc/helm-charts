@@ -425,6 +425,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/postgres-0.1.0/postgres-0.1.0.tgz
     version: 0.1.0
+  radarr:
+  - apiVersion: v2
+    appVersion: 3.2.2
+    created: "2022-01-19T16:45:39.993906364Z"
+    description: A Helm chart for Kubernetes
+    digest: 0612b91f74256afdcaed49049b86e657ee285e250282cf06bd3a7f2a04700db3
+    name: radarr
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/radarr-0.1/radarr-0.1.tgz
+    version: "0.1"
   restya:
   - apiVersion: v2
     appVersion: v1.7
@@ -741,4 +752,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-19T16:26:02.311877915Z"
+generated: "2022-01-19T16:45:39.994032965Z"
