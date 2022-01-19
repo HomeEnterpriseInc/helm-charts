@@ -507,6 +507,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/restya-0.1/restya-0.1.tgz
     version: "0.1"
+  sonarr:
+  - apiVersion: v2
+    appVersion: 3.0.6
+    created: "2022-01-19T17:28:52.409948344Z"
+    description: A Helm chart for Kubernetes
+    digest: 6a2fd67ac9014ecf10cfbcd8fcbcf23d55ecf360f7aff9d35d8e4fe3b0ed6c83
+    name: sonarr
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/sonarr-0.1/sonarr-0.1.tgz
+    version: "0.1"
   tautulli:
   - apiVersion: v2
     appVersion: v2.7.5
@@ -752,4 +763,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-19T16:45:39.994032965Z"
+generated: "2022-01-19T17:28:52.410082556Z"
