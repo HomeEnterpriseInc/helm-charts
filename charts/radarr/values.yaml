@@ -1,0 +1,46 @@
+replicaCount: 1
+
+image:
+  repository: linuxserver/radarr
+  pullPolicy: IfNotPresent
+  tag: "3.2.2"
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 7878
+
+certManager:
+  enabled: true
+  clusterIssuer:
+    issuerRef: letsencrypt
+
+storage:
+  storageClassName: local-path
+  capacity: 1G
+  persistenentVolume:
+    create: false
+    localPath: "/opt/data/radarr"
+    nodeAffinityHostName: "example-node"
+
+ingress:
+  enabled: true
+  annotations:
+  hosts:
+    - host: radarr.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: radarr-letsencrypt-certificate
+      hosts:
+        - radarr.example.com
+
+resources: {}
+#  limits:
+#    cpu: 100m
+#    memory: 128Mi
+#  requests:
+#    cpu: 50m
+#    memory: 64Mi
