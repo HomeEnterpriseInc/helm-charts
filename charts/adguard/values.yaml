@@ -36,7 +36,8 @@ ingress:
         - path: /
           pathType: Prefix
   tls:
-    - hosts:
+    - secretName: adguard-letsencrypt-certificate
+      hosts:
         - dns.example.com
 
 resources: {}
