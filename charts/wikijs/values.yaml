@@ -13,16 +13,13 @@ service:
   type: ClusterIP
   port: 3000
 
-certManager:
-  enabled: true
-  clusterIssuer:
-    issuerRef: letsencrypt
-
 ingress:
   enabled: true
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     nginx.org/client-max-body-size: "50m"
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/ingress.class: nginx
   hosts:
     - host: wiki.example.com
       paths:
