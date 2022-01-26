@@ -32,14 +32,11 @@ keycloak:
   proxyAddressForwarding: true
   javaOpts: "-server -Xms512m -Xmx768m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true   --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED"
 
-certManager:
-  enabled: true
-  clusterIssuer:
-    issuerRef: letsencrypt
-
 ingress:
   enabled: true
-  annotations: {}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/ingress.class: nginx
   hosts:
     - host: sso.example.com
       paths:

@@ -2,5 +2,5 @@ apiVersion: v2
 name: plex
 description: A media streaming server
 type: application
-version: "0.4"
+version: "0.5"
 appVersion: "1.23.5.4862-0f739d462"
