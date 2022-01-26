@@ -219,6 +219,16 @@ entries:
   keycloak:
   - apiVersion: v2
     appVersion: 14.0.0
+    created: "2022-01-26T16:57:15.111693155Z"
+    description: A Helm chart for Kubernetes
+    digest: c357a40b4ad0b3cdfeb4542625f50f99c19b69419e0e500948b7176863c40b9e
+    name: keycloak
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/keycloak-0.5/keycloak-0.5.tgz
+    version: "0.5"
+  - apiVersion: v2
+    appVersion: 14.0.0
     created: "2022-01-18T15:56:43.620542268Z"
     description: A Helm chart for Kubernetes
     digest: 26cf53a7c139835023ddee35299fefe65520b655b6cb2256c5fa473316d144e4
@@ -434,6 +444,16 @@ entries:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/pi-gallery2-0.1/pi-gallery2-0.1.tgz
     version: "0.1"
   plex:
+  - apiVersion: v2
+    appVersion: 1.23.5.4862-0f739d462
+    created: "2022-01-26T16:57:15.280575978Z"
+    description: A media streaming server
+    digest: 82d16a4ab928a6f2eeeb609fd9956abe13b4b3f3dfc3f597634a25e55d470bb9
+    name: plex
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/plex-0.5/plex-0.5.tgz
+    version: "0.5"
   - apiVersion: v2
     appVersion: 1.23.5.4862-0f739d462
     created: "2022-01-18T16:14:07.322154339Z"
@@ -805,6 +825,16 @@ entries:
   wordpress:
   - apiVersion: v2
     appVersion: 5.8.0-php8.0-apache
+    created: "2022-01-26T16:57:15.458801731Z"
+    description: Blog server
+    digest: 83a3df72ee8b58496fdaeb5bfbc80ac1e68b1c2fcafe8a88f829fc4e5fd2abc4
+    name: wordpress
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.4/wordpress-0.4.tgz
+    version: "0.4"
+  - apiVersion: v2
+    appVersion: 5.8.0-php8.0-apache
     created: "2022-01-18T17:40:45.203416998Z"
     description: Blog server
     digest: 44a574acee13ed28e38e095ac1aeef42da3e223af7622dfb57b658c45b064bbd
@@ -833,4 +863,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-26T16:51:16.61539973Z"
+generated: "2022-01-26T16:57:15.458969633Z"
