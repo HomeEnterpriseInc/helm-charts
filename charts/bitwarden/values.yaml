@@ -11,11 +11,6 @@ image:
 
 hostNetwork: false
 
-certManager:
-  enabled: true
-  clusterIssuer:
-    issuerRef: letsencrypt
-
 bitwarden:
   mysql:
     host: mysql-svc.internal.svc.cluster.local
