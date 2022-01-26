@@ -382,6 +382,16 @@ entries:
   opencart:
   - apiVersion: v2
     appVersion: 3.0.3-8
+    created: "2022-01-26T17:22:40.757682791Z"
+    description: Ecommerce Solution
+    digest: e9012ab94707543a14f5502ff8fd181ecbf46de23097abaea412660ee108aefe
+    name: opencart
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/opencart-0.3/opencart-0.3.tgz
+    version: "0.3"
+  - apiVersion: v2
+    appVersion: 3.0.3-8
     created: "2022-01-18T16:09:56.66967961Z"
     description: Ecommerce Solution
     digest: 4e489771df005850dcac387efefd32321c435ca33760621f7b783333317693be
@@ -401,6 +411,16 @@ entries:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/opencart-0.1/opencart-0.1.tgz
     version: "0.1"
   openproject:
+  - apiVersion: v2
+    appVersion: 12.0.2
+    created: "2022-01-26T17:22:40.933623851Z"
+    description: Project Management Tool
+    digest: b804283d404560364bb3473ee0e0befb02664e54c7f894b6a8a370e1a8ae5d4d
+    name: openproject
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/openproject-0.5.0/openproject-0.5.0.tgz
+    version: 0.5.0
   - apiVersion: v2
     appVersion: 12.0.2
     created: "2022-01-18T16:07:29.17274631Z"
@@ -558,6 +578,16 @@ entries:
   radarr:
   - apiVersion: v2
     appVersion: 3.2.2
+    created: "2022-01-26T17:22:41.065899817Z"
+    description: A Helm chart for Kubernetes
+    digest: 6f02bb2cc5aac7b7043868bb8a77bdde5ce5660ea5636f18f78e5d679611f14f
+    name: radarr
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/radarr-0.2/radarr-0.2.tgz
+    version: "0.2"
+  - apiVersion: v2
+    appVersion: 3.2.2
     created: "2022-01-19T16:45:39.993906364Z"
     description: A Helm chart for Kubernetes
     digest: 0612b91f74256afdcaed49049b86e657ee285e250282cf06bd3a7f2a04700db3
@@ -567,6 +597,16 @@ entries:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/radarr-0.1/radarr-0.1.tgz
     version: "0.1"
   restya:
+  - apiVersion: v2
+    appVersion: v1.7
+    created: "2022-01-26T17:22:41.215435043Z"
+    description: project management tool
+    digest: 1a9d0d957523ce82b92db4a81dbc221ab9803d71358850b654bef058530647b3
+    name: restya
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/restya-0.8/restya-0.8.tgz
+    version: "0.8"
   - apiVersion: v2
     appVersion: v1.7
     created: "2022-01-18T16:30:13.19462216Z"
@@ -903,4 +943,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-26T17:17:59.37660062Z"
+generated: "2022-01-26T17:22:41.215593941Z"
