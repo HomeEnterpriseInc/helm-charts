@@ -11,17 +11,15 @@ image:
 
 securityContext: {}
 
-certManager:
-  enabled: true
-  clusterIssuer:
-    issuerRef: letsencrypt
-
 service:
   type: ClusterIP
   port: 8978
 
 ingress:
   enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/ingress.class: nginx
   hosts:
     - host: cloudbeaver.example.com
       paths:

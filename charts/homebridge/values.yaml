@@ -32,15 +32,11 @@ homebridge:
   configUI: "1"
   timezone: "UTC"
 
-
-certManager:
-  enabled: true
-  clusterIssuer:
-    issuerRef: letsencrypt
-
 ingress:
   enabled: true
-  annotations: {}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/ingress.class: nginx
   hosts:
     - host: homebridge.example.com
       paths:
