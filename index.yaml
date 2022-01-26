@@ -680,6 +680,16 @@ entries:
   sonarr:
   - apiVersion: v2
     appVersion: 3.0.6
+    created: "2022-01-26T17:31:11.284343819Z"
+    description: A Helm chart for Kubernetes
+    digest: 57744c2897052cf749a3f0793b8aacb698aa64f4c1cb430d8eb9222d11c69fd2
+    name: sonarr
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/sonarr-0.2/sonarr-0.2.tgz
+    version: "0.2"
+  - apiVersion: v2
+    appVersion: 3.0.6
     created: "2022-01-19T17:28:52.409948344Z"
     description: A Helm chart for Kubernetes
     digest: 6a2fd67ac9014ecf10cfbcd8fcbcf23d55ecf360f7aff9d35d8e4fe3b0ed6c83
@@ -689,6 +699,16 @@ entries:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/sonarr-0.1/sonarr-0.1.tgz
     version: "0.1"
   tautulli:
+  - apiVersion: v2
+    appVersion: v2.7.5
+    created: "2022-01-26T17:31:11.44753303Z"
+    description: A Helm chart for Kubernetes
+    digest: 1c3dc9a716a068cad495842a5650a3f15683e170822562e568bc3c3e2d9efd8b
+    name: tautulli
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/tautulli-0.4/tautulli-0.4.tgz
+    version: "0.4"
   - apiVersion: v2
     appVersion: v2.7.5
     created: "2022-01-18T16:33:20.596449054Z"
@@ -751,6 +771,16 @@ entries:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/timemachine-0.2/timemachine-0.2.tgz
     version: "0.2"
   transmission:
+  - apiVersion: v2
+    appVersion: 3.00-r2-ls92
+    created: "2022-01-26T17:31:11.617711896Z"
+    description: A Helm chart for Kubernetes
+    digest: 48beeb5b96d00d1fc457a7ef31a59d600bbfb1ee15c821f209352fd3ce8d0bc7
+    name: transmission
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/transmission-0.7/transmission-0.7.tgz
+    version: "0.7"
   - apiVersion: v2
     appVersion: 3.00-r2-ls92
     created: "2022-01-18T16:57:14.24672586Z"
@@ -822,6 +852,16 @@ entries:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wg-access-server-0.1/wg-access-server-0.1.tgz
     version: "0.1"
   wikijs:
+  - apiVersion: v2
+    appVersion: canary-2.5.243
+    created: "2022-01-26T17:31:11.776817673Z"
+    description: Wiki.js helm chart
+    digest: abb63aae773ce1fa61aae341f50f7478b08739f4d72fd4b031917612062be530
+    name: wikijs
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wikijs-0.9.0/wikijs-0.9.0.tgz
+    version: 0.9.0
   - apiVersion: v2
     appVersion: canary-2.5.243
     created: "2022-01-18T17:40:45.050936332Z"
@@ -943,4 +983,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-26T17:22:41.215593941Z"
+generated: "2022-01-26T17:31:11.777204276Z"
