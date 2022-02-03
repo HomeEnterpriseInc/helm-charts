@@ -3,7 +3,7 @@
 replicaCount: 1
 revisionHistoryLimit: 5
 image:
-  repository: bpatrik/pi-gallery2
+  repository: bpatrik/pigallery2
   tag: 1.9.0-debian-buster
   pullPolicy: IfNotPresent
 
