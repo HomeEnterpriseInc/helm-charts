@@ -485,6 +485,16 @@ entries:
   pi-gallery2:
   - apiVersion: v2
     appVersion: 1.9.0-debian-buster
+    created: "2022-02-03T09:00:13.659408446Z"
+    description: A Helm chart for Kubernetes
+    digest: cd450f1a838ddc4f5c55d39e1b2df177612be32e9d93c0c8d68a03d13b54eae1
+    name: pi-gallery2
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/pi-gallery2-0.3/pi-gallery2-0.3.tgz
+    version: "0.3"
+  - apiVersion: v2
+    appVersion: 1.9.0-debian-buster
     created: "2022-01-18T16:12:50.977160742Z"
     description: A Helm chart for Kubernetes
     digest: c9f308366df88b0570696234a9c1cbbf11d494199f034333e899eadff7086f0f
@@ -983,4 +993,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-01-26T17:31:11.777204276Z"
+generated: "2022-02-03T09:00:13.659575053Z"
