@@ -7,7 +7,7 @@ replicaCount: 1
 hostNetwork: true
 
 image:
-  repository: homeassistant/home-assistan
+  repository: homeassistant/home-assistant
   pullPolicy: IfNotPresent
   tag: "2022.3.5"
 
