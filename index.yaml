@@ -184,6 +184,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/cloudbeaver-0.1/cloudbeaver-0.1.tgz
     version: "0.1"
+  homeassistant:
+  - apiVersion: v2
+    appVersion: 2022.3.5
+    created: "2022-03-18T18:20:14.351843635Z"
+    description: A Helm chart for Kubernetes
+    digest: e5845d1a0165b4caa04064fcf9802959ee013c17624379303de125944e93212f
+    name: homeassistant
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/homeassistant-0.1/homeassistant-0.1.tgz
+    version: "0.1"
   homebridge:
   - apiVersion: v2
     appVersion: 2021-12-19-ubuntu
@@ -993,4 +1004,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-02-03T09:00:13.659575053Z"
+generated: "2022-03-18T18:20:14.351993337Z"
