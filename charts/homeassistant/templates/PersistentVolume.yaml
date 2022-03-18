@@ -1,0 +1,25 @@
+{{- if .Values.storage.persistenentVolume.create }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "homeassistant.name" . }}-pv
+spec:
+  volumeMode: Filesystem
+  capacity:
+    storage: {{ .Values.storage.capacity | quote }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.storage.storageClassName }}
+  local:
+    fsType: ""
+    path: {{ .Values.storage.persistenentVolume.localPath }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - {{ .Values.storage.persistenentVolume.nodeAffinityHostName }}
+{{- end }}
