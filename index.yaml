@@ -187,6 +187,16 @@ entries:
   homeassistant:
   - apiVersion: v2
     appVersion: 2022.3.5
+    created: "2022-03-18T18:24:10.714542987Z"
+    description: A Helm chart for Kubernetes
+    digest: ec12c6a399612fd304b357c3ef0e8035d713088a673302877a31b133381f5b68
+    name: homeassistant
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/homeassistant-0.2/homeassistant-0.2.tgz
+    version: "0.2"
+  - apiVersion: v2
+    appVersion: 2022.3.5
     created: "2022-03-18T18:20:14.351843635Z"
     description: A Helm chart for Kubernetes
     digest: e5845d1a0165b4caa04064fcf9802959ee013c17624379303de125944e93212f
@@ -1004,4 +1014,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-03-18T18:20:14.351993337Z"
+generated: "2022-03-18T18:24:10.715080091Z"
