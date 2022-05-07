@@ -52,6 +52,9 @@ spec:
             - name: data
               mountPath: /downloads
               subPath: Media
+            - name: config
+              mountPath: /watch
+              subPath: transmission/watch
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
