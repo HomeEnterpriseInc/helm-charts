@@ -19,12 +19,7 @@ service:
   port: 8581
 
 storage:
-  storageClassName: local-path
   capacity: 5G
-  persistenentVolume:
-    create: false
-    localPath: "/opt/data/homebridge"
-    nodeAffinityHostName: "example-node"
 
 homebridge:
   puid: "1000"
