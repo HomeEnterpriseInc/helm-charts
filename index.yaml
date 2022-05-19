@@ -677,6 +677,16 @@ entries:
     version: "0.1"
   postgres:
   - apiVersion: v2
+    appVersion: "14.2"
+    created: "2022-05-19T10:35:40.3048604Z"
+    description: A Helm chart for Kubernetes
+    digest: 32c292e7758c6739a2e9555dc8396841ae129eab124794e919776b78687aec28
+    name: postgres
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/postgres-0.3.0/postgres-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: "14.0"
     created: "2022-01-11T10:02:06.327632329Z"
     description: A Helm chart for Kubernetes
@@ -1124,4 +1134,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-05-19T10:32:39.748480494Z"
+generated: "2022-05-19T10:35:40.305163204Z"
