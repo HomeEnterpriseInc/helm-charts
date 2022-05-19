@@ -16,12 +16,7 @@ mysql:
   rootPassword: dG9vcg==
 
 storage:
-  storageClassName: local-path
   capacity: 15G
-  persistenentVolume:
-    create: false
-    localPath: "/opt/data/mysql"
-    nodeAffinityHostName: "example-node"
 
 securityContext: {}
 

@@ -35,7 +35,7 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /var/lib/mysql
-            subPath: mysql
+            subPath: {{ include "mysql.name" . }}
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
