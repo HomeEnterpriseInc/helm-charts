@@ -59,7 +59,7 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-              subPath: homeassistant
+              subPath: {{ include "homeassistant.name" . }}
       securityContext:
         {}
       volumes:

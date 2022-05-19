@@ -19,12 +19,7 @@ service:
   port: 8123
 
 storage:
-  storageClassName: local-path
   capacity: 5G
-  persistenentVolume:
-    create: false
-    localPath: "/opt/data/homeassistant"
-    nodeAffinityHostName: "example-node"
 
 ingress:
   enabled: true
