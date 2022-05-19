@@ -69,7 +69,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/www/html
-              subPath: wordpress
+              subPath: {{ include "wordpress.name" . }}
       securityContext:
         {}
       volumes:

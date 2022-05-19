@@ -5,10 +5,6 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  {{- if .Values.storage.persistenentVolume.create }}
-  volumeName: {{ include "wordpress.name" . }}-pv
-  {{ end }}
-  storageClassName: {{ .Values.storage.storageClassName }}
   resources:
     requests:
       storage: {{ .Values.storage.capacity | quote }}
