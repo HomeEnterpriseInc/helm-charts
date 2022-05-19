@@ -27,7 +27,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /opt/cloudbeaver/workspace
-              subPath: cloudbeaver
+              subPath: {{ include "cloudbeaver.name" . }}
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
