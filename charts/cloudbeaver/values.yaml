@@ -30,7 +30,8 @@ ingress:
       hosts:
         - cloudbeaver.example.com
 
-storage.capacity: 5G
+storage:
+  capacity: 5G
 
 resources: {}
 #  requests:
