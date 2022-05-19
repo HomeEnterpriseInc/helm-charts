@@ -12,12 +12,7 @@ fullnameOverride: ""
 hostNetwork: true
 
 storage:
-  storageClassName: local-path
   capacity: 5G
-  persistenentVolume:
-    create: false
-    localPath: "/opt/data/adguard"
-    nodeAffinityHostName: "example-node"
 
 securityContext: {}
 

@@ -56,10 +56,10 @@ spec:
           volumeMounts:
             - name: {{ include "adguard.name" . }}-data
               mountPath: /opt/adguardhome/work
-              subPath: data
+              subPath: {{ include "adguard.name" . }}/data
             - name: {{ include "adguard.name" . }}-data
               mountPath: /opt/adguardhome/conf
-              subPath: conf
+              subPath: {{ include "adguard.name" . }}/conf
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
