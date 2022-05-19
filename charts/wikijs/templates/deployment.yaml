@@ -43,7 +43,7 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /wiki/data
-            subPath: wikijs
+            subPath: {{ include "wikijs.name" . }}
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
