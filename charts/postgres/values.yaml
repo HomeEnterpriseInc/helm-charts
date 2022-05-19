@@ -24,9 +24,4 @@ postgres:
   password: cG9zdGdyZXNAMTIz
 
 storage:
-  storageClassName: local-path
   capacity: 15G
-  persistenentVolume:
-    create: false
-    localPath: "/opt/data/postgres"
-    nodeAffinityHostName: "example-node"
