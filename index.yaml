@@ -63,6 +63,16 @@ entries:
     version: "0.1"
   bitwarden:
   - apiVersion: v2
+    appVersion: 1.24.0
+    created: "2022-05-19T09:45:50.224453698Z"
+    description: A Helm chart for Kubernetes
+    digest: 68f19b350c4220838c673b3ceff91daa8e1b1885ec59c5d30d3db631b33b7d90
+    name: bitwarden
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/bitwarden-0.8/bitwarden-0.8.tgz
+    version: "0.8"
+  - apiVersion: v2
     appVersion: 1.23.1
     created: "2022-01-26T16:51:16.61524403Z"
     description: A Helm chart for Kubernetes
@@ -1064,4 +1074,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-05-19T09:40:46.715328132Z"
+generated: "2022-05-19T09:45:50.224750004Z"
