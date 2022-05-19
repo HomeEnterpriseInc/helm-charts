@@ -30,6 +30,8 @@ spec:
                 key: postgres-root-password
           - name: POSTGRES_USER
             value: {{ .Values.postgres.user }}
+          - name: PGDATA
+            value: /var/lib/postgresql/data/pgdata
           ports:
           - name: postgres
             containerPort: {{ .Values.service.port }}
