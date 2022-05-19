@@ -1005,6 +1005,16 @@ entries:
     version: 0.1.0
   wordpress:
   - apiVersion: v2
+    appVersion: 5.9.3-php8.1-apache
+    created: "2022-05-19T09:37:08.505139915Z"
+    description: Blog server
+    digest: 5188ddf297f6403b454f897e78e54d64e2863976963811f92fc08cda735d720d
+    name: wordpress
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.5/wordpress-0.5.tgz
+    version: "0.5"
+  - apiVersion: v2
     appVersion: 5.8.0-php8.0-apache
     created: "2022-01-26T16:57:15.458801731Z"
     description: Blog server
@@ -1044,4 +1054,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-05-19T08:18:43.625106831Z"
+generated: "2022-05-19T09:37:08.50543373Z"
