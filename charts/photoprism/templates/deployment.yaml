@@ -93,22 +93,17 @@ spec:
             - name: "HOME"
               value: "/photoprism"
           volumeMounts:
-            {{- range .Values.storage.data.mounts }}
-            - name: {{ $root.Values.storage.data.claimName | quote }}
-              mountPath: /photoprism/originals/{{ .name }}
-              {{- if .subPath }}
-              subPath: {{ .subPath }}
-              {{- end }}
-            {{- end }}
-            - name: {{ .Values.storage.cache.claimName | quote }}
+            - name: photos
+              mountPath: /photoprism/originals/
+            - name: config
               mountPath: /photoprism/storage
-              subPath: {{ .Values.storage.cache.subPath }}
+              subPath: "photoprism"
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
-        - name: {{ .Values.storage.data.claimName | quote }}
+        - name: photos
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.data.claimName | quote }}
-        - name: {{ .Values.storage.cache.claimName | quote }}
+            claimName: {{ include "photoprism.name" . }}-photos-pvc
+        - name: config
           persistentVolumeClaim:
-            claimName: {{ .Values.storage.cache.claimName | quote }}
+            claimName: {{ include "photoprism.name" . }}-config-pvc
