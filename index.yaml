@@ -575,6 +575,16 @@ entries:
   photoprism:
   - apiVersion: v2
     appVersion: "20211010"
+    created: "2022-09-25T17:35:59.816092339Z"
+    description: A photo server
+    digest: 422da64645362011d19fa1a55ec1f4d930a60345aefbfc86641ab647c018e794
+    name: photoprism
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/photoprism-0.3/photoprism-0.3.tgz
+    version: "0.3"
+  - apiVersion: v2
+    appVersion: "20211010"
     created: "2022-01-18T16:11:26.639164873Z"
     description: A photo server
     digest: b6716102eca78c1251ce140bbf1a89f93b364ff6d08b35eddfdce857bfa04a5e
@@ -1174,4 +1184,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-09-21T19:23:25.744205804Z"
+generated: "2022-09-25T17:35:59.816743693Z"
