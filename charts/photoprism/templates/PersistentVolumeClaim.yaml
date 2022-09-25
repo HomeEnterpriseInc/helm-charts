@@ -19,7 +19,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: {{ .Values.storage.media.storageClassName }}
+  storageClassName: {{ .Values.storage.photos.storageClassName }}
   resources:
     requests:
-      storage: {{ .Values.storage.media.capacity | quote }}
+      storage: {{ .Values.storage.photos.capacity | quote }}
