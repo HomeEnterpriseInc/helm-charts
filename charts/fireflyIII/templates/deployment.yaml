@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "firefly.name" . }}-deployment
+  labels:
+    {{- include "firefly.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "firefly.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "firefly.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ include "firefly.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.firefly.port }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: DB_CONNECTION
+            value: mysql
+          - name: DB_HOST
+            value: {{ .Values.mysql.host }}
+          - name: DB_PORT
+            value: {{ .Values.mysql.port | quote }}
+          - name: DB_DATABASE
+            value: {{ .Values.mysql.dbname }}
+          - name: DB_USERNAME
+            value: {{ .Values.mysql.username }}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "firefly.name" . }}-secret
+                key: mysql-password
+          - name: TZ
+            value: "UTC"
+          volumeMounts:
+          - name: config
+            mountPath: /var/www/html/storage/upload
+            subPath: upload
+        - name: {{ include "firefly.name" . }}-importer
+          image: "{{ .Values.importer.image.repository }}:{{ .Values.importer.image.tag}}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.importer.port }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: FIREFLY_III_URL
+            value: "http://{{ include "firefly.name" . }}-svc:{{ .Values.service.firefly.port }}"
+          - name: VANITY_URL
+            value: "https://{{ (index .Values.ingress.hosts 0).host }}"
+          - name: FIREFLY_III_CLIENT_ID
+            value: {{ .Values.firefly.clientid | quote }}
+          - name: NORDIGEN_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "firefly.name" . }}-secret
+                key: nordigen-id
+          - name: NORDIGEN_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "firefly.name" . }}-secret
+                key: nordigen-key
+          - name: SPECTRE_APP_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "firefly.name" . }}-secret
+                key: spectre-appid
+          - name: SPECTRE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "firefly.name" . }}-secret
+                key: spectre-secret
+          - name: TZ
+            value: "UTC"
+      securityContext:
+      {{- toYaml .Values.securityContext | nindent 8 }}
+      volumes:
+      - name: upload
+        persistentVolumeClaim:
+          claimName: {{ include "firefly.name" . }}-upload-pvc

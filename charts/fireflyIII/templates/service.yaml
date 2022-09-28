@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "firefly.name" . }}-svc
+  labels:
+    {{- include "firefly.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.firefly.type }}
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.service.firefly.port }}
+      targetPort: {{ .Values.service.firefly.port }}
+  selector:
+    {{- include "firefly.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "firefly.name" . }}-importer-svc
+  labels:
+    {{- include "firefly.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.importer.type }}
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.service.importer.port }}
+      targetPort: {{ .Values.service.importer.port }}
+  selector:
+    {{- include "firefly.selectorLabels" . | nindent 4 }}
