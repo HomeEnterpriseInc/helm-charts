@@ -43,6 +43,11 @@ spec:
               secretKeyRef:
                 name: {{ include "firefly.name" . }}-secret
                 key: mysql-password
+          - name: APP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "firefly.name" . }}-secret
+                key: app-key
           - name: TZ
             value: "UTC"
           volumeMounts:
