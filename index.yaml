@@ -234,6 +234,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/cloudbeaver-0.1/cloudbeaver-0.1.tgz
     version: "0.1"
+  firefly:
+  - apiVersion: v2
+    appVersion: version-5.7.12
+    created: "2022-09-28T12:40:11.624794195Z"
+    description: money server
+    digest: 42ba3d19a61a4c5c22afb932ed8b7a98e7e774e4cc25dbcb358f15eecd397d8a
+    name: firefly
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/firefly-0.1/firefly-0.1.tgz
+    version: "0.1"
   homeassistant:
   - apiVersion: v2
     appVersion: 2022.5.1
@@ -1204,4 +1215,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-09-25T19:41:26.881338239Z"
+generated: "2022-09-28T12:40:11.625009497Z"
