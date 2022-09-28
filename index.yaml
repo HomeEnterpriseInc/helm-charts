@@ -237,6 +237,16 @@ entries:
   firefly:
   - apiVersion: v2
     appVersion: version-5.7.12
+    created: "2022-09-28T19:21:01.46048371Z"
+    description: money server
+    digest: 684a2667f45b1b2312ea948164d3ab5afa8181d8621d4b3e311d0e2f55dab4a5
+    name: firefly
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/firefly-1.2/firefly-1.2.tgz
+    version: "1.2"
+  - apiVersion: v2
+    appVersion: version-5.7.12
     created: "2022-09-28T19:16:38.5537015Z"
     description: money server
     digest: 25f1a6a0cc463cbe21baba28fe929764aa7cb144460817856fdc62acdb72f9f2
@@ -1315,4 +1325,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-09-28T19:16:38.55414111Z"
+generated: "2022-09-28T19:21:01.467637168Z"
