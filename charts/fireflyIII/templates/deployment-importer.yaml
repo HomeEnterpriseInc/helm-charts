@@ -34,6 +34,10 @@ spec:
             value: "https://{{ (index .Values.ingress.hosts 0).host }}"
           - name: FIREFLY_III_CLIENT_ID
             value: {{ .Values.firefly.clientid | quote }}
+          - name: USE_PROXIES
+            value: 127.0.0.1
+          - name: TRUSTED_PROXIES
+            value: "**"
           - name: NORDIGEN_ID
             valueFrom:
               secretKeyRef:
