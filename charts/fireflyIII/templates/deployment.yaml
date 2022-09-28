@@ -45,7 +45,7 @@ spec:
           - name: TZ
             value: "UTC"
           volumeMounts:
-          - name: config
+          - name: upload
             mountPath: /var/www/html/storage/upload
             subPath: upload
         - name: {{ include "firefly.name" . }}-importer
