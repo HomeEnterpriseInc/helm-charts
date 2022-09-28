@@ -8,11 +8,7 @@ image:
   repository: fireflyiii/core
   pullPolicy: IfNotPresent
   tag: "version-5.7.12"
-importer:
-  image:
-    repository: fireflyiii/data-importer
-    pullPolicy: IfNotPresent
-    tag: "version-0.9.16"
+
   
 revisionHistoryLimit: 5
 imagePullSecrets: []
@@ -48,6 +44,23 @@ ingress:
     - secretName: firefly-letsencrypt-certificate
       hosts:
         - money.example.com
+
+importer:
+  image:
+    repository: fireflyiii/data-importer
+    pullPolicy: IfNotPresent
+    tag: "version-0.9.16"
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: money-con.example.com
+    tls:
+      - secretName: firefly-importer-letsencrypt-certificate
+        hosts:
+          - money-con.example.com
 
 resources: {}
 #  requests:
