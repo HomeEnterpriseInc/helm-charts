@@ -13,6 +13,7 @@ metadata:
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   {{- end }}
 spec:
   {{- if .Values.ingress.tls }}
@@ -38,7 +39,7 @@ spec:
                 name: {{ $name }}-svc
                 port:
                   number: {{ $.Values.service.firefly.port }}
-          - path: /importer
+          - path: /importer(/|$)(.*)
             pathType: Prefix
             backend:
               service:
