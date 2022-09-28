@@ -1,6 +1,4 @@
 {{- if .Values.ingress.enabled -}}
-{{- $name := include "firefly.name" . -}}
-{{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1
 {{- else -}}
@@ -31,14 +29,19 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          - path: /
+            pathType: Prefix
             backend:
               service:
-                name: {{ $name }}-svc
+                name: {{ include "firefly.name" . }}-svc
                 port:
-                  number: {{ $svcPort }}
-          {{- end }}
+                  number: {{ .Values.service.firefly.port }}
+          - path: /importer
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "firefly.name" . }}-importer-svc
+                port:
+                  number: {{ .Values.service.importer.port }}
     {{- end }}
   {{- end }}
