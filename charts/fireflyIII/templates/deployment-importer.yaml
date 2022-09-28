@@ -29,7 +29,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
           - name: FIREFLY_III_URL
-            value: "http://{{ include "firefly.name" . }}-svc:{{ .Values.service.firefly.port }}"
+            value: "https://{{ (index .Values.ingress.hosts 0).host }}"
           - name: VANITY_URL
             value: "https://{{ (index .Values.ingress.hosts 0).host }}"
           - name: FIREFLY_III_CLIENT_ID
