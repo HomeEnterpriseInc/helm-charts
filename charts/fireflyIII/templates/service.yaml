@@ -28,4 +28,4 @@ spec:
       port: {{ .Values.service.importer.port }}
       targetPort: {{ .Values.service.importer.port }}
   selector:
-    {{- include "firefly.selectorLabels" . | nindent 4 }}
+    {{- include "fireflyimporter.selectorLabels" . | nindent 4 }}

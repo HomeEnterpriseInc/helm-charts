@@ -35,7 +35,6 @@ Common labels
 */}}
 {{- define "firefly.labels" -}}
 helm.sh/chart: {{ include "firefly.chart" . }}
-{{ include "firefly.selectorLabels" . }}
 component: "file-server"
 {{- if .Values.hostNetwork }}
 hostNetwork: {{ .Values.hostNetwork | quote }}
@@ -53,6 +52,9 @@ Selector labels
 app-name: {{ include "firefly.name" . }}
 {{- end }}
 
+{{- define "fireflyimporter.selectorLabels" -}}
+app-name: {{ include "firefly.name" . }}-importer
+{{- end }}
 {{/*
 Create the name of the service account to use
 */}}
