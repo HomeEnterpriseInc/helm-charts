@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "firefly.selectorLabels" . | nindent 8 }}
+        {{- include "fireflyimporter.selectorLabels" . | nindent 8 }}
     spec:
       restartPolicy: Always
       containers:
