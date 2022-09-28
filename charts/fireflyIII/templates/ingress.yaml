@@ -38,13 +38,6 @@ spec:
                 name: {{ $name }}-svc
                 port:
                   number: {{ $.Values.service.firefly.port }}
-          - path: /importer(/|$)(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $name }}-importer-svc
-                port:
-                  number: {{ $.Values.service.importer.port }}
       {{- end }}
     {{- end }}
   {{- end }}
