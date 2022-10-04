@@ -13,3 +13,51 @@ spec:
       targetPort: {{ .Values.service.port }}
   selector:
     {{- include "plex.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "plex.name" . }}-companion-svc
+  labels:
+    {{- include "plex.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: companion
+      protocol: TCP
+      port: 8324
+      targetPort: 8324
+  selector:
+    {{- include "plex.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "plex.name" . }}-dlna-tcp-svc
+  labels:
+    {{- include "plex.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: dlna-tcp
+      protocol: TCP
+      port: 32469
+      targetPort: 32469
+  selector:
+    {{- include "plex.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "plex.name" . }}-dlna-udp-svc
+  labels:
+    {{- include "plex.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: dlna-udp
+      protocol: UDP
+      port: 1900
+      targetPort: 1900
+  selector:
+    {{- include "plex.selectorLabels" . | nindent 4 }}

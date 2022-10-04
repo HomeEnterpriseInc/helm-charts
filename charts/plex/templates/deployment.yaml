@@ -35,6 +35,19 @@ spec:
               secretKeyRef:
                 name: plex-secret
                 key: claim-ref
+          ports: 
+            - name: http
+              containerPort: 32400
+              protocol: TCP
+            - name: plex-companion
+              containerPort: 8324
+              protocol: TCP
+            - name: dlna
+              containerPort: 32469
+              protocol: TCP
+            - name: dlna-udp
+              containerPort: 1900
+              protocol: UDP
           readinessProbe:
             httpGet:
               path: /identity
