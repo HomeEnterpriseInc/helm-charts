@@ -25,7 +25,7 @@ spec:
   ports:
     - port: 53
       targetPort: dns-53-udp
-      protocol: TCP
+      protocol: UDP
       name: dns-53-udp
   selector:
     {{- include "adguard.selectorLabels" . | nindent 4 }}
