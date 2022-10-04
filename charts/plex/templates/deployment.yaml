@@ -30,6 +30,8 @@ spec:
           env:
           - name: TZ
             value: {{ .Values.plex.server.timeZone | quote }}
+          - name: ADVERTISE_IP
+            value: {{ .Values.plex.advertiseIP | quote }}
           - name: PLEX_CLAIM
             valueFrom:
               secretKeyRef:
