@@ -28,6 +28,8 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+          - name: ENABLE_INSECURE_AGENTS
+            value: "true"
           - name: DOMAIN
             value: {{ (index .Values.ingress.hosts 0).host }}
           - name: DATABASE_HOST
