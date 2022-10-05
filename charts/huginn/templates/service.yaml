@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "huginn.name" . }}-svc
+  labels:
+    {{- include "huginn.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.huginn.type }}
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.service.huginn.port }}
+      targetPort: {{ .Values.service.huginn.port }}
+  selector:
+    {{- include "huginn.selectorLabels" . | nindent 4 }}

@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "huginn.name" . }}-deployment
+  labels:
+    {{- include "huginn.labels" . | nindent 4 }}
+    {{ include "huginn.selectorLabels" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "huginn.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "huginn.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ include "huginn.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.huginn.port }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: DOMAIN
+            value: {{ (index .Values.ingress.hosts 0).host }}
+          - name: DATABASE_HOST
+            value: {{ .Values.huginn.mysql.host }}
+          - name: DATABASE_NAME
+            value: {{ .Values.huginn.mysql.dbname | quote }} 
+          - name: DATABASE_USERNAME
+            value: {{ .Values.huginn.mysql.username | quote }} 
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "huginn.name" . }}-secret
+                key: mysql-password
+          - name: FORCE_SSL
+            value: {{ .Values.huginn.forceSSL | quote }} 
+          - name: INVITATION_CODE
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "huginn.name" . }}-secret
+                key: invitation-code
+          - name: SMTP_DOMAIN
+            value: {{ .Values.huginn.smtp.domain | quote }} 
+          - name: SMTP_USER_NAME
+            value: {{ .Values.huginn.smtp.username | quote }} 
+          - name: SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "huginn.name" . }}-secret
+                key: smtp-password
+          - name: SMTP_SERVER
+            value: {{ .Values.huginn.smtp.server | quote }} 
+          - name: SMTP_PORT
+            value: {{ .Values.huginn.smtp.port | quote }} 
+          - name: SMTP_AUTHENTICATION
+            value: {{ .Values.huginn.smtp.authentication | quote }} 
+          - name: SMTP_ENABLE_STARTTLS_AUTO
+            value: {{ .Values.huginn.smtp.starttlsAuto | quote }} 
+          - name: SMTP_SSL
+            value: {{ .Values.huginn.smtp.ssl | quote }} 
+          - name: EMAIL_FROM_ADDRESS
+            value: {{ .Values.huginn.smtp.fromEmail | quote }} 
+          volumeMounts:
+          - name: upload
+            mountPath: /upload
+            subPath: huginn
+      securityContext:
+      {{- toYaml .Values.securityContext | nindent 8 }}
+      volumes:
+      - name: upload
+        persistentVolumeClaim:
+          claimName: {{ include "huginn.name" . }}-upload-pvc
