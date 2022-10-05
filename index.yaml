@@ -510,6 +510,16 @@ entries:
   huginn:
   - apiVersion: v2
     appVersion: version-5.7.12
+    created: "2022-10-05T14:34:45.066703349Z"
+    description: money server
+    digest: 26151d51ed5b6ee3022095eea8d595f412b85d3ed870a006dc8a76b3350842ae
+    name: huginn
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/huginn-0.2/huginn-0.2.tgz
+    version: "0.2"
+  - apiVersion: v2
+    appVersion: version-5.7.12
     created: "2022-10-05T13:14:36.917493429Z"
     description: money server
     digest: 3ee228e362575d52b90f629a59347c36cd995504cac086d389b46ef10d800b3d
@@ -1426,4 +1436,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-10-05T13:14:36.918277232Z"
+generated: "2022-10-05T14:34:45.067137082Z"
