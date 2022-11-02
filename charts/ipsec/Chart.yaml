@@ -1,6 +1,6 @@
 apiVersion: v2
-name: IPsec
+name: ipsec
 description: VPN Server
 type: application
-version: "0.1"
+version: "0.2"
 appVersion: "latest"
