@@ -29,3 +29,19 @@ spec:
       targetPort: 500
   selector:
     {{- include "ipsec.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ipsec.name" . }}-ltwotp-udp-svc
+  labels:
+    {{- include "ipsec.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: ltwotp-udp
+      protocol: UDP
+      port: 1701
+      targetPort: 1701
+  selector:
+    {{- include "ipsec.selectorLabels" . | nindent 4 }}

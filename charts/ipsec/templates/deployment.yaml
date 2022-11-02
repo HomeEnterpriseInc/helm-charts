@@ -59,5 +59,16 @@ spec:
             - name: esp
               containerPort: 4500
               protocol: UDP
+            - name: ltwotp
+              containerPort: 1701
+              protocol: UDP
+          volumeMounts:
+          - name: config
+            mountPath: /etc/ipsec.d
+            subPath: ipsec
       securityContext:
         {}
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: {{ include "ipsec.name" . }}-config-pvc
