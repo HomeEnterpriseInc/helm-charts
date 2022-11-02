@@ -24,7 +24,7 @@ podAnnotations: {}
 podSecurityContext: {}
 
 securityContext:
-  privileged: false
+  privileged: true
 
 service:
   type: ClusterIP
