@@ -7,6 +7,7 @@ metadata:
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  privileged: true
   selector:
     matchLabels:
       {{- include "ipsec.selectorLabels" . | nindent 6 }}
