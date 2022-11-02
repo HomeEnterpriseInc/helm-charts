@@ -1,0 +1,44 @@
+# Default values for plex.
+
+replicaCount: 1
+revisionHistoryLimit: 5
+image:
+  repository: hwdsl2/ipsec-vpn-server
+  tag: "latest"
+  pullPolicy: Always
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+ipsec:
+  psk: ZGVtbw==
+  user: ZGVtbw==
+  password: ZGVtbw==
+  additional:
+    user: RGVtbyBEZW1v
+    password: RGVtbyBEZW1v
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext:
+  privileged: false
+
+service:
+  type: ClusterIP
+  port: 500
+
+
+resources: {}
+#  limits:
+#    cpu: "1"
+#    memory: "2048Mi"
+#  requests:
+#    cpu: "500m"
+#    memory: "1024Mi"
+
+tolerations: []
+
+affinity: {}

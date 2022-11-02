@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ipsec.name" . }}-deployment
+  labels:
+    {{- include "ipsec.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "ipsec.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "ipsec.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ include "ipsec.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: VPN_IPSEC_PSK
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "ipsec.name" . }}-secret
+                key: ipsec_psk
+          - name: VPN_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "ipsec.name" . }}-secret
+                key: ipsec_user
+          - name: VPN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "ipsec.name" . }}-secret
+                key: ipsec_password
+          - name: VPN_ADDL_USERS
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "ipsec.name" . }}-secret
+                key: ipsec_additional_user
+          - name: VPN_ADDL_PASSWORDS
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "ipsec.name" . }}-secret
+                key: ipsec_additional_pass
+          ports: 
+            - name: isakmp
+              containerPort: 500
+              protocol: UDP
+            - name: esp
+              containerPort: 4500
+              protocol: UDP
+      securityContext:
+        {}
