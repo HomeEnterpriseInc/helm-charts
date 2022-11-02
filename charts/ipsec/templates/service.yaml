@@ -10,7 +10,7 @@ spec:
     - name: esp-udp
       protocol: UDP
       port: 4500
-      targetPort: esp
+      targetPort: 4500
   selector:
     {{- include "ipsec.selectorLabels" . | nindent 4 }}
 ---
@@ -26,6 +26,6 @@ spec:
     - name: isakmp-udp
       protocol: UDP
       port: 500
-      targetPort: isakmp
+      targetPort: 500
   selector:
     {{- include "ipsec.selectorLabels" . | nindent 4 }}
