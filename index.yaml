@@ -539,6 +539,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/huginn-0.1/huginn-0.1.tgz
     version: "0.1"
+  ipsec:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2022-11-02T11:40:18.185378486Z"
+    description: VPN Server
+    digest: dfcbe71b8fdca384b9907a5b4a6524626b167967de630343ff8e7029f15542b0
+    name: ipsec
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/ipsec-0.2/ipsec-0.2.tgz
+    version: "0.2"
   jackett:
   - apiVersion: v2
     appVersion: 0.20.399
@@ -1447,4 +1458,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-11-02T11:28:16.161403498Z"
+generated: "2022-11-02T11:40:18.185728993Z"
