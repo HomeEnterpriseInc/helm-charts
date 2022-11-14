@@ -542,6 +542,16 @@ entries:
   ipsec:
   - apiVersion: v2
     appVersion: latest
+    created: "2022-11-14T15:56:08.138976001Z"
+    description: VPN Server
+    digest: 94f3f3e5946bb2461c149e7609ec5b9b469fdcdda9f64884d63366e424075d2b
+    name: ipsec
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/ipsec-0.7/ipsec-0.7.tgz
+    version: "0.7"
+  - apiVersion: v2
+    appVersion: latest
     created: "2022-11-02T14:29:49.316908056Z"
     description: VPN Server
     digest: 7092a335b3e6795b92d20137b341ebc7a7113fee461aea11c32e779cd6b45d43
@@ -1498,4 +1508,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-11-02T14:29:49.317253054Z"
+generated: "2022-11-14T15:56:08.139285504Z"
