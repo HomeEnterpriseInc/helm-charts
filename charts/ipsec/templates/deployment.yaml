@@ -17,6 +17,7 @@ spec:
       labels:
         {{- include "ipsec.selectorLabels" . | nindent 8 }}
     spec:
+      hostNetwork: {{ .Values.hostNetwork }}
       restartPolicy: Always
       containers:
         - name: {{ include "ipsec.name" . }}
