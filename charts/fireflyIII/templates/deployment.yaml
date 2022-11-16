@@ -72,7 +72,7 @@ spec:
           - name: MAIL_ENCRYPTION
             value: {{ .Values.mail.encryption }}
           - name: ENABLE_EXTERNAL_MAP
-            value: true
+            value: "true"
           volumeMounts:
           - name: upload
             mountPath: /var/www/html/storage/upload
