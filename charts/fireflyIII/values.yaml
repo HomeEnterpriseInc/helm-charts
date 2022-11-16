@@ -98,3 +98,5 @@ mail:
   username: example@gmail.com
   password: cGFzc3dvcmQ=
   encryption: tls
+mapbox:
+  apikey: QVBJX0tFWQ==

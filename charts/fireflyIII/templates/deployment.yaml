@@ -73,6 +73,11 @@ spec:
             value: {{ .Values.mail.encryption }}
           - name: ENABLE_EXTERNAL_MAP
             value: "true"
+          - name: MAPBOX_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "firefly.name" . }}-secret
+                key: mapbox-api-key
           volumeMounts:
           - name: upload
             mountPath: /var/www/html/storage/upload
