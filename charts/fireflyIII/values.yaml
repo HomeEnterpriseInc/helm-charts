@@ -91,3 +91,10 @@ spectre:
 firefly:
   clientid: 4
   key: WldqMHNXcFdaSkhBemZTdFIxZFRLQ3JVajRSZmpqRWY=
+mail:
+  host: gmail.com
+  port: 556
+  from: example@gmail.com
+  username: example@gmail.com
+  password: cGFzc3dvcmQ=
+  encryption: tls
