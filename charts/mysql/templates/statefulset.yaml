@@ -24,11 +24,11 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          - name: MYSQL_ROOT_PASSWORD
+          - name: {{ include "mysql.name" . | upper }}_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: mysql-secret
-                key: mysql-root-password
+                name: {{ include "mysql.name" . }}-secret
+                key: {{ include "mysql.name" . }}-root-password
           ports:
           - name: mysql
             containerPort: {{ .Values.service.port }}
