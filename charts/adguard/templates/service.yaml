@@ -21,7 +21,8 @@ metadata:
   labels:
     {{- include "adguard.labels" . | nindent 4 }}
 spec:
-  type: ClusterIP
+  type: LoadBalancer
+  externalTrafficPolicy: Local
   ports:
     - port: 53
       targetPort: dns-53-udp
