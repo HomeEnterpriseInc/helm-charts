@@ -14,6 +14,7 @@ spec:
   selector:
     {{- include "adguard.selectorLabels" . | nindent 4 }}
 ---
+{{- if .Values.hostNetwork -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -30,3 +31,4 @@ spec:
       name: dns-53-udp
   selector:
     {{- include "adguard.selectorLabels" . | nindent 4 }}
+{{- end }}
