@@ -14,7 +14,7 @@ spec:
   selector:
     {{- include "adguard.selectorLabels" . | nindent 4 }}
 ---
-{{- if .Values.hostNetwork -}}
+{{- if not .Values.hostNetwork -}}
 apiVersion: v1
 kind: Service
 metadata:
