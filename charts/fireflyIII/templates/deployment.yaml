@@ -81,7 +81,7 @@ spec:
           volumeMounts:
           - name: upload
             mountPath: /var/www/html/storage/upload
-            subPath: firefly
+            subPath: {{ include "firefly.name" . }}
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
