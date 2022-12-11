@@ -42,6 +42,7 @@ spec:
     {{- end }}
   {{- end }}
 ---
+{{- if .Values.firefly.importer.enabled -}}
 {{- if .Values.ingress.enabled -}}
 {{- $name := include "firefly.name" . -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -85,3 +86,4 @@ spec:
       {{- end }}
     {{- end }}
   {{- end }}
+{{- end }}

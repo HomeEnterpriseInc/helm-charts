@@ -91,6 +91,8 @@ spectre:
 firefly:
   clientid: 4
   key: WldqMHNXcFdaSkhBemZTdFIxZFRLQ3JVajRSZmpqRWY=
+  importer: 
+    enabled: true
 mail:
   host: gmail.com
   port: 556
