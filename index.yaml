@@ -215,6 +215,16 @@ entries:
     version: "0.1"
   cert-manager:
   - apiVersion: v2
+    appVersion: v1.10.1
+    created: "2022-12-12T16:54:12.239263287Z"
+    description: Cert Manager
+    digest: 2ca9e656f5a09b183afc2aefb553722b84a469bae67815a1112fb9612363ecca
+    name: cert-manager
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/cert-manager-1.10.1/cert-manager-1.10.1.tgz
+    version: 1.10.1
+  - apiVersion: v2
     appVersion: v1.6.1
     created: "2022-01-26T15:53:31.434244166Z"
     description: Cert Manager
@@ -1608,4 +1618,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-12-11T19:14:15.978850969Z"
+generated: "2022-12-12T16:54:12.240886798Z"
