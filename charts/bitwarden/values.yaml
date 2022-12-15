@@ -20,7 +20,7 @@ bitwarden:
   smtp:
     host: smtp.gmail.com
     port: 587
-    ssl: true
+    security: starttls
     userName:
     password:
     fromEmail:
