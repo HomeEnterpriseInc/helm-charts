@@ -69,7 +69,7 @@ spec:
               mountPath: /dev/net/tun
             - name: data
               mountPath: /data
-              subpath: {{ $fullName }}
+              subPath: {{ $fullName }}/data
             - name: config
               mountPath: /config.yaml
               subPath: config.yaml
