@@ -33,8 +33,8 @@ spec:
               value: {{ .Values.bitwarden.smtp.host | quote }}
             - name: SMTP_PORT
               value: {{ .Values.bitwarden.smtp.port | quote }}
-            - name: SMTP_SSL
-              value: {{ .Values.bitwarden.smtp.ssl | quote }}
+            - name: SMTP_SECURITY
+              value: {{ .Values.bitwarden.smtp.security | quote }}
             - name: SMTP_USERNAME
               value: {{ .Values.bitwarden.smtp.userName | quote }}
             - name: SMTP_PASSWORD
