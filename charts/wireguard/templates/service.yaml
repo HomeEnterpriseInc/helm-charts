@@ -26,17 +26,12 @@ spec:
     {{- include "wg-access-server.selectorLabels" . | nindent 4 }}
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ $fullName }}-wireguard
   labels:
     {{- include "wg-access-server.labels" . | nindent 4 }}
-{{- if .Values.wireguard.service.annotations }}
-  annotations:
-{{ toYaml .Values.wireguard.service.annotations | indent 4 }}
-{{- end }}
 spec:
   type: {{ .Values.wireguard.service.type }}
   sessionAffinity: ClientIP

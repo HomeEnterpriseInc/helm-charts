@@ -8,15 +8,17 @@ web:
     privateKey: ""
   service:
     type: ClusterIP
+    annotations: {}
 
 wireguard:
   config:
     privateKey: ""
   service:
-    type: ClusterIP
+    type: LoadBalancer
+    annotations: {}
 
 persistence:
-  enabled: false
+  enabled: true
   size: 100Mi
   annotations: {}
   accessModes:
@@ -32,7 +34,9 @@ certManager:
 
 ingress:
   enabled: true
-  annotations: {}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/ingress.class: nginx
   hosts:
      - vpn.example.com
   tls:
@@ -47,7 +51,7 @@ fullnameOverride: ""
 imagePullSecrets: []
 
 image:
-  repository: place1/wg-access-server
+  repository: linuxserver/wireguard
   pullPolicy: IfNotPresent
   tag: "v0.4.6"
 
