@@ -1,6 +1,5 @@
 {{- if .Values.ingress.enabled -}}
   {{- $name := include "wg-access-server.fullname" . -}}
-  {{- $svcPort := .Values.service.port -}}
   {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1
   {{- else -}}
@@ -38,7 +37,7 @@ spec:
               service:
                 name: {{ $name }}-svc
                 port:
-                  number: {{ $svcPort }}
+                  number: 8000
           {{- end }}
     {{- end }}
   {{- end }}
