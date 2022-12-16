@@ -1479,6 +1479,15 @@ entries:
   wg-access-server:
   - apiVersion: v2
     appVersion: v0.4.6
+    created: "2022-12-16T11:29:43.984196885Z"
+    description: A Wireguard VPN Access Server
+    digest: 492f01ebebc9e6564db0c4099e31bca77983fe4dfdebb67fba6eea5f9f405f55
+    name: wg-access-server
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wg-access-server-0.3/wg-access-server-0.3.tgz
+    version: "0.3"
+  - apiVersion: v2
+    appVersion: v0.4.6
     created: "2022-12-16T11:18:36.912113712Z"
     description: A Wireguard VPN Access Server
     digest: fb0866974ff9130a18bfc02f72f4da0972010e122d9ac8a29e7765ab820df5b4
@@ -1647,4 +1656,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2022-12-16T11:18:36.912796308Z"
+generated: "2022-12-16T11:29:43.984599685Z"
