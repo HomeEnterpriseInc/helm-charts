@@ -45,6 +45,12 @@ spec:
               value: {{ .Values.bitwarden.signup.allowed | quote }}
             - name: DOMAIN
               value: {{ .Values.bitwarden.domain | quote }}
+            - name: ORG_EVENTS_ENABLED
+              value: "true"
+            - name: ORG_GROUPS_ENABLED
+              value: "true"
+            - name: EVENTS_DAYS_RETAIN
+              value: "30"
           {{- if .Values.probe.enable }}
           readinessProbe:
             httpGet:
