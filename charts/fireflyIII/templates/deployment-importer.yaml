@@ -69,7 +69,7 @@ spec:
           - name: CAN_POST_AUTOIMPORT
             value: "true"
           - name: IMPORT_DIR_WHITELIST
-            value: "/var/www/html/storage/autoimport"
+            value: "/var/www/html/storage/autoimport/autoImport"
           - name: TZ
             value: "UTC"
           volumeMounts:
