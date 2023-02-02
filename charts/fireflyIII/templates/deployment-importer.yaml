@@ -59,8 +59,23 @@ spec:
               secretKeyRef:
                 name: {{ include "firefly.name" . }}-secret
                 key: spectre-secret
+          - name: AUTO_IMPORT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "firefly.name" . }}-secret
+                key: auto-import-secret
+          - name: CAN_POST_FILES
+            value: "true"
+          - name: CAN_POST_AUTOIMPORT
+            value: "true"
+          - name: IMPORT_DIR_WHITELIST
+            value: "/var/www/html/storage/autoimport"
           - name: TZ
             value: "UTC"
+          volumeMounts:
+            - name: upload
+              mountPath: /var/www/html/storage/autoimport
+              subPath: {{ include "firefly.name" . }}
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:

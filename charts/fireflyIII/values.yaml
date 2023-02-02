@@ -93,6 +93,9 @@ firefly:
   key: WldqMHNXcFdaSkhBemZTdFIxZFRLQ3JVajRSZmpqRWY=
   importer: 
     enabled: true
+    autoImporter:
+      secret: YXV0b2ltcHNlYzE2Y2hhcg==
+
 mail:
   host: gmail.com
   port: 556
