@@ -50,25 +50,6 @@ spec:
             - name: dlna-udp
               containerPort: 1900
               protocol: UDP
-          readinessProbe:
-            httpGet:
-              path: /identity
-              port: {{ .Values.service.port }}
-            failureThreshold: 5
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /identity
-              port: {{ .Values.service.port }}
-            failureThreshold: 5
-            periodSeconds: 10
-          startupProbe:
-            httpGet:
-              path: /identity
-              port: {{ .Values.service.port }}
-            failureThreshold: 30            
-            initialDelaySeconds: 5
-            periodSeconds: 10
           volumeMounts:
           - name: media
             mountPath: /movies
