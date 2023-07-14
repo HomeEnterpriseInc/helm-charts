@@ -16,9 +16,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "plex.name" . }}-media-pvc
+  name: {{ include "plex.name" . }}-movies-pvc
   annotations:
-    nfs.io/storage-path: "Media"
+    nfs.io/storage-path: "Movies"
 spec:
   accessModes:
     - ReadWriteOnce

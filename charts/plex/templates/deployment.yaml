@@ -28,16 +28,16 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          - name: TZ
-            value: {{ .Values.plex.server.timeZone | quote }}
-          - name: ADVERTISE_IP
-            value: {{ .Values.plex.advertiseIP | quote }}
-          - name: PLEX_CLAIM
-            valueFrom:
-              secretKeyRef:
-                name: plex-secret
-                key: claim-ref
-          ports: 
+            - name: TZ
+              value: {{ .Values.plex.server.timeZone | quote }}
+            - name: ADVERTISE_IP
+              value: {{ .Values.plex.advertiseIP | quote }}
+            - name: PLEX_CLAIM
+              valueFrom:
+                secretKeyRef:
+                  name: plex-secret
+                  key: claim-ref
+          ports:
             - name: http
               containerPort: 32400
               protocol: TCP
@@ -51,22 +51,20 @@ spec:
               containerPort: 1900
               protocol: UDP
           volumeMounts:
-          - name: media
-            mountPath: /movies
-            subPath: Media
-          - name: config
-            mountPath: /config
-            subPath: plex
-          - name: transcode-volume
-            mountPath: /transcode
-      securityContext:
-        {}
+            - name: movies
+              mountPath: /movies
+              subPath: Movies
+            - name: config
+              mountPath: /config
+              subPath: plex
+            - name: transcode-volume
+              mountPath: /transcode
       volumes:
-      - name: media
-        persistentVolumeClaim:
-          claimName: {{ include "plex.name" . }}-media-pvc
-      - name: config
-        persistentVolumeClaim:
-          claimName: {{ include "plex.name" . }}-config-pvc
-      - name: transcode-volume
-        emptyDir: { }
+        - name: movies
+          persistentVolumeClaim:
+            claimName: {{ include "plex.name" . }}-movies-pvc
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ include "plex.name" . }}-config-pvc
+        - name: transcode-volume
+          emptyDir: { }
