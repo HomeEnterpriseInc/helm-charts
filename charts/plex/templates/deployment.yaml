@@ -54,6 +54,9 @@ spec:
             - name: movies
               mountPath: /movies
               subPath: Movies
+            - name: tv-shows
+              mountPath: /tv-shows
+              subPath: TVSeries
             - name: config
               mountPath: /config
               subPath: plex
@@ -63,6 +66,9 @@ spec:
         - name: movies
           persistentVolumeClaim:
             claimName: {{ include "plex.name" . }}-movies-pvc
+        - name: tv-shows
+          persistentVolumeClaim:
+            claimName: {{ include "plex.name" . }}-tv-shows-pvc
         - name: config
           persistentVolumeClaim:
             claimName: {{ include "plex.name" . }}-config-pvc

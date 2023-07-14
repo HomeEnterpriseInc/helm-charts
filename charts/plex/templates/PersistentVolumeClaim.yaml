@@ -29,3 +29,20 @@ spec:
   resources:
     requests:
       storage: {{ .Values.storage.media.capacity | quote }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "plex.name" . }}-tv-shows-pvc
+  annotations:
+    nfs.io/storage-path: "TVSeries"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if .Values.storage.media.persistenentVolume.create }}
+  volumeName: {{ include "plex.name" . }}-media-pv
+  {{ end }}
+  storageClassName: {{ .Values.storage.media.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.media.capacity | quote }}
