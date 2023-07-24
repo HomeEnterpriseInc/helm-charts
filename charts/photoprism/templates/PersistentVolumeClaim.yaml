@@ -37,4 +37,4 @@ spec:
   storageClassName: {{ .Values.storage.photos.storageClassName }}
   resources:
     requests:
-      storage: {{ .Values.storage.media.capacity | quote }}
+      storage: {{ .Values.storage.photos.capacity | quote }}
