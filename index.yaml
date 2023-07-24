@@ -274,6 +274,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/cert-manager-1.5.3/cert-manager-1.5.3.tgz
     version: 1.5.3
+  changedetection:
+  - apiVersion: v2
+    appVersion: 0.44.20230719
+    created: "2023-07-24T12:16:53.008448857Z"
+    description: DB Client
+    digest: deb977b173aea87981a75a9dd2ea87057b39b41fa01c175ffac9dfdb7f0f1909
+    name: changedetection
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/changedetection-0.1/changedetection-0.1.tgz
+    version: "0.1"
   cloudbeaver:
   - apiVersion: v2
     appVersion: 22.0.4
@@ -1725,4 +1736,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2023-07-14T13:24:41.948763594Z"
+generated: "2023-07-24T12:16:53.009162566Z"
