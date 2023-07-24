@@ -1,0 +1,6 @@
+apiVersion: v2
+name: changedetection
+description: DB Client
+type: application
+version: "0.1"
+appVersion: "0.44.20230719"

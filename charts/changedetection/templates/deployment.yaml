@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "changedetection.name" . }}-deployment
+  labels:
+    {{- include "changedetection.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "changedetection.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "changedetection.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ include "changedetection.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PLAYWRIGHT_DRIVER_URL
+              value: ws://localhost:3000/?stealth=1&--disable-web-security=true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /opt/changedetection/workspace
+              subPath: {{ include "changedetection.name" . }}
+        - name: {{ include "changedetection.name" . }}-playwright-chrome
+          image: "{{ .Values.playwrightChrome.image.repository }}:{{ .Values.playwrightChrome.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: SCREEN_WIDTH
+            value: "1920"
+          - name: SCREEN_HEIGHT
+            value: "1024"
+          - name: SCREEN_DEPTH
+            value: "16"
+          - name: ENABLE_DEBUGGER
+            value: "false"
+          - name: PREBOOT_CHROME
+            value: "true"
+          - name: CONNECTION_TIMEOUT
+            value: "300000"
+          - name: MAX_CONCURRENT_SESSIONS
+            value: "10"
+          - name: CHROME_REFRESH_TIME
+            value: "600000"
+          - name: DEFAULT_BLOCK_ADS
+            value: "true"
+          - name: DEFAULT_STEALTH
+            value: "true"
+            #             Ignore HTTPS errors, like for self-signed certs
+            #            - DEFAULT_IGNORE_HTTPS_ERRORS=true
+      securityContext:
+      {{- toYaml .Values.securityContext | nindent 8 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "changedetection.name" . }}-pvc
