@@ -23,3 +23,18 @@ spec:
   resources:
     requests:
       storage: {{ .Values.storage.photos.capacity | quote }}
+---
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "photoprism.name" . }}-photos-pvc
+  annotations:
+    nfs.io/storage-path: "Photos"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.storage.photos.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.media.capacity | quote }}

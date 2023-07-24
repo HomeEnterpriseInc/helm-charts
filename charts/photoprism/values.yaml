@@ -30,8 +30,8 @@ storage:
     storageClassName: nfs-client
     capacity: 1G
   photos:
-    storageClassName: nfs-photos-client
-    capacity: 100G
+    storageClassName: smb-media
+    capacity: 10G
 
 
 photoprism:
