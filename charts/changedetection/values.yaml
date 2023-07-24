@@ -5,9 +5,9 @@
 replicaCount: 1
 hostNetwork: false
 image:
-  repository: linuxserver/changedetection.io
+  repository: ghcr.io/dgtlmoon/changedetection.io
   pullPolicy: IfNotPresent
-  tag: "0.44.20230719"
+  tag: "0.44"
 playwrightChrome:
   image:
     repository: browserless/chrome

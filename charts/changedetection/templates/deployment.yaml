@@ -29,7 +29,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: data
-              mountPath: /opt/changedetection/workspace
+              mountPath: /datastore
               subPath: {{ include "changedetection.name" . }}
         - name: {{ include "changedetection.name" . }}-playwright-chrome
           image: "{{ .Values.playwrightChrome.image.repository }}:{{ .Values.playwrightChrome.image.tag }}"
