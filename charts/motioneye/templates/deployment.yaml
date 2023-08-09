@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "motioneye.name" . }}-deployment
+  labels:
+    {{- include "motioneye.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "motioneye.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "motioneye.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ include "motioneye.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.probe.enable }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 5
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            failureThreshold: 30
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /etc/motioneye
+              subPath: {{ include "motioneye.name" . }}/conf
+            - name: data
+              mountPath: /var/lib/motioneye
+              subPath: {{ include "motioneye.name" . }}/data
+      securityContext:
+        {}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "motioneye.name" . }}-pvc

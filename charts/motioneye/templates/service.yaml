@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "motioneye.name" . }}-svc
+  labels:
+    {{- include "motioneye.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+  selector:
+    {{- include "motioneye.selectorLabels" . | nindent 4 }}
