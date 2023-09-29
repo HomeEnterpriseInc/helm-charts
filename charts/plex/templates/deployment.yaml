@@ -61,7 +61,28 @@ spec:
               mountPath: /config
               subPath: plex
             - name: transcode-volume
-              mountPath: /transcode
+              mountPath: /
+          {{- if .Values.probe.enable }}
+          readinessProbe:
+            httpGet:
+              path: /identity
+              port: 32400
+            failureThreshold: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /identity
+              port: 32400
+            failureThreshold: 5
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /identity
+              port: 32400
+            failureThreshold: 30
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          {{- end }}
       volumes:
         - name: movies
           persistentVolumeClaim:

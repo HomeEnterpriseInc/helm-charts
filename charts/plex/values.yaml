@@ -52,7 +52,8 @@ resources: {}
 #  requests:
 #    cpu: "500m"
 #    memory: "1024Mi"
-
+probe:
+  enable: true
 storage:
   config:
     storageClassName: local-path
