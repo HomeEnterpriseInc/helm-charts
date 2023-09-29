@@ -61,7 +61,7 @@ spec:
               mountPath: /config
               subPath: plex
             - name: transcode-volume
-              mountPath: /
+              mountPath: /transcode
           {{- if .Values.probe.enable }}
           readinessProbe:
             httpGet:
