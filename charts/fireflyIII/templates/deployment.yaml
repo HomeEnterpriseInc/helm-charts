@@ -79,7 +79,7 @@ spec:
                 name: {{ include "firefly.name" . }}-secret
                 key: mapbox-api-key
           - name: ALLOW_WEBHOOKS
-            value: true
+            value: "true"
           volumeMounts:
           - name: upload
             mountPath: /var/www/html/storage/upload
