@@ -42,7 +42,7 @@ spec:
             value: {{ .Values.wikijs.db.name }}
           - name: ADMIN_EMAIL
             vakue: {{ .Values.wikijs.admin.email }}
-          - name: ADMIN_EMAIL
+          - name: ADMIN_PASS
             valueFrom:
               secretKeyRef:
                 name: {{ include "wikijs.name" . }}-secret
