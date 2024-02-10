@@ -1324,6 +1324,16 @@ entries:
   postgres:
   - apiVersion: v2
     appVersion: "14.2"
+    created: "2024-02-10T23:00:17.572353951Z"
+    description: A Helm chart for Kubernetes
+    digest: b8f288005ac9398dc7ab587e6620d89fcdefc97852d841d19c9b69980b9bd616
+    name: postgres
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/postgres-0.7.0/postgres-0.7.0.tgz
+    version: 0.7.0
+  - apiVersion: v2
+    appVersion: "14.2"
     created: "2024-02-10T22:44:51.556159838Z"
     description: A Helm chart for Kubernetes
     digest: 084674eef93cfb1def7d77e343781f38b03747f9b766dec6dc8913db198b31b2
@@ -1698,6 +1708,16 @@ entries:
   wikijs:
   - apiVersion: v2
     appVersion: canary-2.5.243
+    created: "2024-02-10T23:00:17.683853393Z"
+    description: Wiki.js helm chart
+    digest: d5e2fd16a6004b807bbade9b0f383f9c209d0614e8df9ecddb67ba7addfcfa38
+    name: wikijs
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wikijs-1.1.0/wikijs-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: canary-2.5.243
     created: "2022-05-19T10:38:55.786533063Z"
     description: Wiki.js helm chart
     digest: 37de27501253961c5cd1d85b540f9cc0ff3cc260ecd2d75c4fd3c725833ccfcc
@@ -1847,4 +1867,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2024-02-10T22:44:51.556600662Z"
+generated: "2024-02-10T23:00:17.684224292Z"
