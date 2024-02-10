@@ -4,6 +4,8 @@
 
 replicaCount: 1
 
+hostNetwork: "false"
+
 image:
   repository: postgres
   pullPolicy: IfNotPresent

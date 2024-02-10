@@ -40,6 +40,13 @@ spec:
             value: {{ .Values.wikijs.db.username }}
           - name: DB_NAME
             value: {{ .Values.wikijs.db.name }}
+          - name: ADMIN_EMAIL
+            vakue: {{ .Values.wikijs.admin.email }}
+          - name: ADMIN_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "wikijs.name" . }}-secret
+                key: admin-password
           volumeMounts:
           - name: data
             mountPath: /wiki/data

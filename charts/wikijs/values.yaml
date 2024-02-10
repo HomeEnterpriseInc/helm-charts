@@ -40,3 +40,6 @@ wikijs:
     username: wikijs
     password: d2lraWpzQDMyMQ==
     name: wikijs
+  admin:
+    email: admin@example.com
+    password: YWRtaW5AMzIx
