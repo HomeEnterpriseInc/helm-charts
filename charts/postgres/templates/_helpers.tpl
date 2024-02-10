@@ -34,7 +34,7 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "postgres.labels" -}}
-helm.sh/chart: {{ include "postgres.chart" . }}
+helm.sh/chart: {{ include "postgres.chart" . | quote }}
 {{ include "postgres.selectorLabels" . }}
 component: "database-server"
 hostNetwork: {{ .Values.hostNetwork | quote }}
@@ -48,7 +48,7 @@ version: {{ .Chart.AppVersion | quote }}
 Selector labels
 */}}
 {{- define "postgres.selectorLabels" -}}
-app-name: {{ include "postgres.name" . }}
+app-name: {{ include "postgres.name" . | quote }}
 {{- end }}
 
 {{/*
