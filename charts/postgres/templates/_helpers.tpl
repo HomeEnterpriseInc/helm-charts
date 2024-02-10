@@ -39,8 +39,8 @@ helm.sh/chart: {{ include "postgres.chart" . }}
 component: "database-server"
 hostNetwork: {{ .Values.hostNetwork | quote }}
 internal-service: {{not .Values.hostNetwork | quote }}
-managed-by: chynten
-created-by: chynten
+managed-by: "chynten"
+created-by: "chynten"
 version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 

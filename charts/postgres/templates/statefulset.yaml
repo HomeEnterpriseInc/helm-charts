@@ -26,8 +26,8 @@ spec:
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: postgres-secret
-                key: postgres-root-password
+                name: {{ include "postgres.name" . }}-secret
+                key: {{ include "postgres.name" . }}-root-password
           - name: POSTGRES_USER
             value: {{ .Values.postgres.user }}
           - name: PGDATA
