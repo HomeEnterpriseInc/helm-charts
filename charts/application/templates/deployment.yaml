@@ -18,7 +18,9 @@ spec:
       labels:
         {{- include "application.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if .Values.application.hostNetwork }}
       hostNetwork: {{ .Values.application.hostNetwork }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:

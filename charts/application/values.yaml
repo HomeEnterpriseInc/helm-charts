@@ -19,8 +19,6 @@ application:
   volumes:
 
 securityContext:
-  allowPrivilegeEscalation: false
-  allowPrivilege: false
 
 resources:
 overrideProbe:
