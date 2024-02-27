@@ -23,23 +23,6 @@ securityContext:
   allowPrivilege: false
 
 resources:
-
-
 overrideProbe:
-  readinessProbe:
-    tcpSocket:
-      port: 8085
-    initialDelaySeconds: 15
-    periodSeconds: 10
-  livenessProbe:
-    tcpSocket:
-      port: 8085
-    initialDelaySeconds: 15
-    periodSeconds: 10
-  startupProbe:
-    tcpSocket:
-      port: 8085
-    initialDelaySeconds: 15
-    periodSeconds: 10
 
 affinity: {}
