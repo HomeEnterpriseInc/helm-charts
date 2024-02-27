@@ -80,7 +80,7 @@ spec:
       {{- range $key, $value :=  .Values.application.volumes }}
         - name: {{ $key }}
           persistentVolumeClaim:
-            claimName: {{ $key }}-pvc
+            claimName: {{ include "application.name" $ }}-{{ $key }}-pvc
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
