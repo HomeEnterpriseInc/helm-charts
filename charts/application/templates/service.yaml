@@ -9,7 +9,7 @@ metadata:
     {{- include "application.labels" $ | nindent 4 }}
 spec:
   type: {{ $value.serviceType | default "ClusterIP"}}
-  externalTrafficPolicy: {{ $value.externalTrafficPolicy | default "Local" }}
+  externalTrafficPolicy: {{ $value.externalTrafficPolicy | default "Local" | quote }}
   ports:
     - port: {{ $value.port }}
       targetPort: {{ $key }}
