@@ -12,75 +12,18 @@ fullnameOverride: ""
 application:
   component: dns-server
   managedBy: chynten
-  hostNetwork: true
+  hostNetwork: false
   configs:
-    ABC: XYZ
-    MNO: "true"
-    XYS: |-
-      asdasd
-      asdasd
-      asdasd
   secrets:
-    OPQ: "RST"
-    Ama: "true"
   ports:
-    http:
-      port: 8080
-      probe:
-        enable: true
-        initialDelay: 15
-        period: 10
-      ingress:
-        enable: true
-        host: dns.example.com
-        path: /
-        pathType: Prefix
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt
-          kubernetes.io/ingress.class: nginx
-    https:
-      port: 8081
-      ingress:
-        enable: true
-        host: dns.example.com
-        path: /
-        pathType: Prefix
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt
-          kubernetes.io/ingress.class: nginx
-    dns:
-      port: 53
-      proto: UDP
-      serviceType: LoadBalancer
   volumes:
-    data:
-      persistentVolumeName: data
-      storageClassName:
-      accessMode: ReadWriteOnce
-      mountPath: /var/lib/data
-      subPath: /app
-      subPathExpr:
-      capacity: 10G
-    config:
-      persistentVolumeName: config
-      storageClassName:
-      accessMode: ReadWriteOnce
-      mountPath: /var/lib/conf
-      subPath: /app
-      subPathExpr:
-      capacity: 10G
 
 securityContext:
   allowPrivilegeEscalation: false
   allowPrivilege: false
 
 resources:
-  limits:
-    cpu: "100m"
-    memory: "128Mi"
-  requests:
-    cpu: "50m"
-    memory: "64Mi"
+
 
 overrideProbe:
   readinessProbe:
