@@ -14,7 +14,7 @@ spec:
   tls:
     - hosts:
         - {{ $value.ingress.host | quote }}
-      secretName: {{ $value.ingress.host | replace "." "_" }}-certificate
+      secretName: {{ $value.ingress.host | replace "." "-" }}-certificate
   rules:
     - host: {{ $value.ingress.host | quote }}
       http:
