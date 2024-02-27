@@ -122,6 +122,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/adguard-0.1/adguard-0.1.tgz
     version: "0.1"
+  application:
+  - apiVersion: v2
+    appVersion: v0.1
+    created: "2024-02-27T19:33:14.165246738Z"
+    description: General Application Template
+    digest: d28429355d748592ab65cd139b6276e619814846220c1375dc969047e3083064
+    name: application
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/application-0.1.0/application-0.1.0.tgz
+    version: 0.1.0
   bitwarden:
   - apiVersion: v2
     appVersion: 1.27.0
@@ -1897,4 +1908,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2024-02-10T23:50:45.213221805Z"
+generated: "2024-02-27T19:33:14.165630684Z"
