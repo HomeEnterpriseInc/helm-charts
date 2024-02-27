@@ -1,0 +1,21 @@
+{{- if not .Values.application.hostNetwork -}}
+{{- range $key, $value :=  .Values.application.ports }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "application.name" $ }}-{{ $key }}
+  labels:
+    {{- include "application.labels" $ | nindent 4 }}
+spec:
+  type: {{ $value.serviceType | default "ClusterIP"}}
+  externalTrafficPolicy: {{ $value.externalTrafficPolicy | default "Local" }}
+  ports:
+    - port: {{ $value.port }}
+      targetPort: {{ $key }}
+      protocol: {{ $value.proto | default "TCP" }}
+      name: {{ $key }}
+  selector:
+    {{- include "application.selectorLabels" $ | nindent 4 }}
+{{- end }}
+{{- end }}

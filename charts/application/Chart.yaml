@@ -1,0 +1,6 @@
+apiVersion: v2
+name: application
+description: General Application Template
+type: application
+version: "0.1.0"
+appVersion: "v0.1"
