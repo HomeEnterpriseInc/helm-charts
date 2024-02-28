@@ -21,63 +21,63 @@ spec:
       {{- if .Values.application.hostNetwork }}
       hostNetwork: {{ .Values.application.hostNetwork }}
       {{- end }}
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          envFrom:
-          {{- if .Values.application.configs}}
-          - configMapRef:
-              name: {{ include "application.name" . }}
-          {{- end }}
-          {{- if .Values.application.secrets }}
-          - secretRef:
-              name: {{ include "application.name" . }}
-          {{- end }}
-          {{- if not .Values.application.hostNetwork }}
-          ports:
-          {{- range $key, $value :=  .Values.application.ports }}
-            - name: {{ $key }}
-              containerPort: {{ $value.port }}
-              protocol: {{ $value.proto | default "TCP" }}
-          {{- end }}
-          {{- end }}
-          {{- if .Values.overrideProbe }}
-          {{- with .Values.overrideProbe }}
-            {{- toYaml . | nindent 10 }}
-          {{- end }}
-          {{- else }}
-          {{- range $key, $value :=  .Values.application.ports }}
-          {{- if and $value.probe $value.probe.enable }}
-          readinessProbe:
-            tcpSocket:
-              port: {{ $value.port }}
-            initialDelaySeconds: {{ $value.probe.initialDelay }}
-            periodSeconds: {{ $value.probe.period }}
-          livenessProbe:
-            tcpSocket:
-              port: {{ $value.port }}
-            initialDelaySeconds: {{ $value.probe.initialDelay }}
-            periodSeconds: {{ $value.probe.period }}
-          startupProbe:
-            tcpSocket:
-              port: {{ $value.port }}
-            initialDelaySeconds: {{ $value.probe.initialDelay }}
-            periodSeconds: {{ $value.probe.period }}
-          {{- break }}
-          {{- end }}
-          {{- end }}
-          {{- end }}
-          volumeMounts:
-          {{- range $key, $value :=  .Values.application.volumes }}
-            - name: {{ $key }}
-              mountPath: {{ $value.mountPath }}
-              subPath: {{ $value.subPath }}
-          {{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        {{- if .Values.application.configs}}
+        - configMapRef:
+            name: {{ include "application.name" . }}
+        {{- end }}
+        {{- if .Values.application.secrets }}
+        - secretRef:
+            name: {{ include "application.name" . }}
+        {{- end }}
+        {{- if not .Values.application.hostNetwork }}
+        ports:
+        {{- range $key, $value :=  .Values.application.ports }}
+          - name: {{ $key }}
+            containerPort: {{ $value.port }}
+            protocol: {{ $value.proto | default "TCP" }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.overrideProbe }}
+        {{- with .Values.overrideProbe }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- else }}
+        {{- range $key, $value :=  .Values.application.ports }}
+        {{- if and $value.probe $value.probe.enable }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ $value.port }}
+          initialDelaySeconds: {{ $value.probe.initialDelay }}
+          periodSeconds: {{ $value.probe.period }}
+        livenessProbe:
+          tcpSocket:
+            port: {{ $value.port }}
+          initialDelaySeconds: {{ $value.probe.initialDelay }}
+          periodSeconds: {{ $value.probe.period }}
+        startupProbe:
+          tcpSocket:
+            port: {{ $value.port }}
+          initialDelaySeconds: {{ $value.probe.initialDelay }}
+          periodSeconds: {{ $value.probe.period }}
+        {{- break }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
+        volumeMounts:
+        {{- range $key, $value :=  .Values.application.volumes }}
+          - name: {{ $key }}
+            mountPath: {{ $value.mountPath }}
+            subPath: {{ $value.subPath }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
       volumes:
       {{- range $key, $value :=  .Values.application.volumes }}
         - name: {{ $key }}
