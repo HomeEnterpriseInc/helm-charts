@@ -21,8 +21,6 @@ spec:
       {{- if .Values.application.hostNetwork }}
       hostNetwork: {{ .Values.application.hostNetwork }}
       {{- end }}
-      securityContext:
-        {{- toYaml .Values.securityContext | nindent 8 }}
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -78,6 +76,8 @@ spec:
         {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
       volumes:
       {{- range $key, $value :=  .Values.application.volumes }}
         - name: {{ $key }}
