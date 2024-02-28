@@ -18,9 +18,11 @@ application:
   ports:
   volumes:
 
-securityContext:
+securityContext: {}
 
-resources:
-overrideProbe:
+resources: {}
+overrideProbe: {}
 
 affinity: {}
+
+podAnnotations: {}
