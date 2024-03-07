@@ -38,14 +38,12 @@ spec:
         - secretRef:
             name: {{ include "application.name" $ }}-{{ $containerName }}
         {{- end }}
-        {{- if not $.Values.hostNetwork }}
         {{- if $containerValues.services }}
         ports:
         {{- range $serviceName, $serviceValue :=  $containerValues.services }}
           - name: {{ $serviceName }}
             containerPort: {{ $serviceValue.port }}
             protocol: {{ $serviceValue.proto | default "TCP" }}
-        {{- end }}
         {{- end }}
         {{- end }}
         {{- if $containerValues.overrideProbe }}

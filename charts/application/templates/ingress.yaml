@@ -1,4 +1,3 @@
-{{- if not .Values.hostNetwork -}}
 {{- if .Values.application -}}
 {{- range $containerName, $containerValues :=  .Values.application }}
 {{- if $containerValues.services -}}
@@ -31,7 +30,6 @@ spec:
                 port:
                   number: {{ $serviceValues.port }}
 ---
-{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
