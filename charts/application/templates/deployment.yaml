@@ -20,71 +20,85 @@ spec:
       labels:
         {{- include "application.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if .Values.application.hostNetwork }}
-      hostNetwork: {{ .Values.application.hostNetwork }}
+      {{- if .Values.hostNetwork }}
+      hostNetwork: {{ .Values.hostNetwork }}
       {{- end }}
       containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+      {{- if .Values.application }}
+      {{- range $containerName, $containerValues :=  .Values.application }}
+      - name: {{ $containerName }}
+        image: "{{ $containerValues.image.repository }}:{{ $containerValues.image.tag | default $.Chart.AppVersion }}"
+        imagePullPolicy: {{ $containerValues.image.pullPolicy }}
         envFrom:
-        {{- if .Values.application.configs}}
+        {{- if $containerValues.configs}}
         - configMapRef:
-            name: {{ include "application.name" . }}
+            name: {{ include "application.name" $ }}-{{ $containerName }}
         {{- end }}
-        {{- if .Values.application.secrets }}
+        {{- if $containerValues.secrets }}
         - secretRef:
-            name: {{ include "application.name" . }}
+            name: {{ include "application.name" $ }}-{{ $containerName }}
         {{- end }}
-        {{- if not .Values.application.hostNetwork }}
+        {{- if not $.Values.hostNetwork }}
+        {{- if $containerValues.services }}
         ports:
-        {{- range $key, $value :=  .Values.application.ports }}
-          - name: {{ $key }}
-            containerPort: {{ $value.port }}
-            protocol: {{ $value.proto | default "TCP" }}
+        {{- range $serviceName, $serviceValue :=  $containerValues.services }}
+          - name: {{ $serviceName }}
+            containerPort: {{ $serviceValue.port }}
+            protocol: {{ $serviceValue.proto | default "TCP" }}
         {{- end }}
         {{- end }}
-        {{- if .Values.overrideProbe }}
-        {{- with .Values.overrideProbe }}
+        {{- end }}
+        {{- if $containerValues.overrideProbe }}
+        {{- with $containerValues.overrideProbe }}
           {{- toYaml . | nindent 10 }}
         {{- end }}
         {{- else }}
-        {{- range $key, $value :=  .Values.application.ports }}
-        {{- if and $value.probe $value.probe.enable }}
+        {{- range $serviceName, $serviceValue :=  $containerValues.services }}
+        {{- if and $serviceValue.probe $serviceValue.probe.enable }}
         readinessProbe:
           tcpSocket:
-            port: {{ $value.port }}
-          initialDelaySeconds: {{ $value.probe.initialDelay }}
-          periodSeconds: {{ $value.probe.period }}
+            port: {{ $serviceValue.port }}
+          initialDelaySeconds: {{ $serviceValue.probe.initialDelay }}
+          periodSeconds: {{ $serviceValue.probe.period }}
         livenessProbe:
           tcpSocket:
-            port: {{ $value.port }}
-          initialDelaySeconds: {{ $value.probe.initialDelay }}
-          periodSeconds: {{ $value.probe.period }}
+            port: {{ $serviceValue.port }}
+          initialDelaySeconds: {{ $serviceValue.probe.initialDelay }}
+          periodSeconds: {{ $serviceValue.probe.period }}
         startupProbe:
           tcpSocket:
-            port: {{ $value.port }}
-          initialDelaySeconds: {{ $value.probe.initialDelay }}
-          periodSeconds: {{ $value.probe.period }}
+            port: {{ $serviceValue.port }}
+          initialDelaySeconds: {{ $serviceValue.probe.initialDelay }}
+          periodSeconds: {{ $serviceValue.probe.period }}
         {{- break }}
         {{- end }}
         {{- end }}
         {{- end }}
+        {{- if $containerValues.volumes }}
         volumeMounts:
-        {{- range $key, $value :=  .Values.application.volumes }}
-          - name: {{ $key }}
-            mountPath: {{ $value.mountPath }}
-            subPath: {{ $value.subPath }}
+        {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
+          - name: {{ $volumeName }}
+            mountPath: {{ $volumeValue.mountPath }}
+            subPath: {{ $volumeValue.subPath }}
+        {{- end }}
         {{- end }}
         resources:
-          {{- toYaml .Values.resources | nindent 12 }}
+          {{- toYaml $containerValues.resources | nindent 10 }}
         securityContext:
-          {{- toYaml .Values.securityContext | nindent 10 }}
+          {{- toYaml $containerValues.securityContext | nindent 10 }}
+      {{- end }}
+      {{- end }}
       volumes:
-      {{- range $key, $value :=  .Values.application.volumes }}
-        - name: {{ $key }}
+      {{- if .Values.application }}
+      {{- range $containerName, $containerValues :=  .Values.application }}
+      {{- if $containerValues.volumes }}
+      {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
+        - name: {{ $volumeName }}
           persistentVolumeClaim:
-            claimName: {{ include "application.name" $ }}-{{ $key }}-pvc
+            claimName: {{ include "application.name" $ }}-{{ $containerName }}-{{ $volumeName }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

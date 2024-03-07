@@ -36,10 +36,13 @@ Common labels
 {{- define "application.labels" -}}
 helm.sh/chart: {{ include "application.chart" . | quote }}
 {{ include "application.selectorLabels" . }}
-app.kubernetes.io/component: {{ .Values.application.component | quote }}
-hostNetwork: {{ .Values.application.hostNetwork | quote }}
-internal-service: {{not .Values.application.hostNetwork | quote }}
-app.kubernetes.io/managed-by: {{ .Values.application.managedBy | quote }}
+app.kubernetes.io/component: {{ .Values.component | quote }}
+hostNetwork: {{ .Values.hostNetwork | quote }}
+internal-service: {{not .Values.hostNetwork | quote }}
+app.kubernetes.io/managed-by: {{ .Values.managedBy | quote }}
+{{- with .Values.extraLabels }}
+  {{- toYaml . | nindent 0 }}
+{{- end }}
 {{- end }}
 
 {{/*

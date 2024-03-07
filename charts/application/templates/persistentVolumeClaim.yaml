@@ -1,19 +1,25 @@
-{{- range $key, $value :=  .Values.application.volumes }}
+{{- if .Values.application }}
+{{- range $containerName, $containerValues :=  .Values.application }}
+{{- if $containerValues.volumes }}
+{{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "application.name" $ }}-{{ $key }}-pvc
+  name: {{ include "application.name" $ }}-{{ $containerName }}-{{ $volumeName }}
 spec:
   accessModes:
-    - {{ $value.accessMode }}
-  {{- if not $value.storageClassName }}
-  volumeName: {{ $value.persistentVolumeName }}
+    - {{ $volumeValue.accessMode }}
+  {{- if not $volumeValue.storageClassName }}
+  volumeName: {{ $volumeValue.persistentVolumeName }}
   {{- end }}
-  {{- if $value.storageClassName }}
-  storageClassName: {{ $value.storageClassName }}
+  {{- if $volumeValue.storageClassName }}
+  storageClassName: {{ $volumeValue.storageClassName }}
   {{- end }}
   resources:
     requests:
-      storage: {{ $value.capacity | quote }}
-{{ end }}
+      storage: {{ $volumeValue.capacity | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

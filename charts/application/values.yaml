@@ -1,5 +1,9 @@
 replicaCount: 1
 
+component: dns-server
+managedBy: chynten
+hostNetwork: false
+
 image:
   repository: adguard/adguardhome
   pullPolicy: IfNotPresent
@@ -9,14 +13,10 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+extraLabels:
+  tags.datadoghq.com/env: prod
+
 application:
-  component: dns-server
-  managedBy: chynten
-  hostNetwork: false
-  configs:
-  secrets:
-  ports:
-  volumes:
 
 securityContext: {}
 

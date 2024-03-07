@@ -1,12 +1,17 @@
-{{- if .Values.application.configs }}
+{{- if .Values.application }}
+{{- range $containerName, $containerValues :=  .Values.application }}
+{{- if $containerValues.configs }}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "application.name" . }}
+  name: {{ include "application.name" $ }}-{{ $containerName }}
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.labels" $ | nindent 4 }}
 data:
-  {{- range $key, $value :=  .Values.application.configs }}
-    {{ $key }}: {{ $value | toYaml | indent 4 | trim }}
+  {{- range $configKey, $configValue :=  $containerValues.configs }}
+    {{ $configKey }}: {{ $configValue | toYaml | indent 4 | trim }}
   {{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
