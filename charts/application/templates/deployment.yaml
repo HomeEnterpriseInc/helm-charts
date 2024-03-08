@@ -86,6 +86,7 @@ spec:
           {{- toYaml $containerValues.securityContext | nindent 10 }}
       {{- end }}
       {{- end }}
+      dnsPolicy: {{ .Values.dnsPolicy | default "ClusterFirst" }}
       volumes:
       {{- if .Values.application }}
       {{- range $containerName, $containerValues :=  .Values.application }}
