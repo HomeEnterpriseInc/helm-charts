@@ -3,7 +3,8 @@ replicaCount: 1
 component: dns-server
 managedBy: chynten
 hostNetwork: false
-
+dnsConfig:
+  nameserver: 10.0.0.0
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -18,6 +19,10 @@ application:
     configs:
       ENV1: VAR1
       ENV2: VAR2
+    externalSecrets:
+      secretStoreRef:
+        name: hashicorp-vault-store
+        kind: ClusterSecretStore
     secrets:
       secret1: value1
       secret2: value2
@@ -59,6 +64,14 @@ application:
     configs:
       ENV3: VAR3
       ENV4: "123"
+    externalSecrets:
+      secretStoreRef:
+        name: hashicorp-vault-store
+        kind: ClusterSecretStore
+      remoteRef: mariadb1
+      secrets:
+        secret3: value3
+        secret4: "123"
     secrets:
       secret3: value3
       secret4: "123"
