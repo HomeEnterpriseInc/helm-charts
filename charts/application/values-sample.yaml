@@ -61,6 +61,10 @@ application:
       repository: adguard/adguardhome
       pullPolicy: IfNotPresent
       tag: "v0.107.0-b.5"
+    command: |
+     ["asd"]
+    args: |
+     ["asd3", "asd2"]
     configs:
       ENV3: VAR3
       ENV4: "123"

@@ -29,6 +29,12 @@ spec:
       - name: {{ $containerName }}
         image: "{{ $containerValues.image.repository }}:{{ $containerValues.image.tag | default $.Chart.AppVersion }}"
         imagePullPolicy: {{ $containerValues.image.pullPolicy }}
+        {{- if $containerValues.command }}
+        command: {{ $containerValues.command }}
+        {{- end }}
+        {{- if $containerValues.args }}
+        args: {{ $containerValues.args }}
+        {{- end }}
         envFrom:
         {{- if $containerValues.configs}}
         - configMapRef:
