@@ -2,6 +2,7 @@
 {{- range $containerName, $containerValues :=  .Values.application }}
 {{- if $containerValues.services -}}
 {{- range $serviceName, $serviceValues :=  $containerValues.services }}
+---
 apiVersion: v1
 kind: Service
 metadata:
