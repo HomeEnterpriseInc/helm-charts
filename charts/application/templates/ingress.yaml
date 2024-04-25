@@ -2,28 +2,29 @@
 {{- range $containerName, $containerValues :=  .Values.application }}
 {{- if $containerValues.services -}}
 {{- range $serviceName, $serviceValues :=  $containerValues.services }}
-{{- if and $serviceValues.ingress $serviceValues.ingress.enable -}}
+{{- range $ingressValues :=  $serviceValues.ingress }}
+{{- if $ingressValues.enable -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "application.name" $ }}-{{ $serviceName }}-{{ $serviceValues.ingress.host | replace "." "-" }}
+  name: {{ include "application.name" $ }}-{{ $serviceName }}-{{ $ingressValues.host | replace "." "-" }}
   labels:
     {{- include "application.labels" $ | nindent 4 }}
-  {{- with $serviceValues.ingress.annotations }}
+  {{- with $ingressValues.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   tls:
     - hosts:
-        - {{ $serviceValues.ingress.host | quote }}
-      secretName: {{ $serviceValues.ingress.host | replace "." "-" }}-certificate
+        - {{ $ingressValues.host | quote }}
+      secretName: {{ $ingressValues.host | replace "." "-" }}-certificate
   rules:
-    - host: {{ $serviceValues.ingress.host | quote }}
+    - host: {{ $ingressValues.host | quote }}
       http:
         paths:
-          - path: {{ $serviceValues.ingress.path }}
-            pathType: {{ $serviceValues.ingress.pathType }}
+          - path: {{ $ingressValues.path }}
+            pathType: {{ $ingressValues.pathType }}
             backend:
               service:
                 name:  {{ include "application.name" $ }}-{{ $containerName }}-{{ $serviceName }}
@@ -35,3 +36,4 @@ spec:
 {{- end }}
 {{- end }}
 {{- end }}
+  {{- end }}
