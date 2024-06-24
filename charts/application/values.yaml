@@ -4,7 +4,8 @@ component: dns-server
 managedBy: chynten
 hostNetwork: false
 denyEgress: true
-allowInternalIngress: true
+denyExternalIngress: true
+allowEgressPorts:
 
 image:
   repository: adguard/adguardhome
