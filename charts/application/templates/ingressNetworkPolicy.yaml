@@ -11,8 +11,8 @@ spec:
     - Ingress
   ingress:
   - from:
-    - ipBlock:
-        cidr: 0.0.0.0/0
-        except:
-        - 10.43.0.0/24
+      - ipBlock:
+          cidr: 10.43.0.0/24
+      - ipBlock:
+          cidr: 10.42.0.0/24
   {{- end }}
