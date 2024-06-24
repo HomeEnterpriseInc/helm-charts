@@ -3,6 +3,8 @@ replicaCount: 1
 component: dns-server
 managedBy: chynten
 hostNetwork: false
+denyEgress: true
+allowInternalIngress: true
 
 image:
   repository: adguard/adguardhome
