@@ -1,99 +1,104 @@
-replicaCount: 1
-
-component: dns-server
-managedBy: chynten
+nameOverride: openproject
+replicaCount: "1"
+component: "tv-serveaar"
 hostNetwork: false
-dnsConfig:
-  nameserver: 10.0.0.0
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-extraLabels:
-  tags.datadoghq.com/env: prod
-application:
-  container1:
+denyEgress: false
+initContainers:
+  openproject-seeder:
     image:
-      repository: adguard/adguardhome
-      pullPolicy: IfNotPresent
-      tag: "v0.107.0-b.5"
+      repository: "openproject/openproject"
+      tag: "14.2"
+    command: [ './docker/prod/seeder' ]
     configs:
-      ENV1: VAR1
-      ENV2: VAR2
-    externalSecrets:
-      secretStoreRef:
-        name: hashicorp-vault-store
-        kind: ClusterSecretStore
+      OPENPROJECT_RAILS__RELATIVE__URL__ROOT: ""
+      RAILS_MIN_THREADS: "4"
+      RAILS_MAX_THREADS: "16"
+      USE_PUMA: "true"
+      IMAP_ENABLED: "false"
     secrets:
-      secret1: value1
-      secret2: value2
-    services:
-      http:
-        port: 8978
-        probe:
-          enable: true
-        ingress:
-          enable: true
-          host: db.int.chynten.com
-          path: /
-          pathType: Prefix
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt
-            kubernetes.io/ingress.class: nginx
+      DATABASE_URL: <path:secrets/data/apps/openproject#connection_string>
     volumes:
-      data:
-        persistentVolumeName: cloudbeaver
+      data-seeder:
+        persistentVolumeName: data-seeder
         storageClassName: nfs-client
         accessMode: ReadWriteOnce
-        mountPath: /opt/cloudbeaver/workspace
-        subPath: cloudbeaver
+        mountPath: /var/openproject/assets
+        subPath: openproject
         capacity: 5G
-    securityContext: {}
-    resources:
-      requests:
-        memory: "64Mi"
-        cpu: "250m"
-      limits:
-        memory: "128Mi"
-        cpu: "500m"
-    overrideProbe: {}
-  container2:
+containers:
+  openproject-web:
     image:
-      repository: adguard/adguardhome
-      pullPolicy: IfNotPresent
-      tag: "v0.107.0-b.5"
-    command: |
-     ["asd"]
-    args: |
-     ["asd3", "asd2"]
+      repository: "openproject/openproject"
+      tag: "14.2"
+    command: ['./docker/prod/web']
     configs:
-      ENV3: VAR3
-      ENV4: "123"
-    externalSecrets:
-      secretStoreRef:
-        name: hashicorp-vault-store
-        kind: ClusterSecretStore
-      remoteRef: mariadb1
-      secrets:
-        secret3: value3
-        secret4: "123"
+      OPENPROJECT_RAILS__RELATIVE__URL__ROOT: ""
+      RAILS_MIN_THREADS: "4"
+      RAILS_MAX_THREADS: "16"
+      USE_PUMA: "true"
+      IMAP_ENABLED: "false"
     secrets:
-      secret3: value3
-      secret4: "123"
+      DATABASE_URL: <path:secrets/data/apps/openproject#connection_string>
     services:
+      http:
+        port: 8080
+        probe:
+          enable: false
+        ingress:
+          - enable: true
+            host: project.chynten.com
+            path: /
+            pathType: Prefix
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt
+              kubernetes.io/ingress.class: nginx
     volumes:
-      data:
-        persistentVolumeName: cloudbeaver1
-        storageClassName: nfs-client1
+      data-web:
+        persistentVolumeName: data-web
+        storageClassName: nfs-client
         accessMode: ReadWriteOnce
-        mountPath: /opt/cloudbeaver/workspace1
-        subPath: cloudbeaver1
+        mountPath: /var/openproject/assets
+        subPath: openproject
         capacity: 5G
-    securityContext:
-      runAsUser: 2000
-      allowPrivilegeEscalation: false
-    resources: {}
-    overrideProbe: {}
-
-affinity: {}
-
-podAnnotations: {}
+  openproject-worker:
+    image:
+      repository: "openproject/openproject"
+      tag: "14.2"
+    command: ['./docker/prod/worker']
+    configs:
+      OPENPROJECT_RAILS__RELATIVE__URL__ROOT: ""
+      RAILS_MIN_THREADS: "4"
+      RAILS_MAX_THREADS: "16"
+      USE_PUMA: "true"
+      IMAP_ENABLED: "false"
+    secrets:
+      DATABASE_URL: <path:secrets/data/apps/openproject#connection_string>
+    volumes:
+      data-worker:
+        persistentVolumeName: data-worker
+        storageClassName: nfs-client
+        accessMode: ReadWriteOnce
+        mountPath: /var/openproject/assets
+        subPath: openproject
+        capacity: 5G
+  openproject-cron:
+    image:
+      repository: "openproject/openproject"
+      tag: "14.2"
+    command: ['./docker/prod/cron']
+    configs:
+      OPENPROJECT_RAILS__RELATIVE__URL__ROOT: ""
+      RAILS_MIN_THREADS: "4"
+      RAILS_MAX_THREADS: "16"
+      USE_PUMA: "true"
+      IMAP_ENABLED: "false"
+    secrets:
+      DATABASE_URL: <path:secrets/data/apps/openproject#connection_string>
+    volumes:
+      data-cron:
+        persistentVolumeName: data-cron
+        storageClassName: nfs-client
+        accessMode: ReadWriteOnce
+        mountPath: /var/openproject/assets
+        subPath: openproject
+        capacity: 5G

@@ -23,3 +23,29 @@ spec:
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{- if .Values.initContainers }}
+{{- range $containerName, $containerValues :=  .Values.initContainers }}
+{{- if $containerValues.volumes }}
+{{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "application.name" $ }}-{{ $containerName }}-{{ $volumeName }}
+spec:
+  accessModes:
+    - {{ $volumeValue.accessMode }}
+  {{- if not $volumeValue.storageClassName }}
+  volumeName: {{ $volumeValue.persistentVolumeName }}
+  {{- end }}
+  {{- if $volumeValue.storageClassName }}
+  storageClassName: {{ $volumeValue.storageClassName }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ $volumeValue.capacity | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

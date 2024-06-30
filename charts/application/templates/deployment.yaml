@@ -23,6 +23,38 @@ spec:
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork }}
       {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers:
+      {{- range $containerName, $containerValues :=  .Values.initContainers }}
+      - name: {{ $containerName }}
+        image: "{{ $containerValues.image.repository }}:{{ $containerValues.image.tag | default $.Chart.AppVersion }}"
+        imagePullPolicy: {{ $containerValues.image.pullPolicy }}
+        {{- if $containerValues.command }}
+        command: {{ $containerValues.command }}
+        {{- end }}
+        {{- if $containerValues.args }}
+        args: {{ $containerValues.args }}
+        {{- end }}
+        envFrom:
+        {{- if $containerValues.configs}}
+        - configMapRef:
+            name: {{ include "application.name" $ }}-{{ $containerName }}
+        {{- end }}
+        {{- if $containerValues.secrets }}
+        - secretRef:
+            name: {{ include "application.name" $ }}-{{ $containerName }}
+        {{- end }}
+        {{- if $containerValues.volumes }}
+        volumeMounts:
+        {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
+        - name: {{ $volumeName }}
+          mountPath: {{ $volumeValue.mountPath }}
+          subPath: {{ $volumeValue.subPath }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
+      {{- end }}
+
       containers:
       {{- if .Values.containers }}
       {{- range $containerName, $containerValues :=  .Values.containers }}
