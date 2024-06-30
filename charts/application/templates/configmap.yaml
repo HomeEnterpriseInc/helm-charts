@@ -1,5 +1,5 @@
-{{- if .Values.application }}
-{{- range $containerName, $containerValues :=  .Values.application }}
+{{- if .Values.containers }}
+{{- range $containerName, $containerValues :=  .Values.containers }}
 {{- if $containerValues.configs }}
 ---
 apiVersion: v1

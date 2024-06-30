@@ -24,8 +24,8 @@ spec:
       hostNetwork: {{ .Values.hostNetwork }}
       {{- end }}
       containers:
-      {{- if .Values.application }}
-      {{- range $containerName, $containerValues :=  .Values.application }}
+      {{- if .Values.containers }}
+      {{- range $containerName, $containerValues :=  .Values.containers }}
       - name: {{ $containerName }}
         image: "{{ $containerValues.image.repository }}:{{ $containerValues.image.tag | default $.Chart.AppVersion }}"
         imagePullPolicy: {{ $containerValues.image.pullPolicy }}
@@ -102,8 +102,8 @@ spec:
       {{- end }}
       {{- end }}
       volumes:
-      {{- if .Values.application }}
-      {{- range $containerName, $containerValues :=  .Values.application }}
+      {{- if .Values.containers }}
+      {{- range $containerName, $containerValues :=  .Values.containers }}
       {{- if $containerValues.volumes }}
       {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
         - name: {{ $volumeName }}

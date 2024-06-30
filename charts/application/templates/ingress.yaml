@@ -1,5 +1,5 @@
-{{- if .Values.application -}}
-{{- range $containerName, $containerValues :=  .Values.application }}
+{{- if .Values.containers -}}
+{{- range $containerName, $containerValues :=  .Values.containers }}
 {{- if $containerValues.services -}}
 {{- range $serviceName, $serviceValues :=  $containerValues.services }}
 {{- range $ingressValues :=  $serviceValues.ingress }}
