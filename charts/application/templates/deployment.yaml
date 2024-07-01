@@ -145,6 +145,17 @@ spec:
       {{- end }}
       {{- end }}
       {{- end }}
+      {{- if .Values.containers }}
+      {{- range $containerName, $containerValues :=  .Values.containers }}
+      {{- if $containerValues.volumes }}
+      {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
+        - name: {{ $volumeName }}
+          persistentVolumeClaim:
+            claimName: {{ include "application.name" $ }}-{{ $containerName }}-{{ $volumeName }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
