@@ -145,8 +145,8 @@ spec:
       {{- end }}
       {{- end }}
       {{- end }}
-      {{- if .Values.containers }}
-      {{- range $containerName, $containerValues :=  .Values.containers }}
+      {{- if .Values.initContainers }}
+      {{- range $containerName, $containerValues :=  .Values.initContainers }}
       {{- if $containerValues.volumes }}
       {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
         - name: {{ $volumeName }}
