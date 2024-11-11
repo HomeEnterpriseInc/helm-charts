@@ -1,104 +1,51 @@
-nameOverride: openproject
+nameOverride: windows
 replicaCount: "1"
-component: "tv-serveaar"
+component: "windows-desktop"
 hostNetwork: false
 denyEgress: false
-initContainers:
-  openproject-seeder:
-    image:
-      repository: "openproject/openproject"
-      tag: "14.2"
-    command: [ './docker/prod/seeder' ]
-    configs:
-      OPENPROJECT_RAILS__RELATIVE__URL__ROOT: ""
-      RAILS_MIN_THREADS: "4"
-      RAILS_MAX_THREADS: "16"
-      USE_PUMA: "true"
-      IMAP_ENABLED: "false"
-    secrets:
-      DATABASE_URL: <path:secrets/data/apps/openproject#connection_string>
-    volumes:
-      data-seeder:
-        persistentVolumeName: data-seeder
-        storageClassName: nfs-client
-        accessMode: ReadWriteOnce
-        mountPath: /var/openproject/assets
-        subPath: openproject
-        capacity: 5G
 containers:
-  openproject-web:
+  windows:
     image:
-      repository: "openproject/openproject"
-      tag: "14.2"
-    command: ['./docker/prod/web']
+      repository: "dockurr/windows"
+      tag: "4.01"
+      pullPolicy: "IfNotPresent"
     configs:
-      OPENPROJECT_RAILS__RELATIVE__URL__ROOT: ""
-      RAILS_MIN_THREADS: "4"
-      RAILS_MAX_THREADS: "16"
-      USE_PUMA: "true"
-      IMAP_ENABLED: "false"
-    secrets:
-      DATABASE_URL: <path:secrets/data/apps/openproject#connection_string>
+      VERSION: "11"
+      RAM_SIZE: "2G"
+      CPU_CORES: "2"
+    securityContext:
+      privileged: true
     services:
-      http:
-        port: 8080
+      win-rdp-tcp:
+        port: 3089
+        probe:
+          enable: false
+      win-rdp-udp:
+        port: 3089
+        proto: UDP
+        probe:
+          enable: false
+      win-http:
+        port: 8086
         probe:
           enable: false
         ingress:
-          - enable: true
-            host: project.chynten.com
-            path: /
-            pathType: Prefix
-            annotations:
-              cert-manager.io/cluster-issuer: letsencrypt
-              kubernetes.io/ingress.class: nginx
+        - enable: true
+          host: win.int.chynten.com
+          path: /
+          pathType: Prefix
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt
+            kubernetes.io/ingress.class: nginx
     volumes:
-      data-web:
-        persistentVolumeName: data-web
+      storage:
+        persistentVolumeName: win-storage
         storageClassName: nfs-client
         accessMode: ReadWriteOnce
-        mountPath: /var/openproject/assets
-        subPath: openproject
+        mountPath: /storage
+        subPath: windows/storage
         capacity: 5G
-  openproject-worker:
-    image:
-      repository: "openproject/openproject"
-      tag: "14.2"
-    command: ['./docker/prod/worker']
-    configs:
-      OPENPROJECT_RAILS__RELATIVE__URL__ROOT: ""
-      RAILS_MIN_THREADS: "4"
-      RAILS_MAX_THREADS: "16"
-      USE_PUMA: "true"
-      IMAP_ENABLED: "false"
-    secrets:
-      DATABASE_URL: <path:secrets/data/apps/openproject#connection_string>
-    volumes:
-      data-worker:
-        persistentVolumeName: data-worker
-        storageClassName: nfs-client
-        accessMode: ReadWriteOnce
-        mountPath: /var/openproject/assets
-        subPath: openproject
-        capacity: 5G
-  openproject-cron:
-    image:
-      repository: "openproject/openproject"
-      tag: "14.2"
-    command: ['./docker/prod/cron']
-    configs:
-      OPENPROJECT_RAILS__RELATIVE__URL__ROOT: ""
-      RAILS_MIN_THREADS: "4"
-      RAILS_MAX_THREADS: "16"
-      USE_PUMA: "true"
-      IMAP_ENABLED: "false"
-    secrets:
-      DATABASE_URL: <path:secrets/data/apps/openproject#connection_string>
-    volumes:
-      data-cron:
-        persistentVolumeName: data-cron
-        storageClassName: nfs-client
-        accessMode: ReadWriteOnce
-        mountPath: /var/openproject/assets
-        subPath: openproject
-        capacity: 5G
+      dev-kvm:
+        persistentVolumeName: dev-kvm-pv
+        hostPath: /dev/kvm
+        mountPath: /dev/kvm

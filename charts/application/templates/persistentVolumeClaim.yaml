@@ -2,6 +2,7 @@
 {{- range $containerName, $containerValues :=  .Values.containers }}
 {{- if $containerValues.volumes }}
 {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
+{{- if not (hasKey $volumeValue "hostPath") }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -19,6 +20,7 @@ spec:
   resources:
     requests:
       storage: {{ $volumeValue.capacity | quote }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -28,6 +30,7 @@ spec:
 {{- range $containerName, $containerValues :=  .Values.initContainers }}
 {{- if $containerValues.volumes }}
 {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
+{{- if not (hasKey $volumeValue "hostPath") }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -45,6 +48,7 @@ spec:
   resources:
     requests:
       storage: {{ $volumeValue.capacity | quote }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

@@ -115,7 +115,9 @@ spec:
         {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
           - name: {{ $volumeName }}
             mountPath: {{ $volumeValue.mountPath }}
+            {{- if $volumeValue.subPath }}
             subPath: {{ $volumeValue.subPath }}
+            {{- end }}
         {{- end }}
         {{- end }}
         resources:
@@ -139,8 +141,13 @@ spec:
       {{- if $containerValues.volumes }}
       {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
         - name: {{ $volumeName }}
+          {{- if $volumeValue.hostPath }}
+          hostPath:
+            path: {{ $volumeValue.hostPath }}
+          {{- else }}
           persistentVolumeClaim:
             claimName: {{ include "application.name" $ }}-{{ $containerName }}-{{ $volumeName }}
+          {{- end }}
       {{- end }}
       {{- end }}
       {{- end }}
