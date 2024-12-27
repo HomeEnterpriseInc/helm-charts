@@ -1,7 +1,18 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "mysql.name" . }}-pvc
+  name: {{ include "mysql.name" . }}-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.storage.capacity | quote }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "mysql.name" . }}-conf-pvc
 spec:
   accessModes:
     - ReadWriteOnce
