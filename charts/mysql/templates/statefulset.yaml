@@ -35,7 +35,10 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /var/lib/mysql
-            subPath: {{ include "mysql.name" . }}
+            subPath: {{ include "mysql.name" . }}/data
+          - name: conf
+            mountPath: /etc/mysql/conf.d
+            subPath: {{ include "mysql.name" . }}/conf
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
