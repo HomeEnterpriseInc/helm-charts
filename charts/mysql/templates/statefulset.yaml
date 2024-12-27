@@ -45,3 +45,6 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: {{ include "mysql.name" . }}-pvc
+      - name: conf
+        persistentVolumeClaim:
+          claimName: { { include "mysql.name" . } }-pvc
