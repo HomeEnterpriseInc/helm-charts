@@ -1178,6 +1178,16 @@ entries:
   mysql:
   - apiVersion: v2
     appVersion: 8.0.29
+    created: "2024-12-27T22:02:31.176139418Z"
+    description: MySQL Database Server
+    digest: 30a6c0e7061f32673e6556b714ad0869ed8afe65277b16c0fe955b29e226a489
+    name: mysql
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/mysql-0.6/mysql-0.6.tgz
+    version: "0.6"
+  - apiVersion: v2
+    appVersion: 8.0.29
     created: "2024-03-23T08:08:50.859414085Z"
     description: MySQL Database Server
     digest: 471a47a8598221453933b424f705599bac5b853b5b9c04aac9be406b8f433534
@@ -2198,4 +2208,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2024-11-11T14:46:58.622156431Z"
+generated: "2024-12-27T22:02:31.176786873Z"
