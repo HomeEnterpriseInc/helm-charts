@@ -5,6 +5,9 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  {{- if .Values.storage.storageClassName }}
+  storageClassName: {{ .Values.storage.storageClassName }}
+  {{- end }}
   resources:
     requests:
       storage: {{ .Values.storage.capacity | quote }}
@@ -16,6 +19,9 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  {{- if .Values.storage.storageClassName }}
+  storageClassName: {{ .Values.storage.storageClassName }}
+  {{- end }}
   resources:
     requests:
       storage: {{ .Values.storage.capacity | quote }}
