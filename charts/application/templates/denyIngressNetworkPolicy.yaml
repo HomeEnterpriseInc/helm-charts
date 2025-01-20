@@ -12,7 +12,7 @@ spec:
   ingress:
   - from:
       - ipBlock:
-          cidr: 10.43.0.0/24
+          cidr: 10.43.0.0/16
       - ipBlock:
-          cidr: 10.42.0.0/24
+          cidr: 10.42.0.0/16
   {{- end }}
