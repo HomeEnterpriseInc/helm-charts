@@ -23,12 +23,17 @@ spec:
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork }}
       {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+      {{- end }}
       {{- if .Values.initContainers }}
       initContainers:
       {{- range $containerName, $containerValues :=  .Values.initContainers }}
       - name: {{ $containerName }}
         image: "{{ $containerValues.image.repository }}:{{ $containerValues.image.tag | default $.Chart.AppVersion }}"
         imagePullPolicy: {{ $containerValues.image.pullPolicy }}
+
         {{- if $containerValues.command }}
         command: {{ $containerValues.command }}
         {{- end }}
