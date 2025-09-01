@@ -66,11 +66,11 @@ spec:
       - name: {{ $containerName }}
         image: "{{ $containerValues.image.repository }}:{{ $containerValues.image.tag | default $.Chart.AppVersion }}"
         imagePullPolicy: {{ $containerValues.image.pullPolicy }}
-        {{- if $containerValues.command }}
-        command: {{ $containerValues.command }}
+          {{- if $containerValues.command }}
+        command: {{ $containerValues.command | toYaml | nindent 12 }}
         {{- end }}
         {{- if $containerValues.args }}
-        args: {{ $containerValues.args }}
+        args: {{ $containerValues.args | toYaml | nindent 12 }}
         {{- end }}
         envFrom:
         {{- if $containerValues.configs}}
