@@ -35,10 +35,10 @@ spec:
         imagePullPolicy: {{ $containerValues.image.pullPolicy }}
 
         {{- if $containerValues.command }}
-        command: {{ $containerValues.command }}
+        command: {{ $containerValues.command | nindent 10 }}
         {{- end }}
         {{- if $containerValues.args }}
-        args: {{ $containerValues.args }}
+        args: {{ $containerValues.args | nindent 10 }}
         {{- end }}
         envFrom:
         {{- if $containerValues.configs}}
@@ -67,10 +67,10 @@ spec:
         image: "{{ $containerValues.image.repository }}:{{ $containerValues.image.tag | default $.Chart.AppVersion }}"
         imagePullPolicy: {{ $containerValues.image.pullPolicy }}
           {{- if $containerValues.command }}
-        command: {{ $containerValues.command | toYaml | nindent 12 }}
+        command: {{ $containerValues.command | nindent 10 }}
         {{- end }}
         {{- if $containerValues.args }}
-        args: {{ $containerValues.args | toYaml | nindent 12 }}
+        args: {{ $containerValues.args | nindent 10 }}
         {{- end }}
         envFrom:
         {{- if $containerValues.configs}}
