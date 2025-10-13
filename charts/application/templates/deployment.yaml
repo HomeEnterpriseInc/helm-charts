@@ -33,12 +33,13 @@ spec:
       - name: {{ $containerName }}
         image: "{{ $containerValues.image.repository }}:{{ $containerValues.image.tag | default $.Chart.AppVersion }}"
         imagePullPolicy: {{ $containerValues.image.pullPolicy }}
-
         {{- if $containerValues.command }}
-        command: {{ $containerValues.command | nindent 10 }}
+        command:
+        {{- toYaml $containerValues.command | nindent 10 }}
         {{- end }}
         {{- if $containerValues.args }}
-        args: {{ $containerValues.args | nindent 10 }}
+        args:
+        {{- toYaml $containerValues.args | nindent 10 }}
         {{- end }}
         envFrom:
         {{- if $containerValues.configs}}
@@ -66,11 +67,13 @@ spec:
       - name: {{ $containerName }}
         image: "{{ $containerValues.image.repository }}:{{ $containerValues.image.tag | default $.Chart.AppVersion }}"
         imagePullPolicy: {{ $containerValues.image.pullPolicy }}
-          {{- if $containerValues.command }}
-        command: {{ $containerValues.command | nindent 10 }}
+        {{- if $containerValues.command }}
+        command:
+        {{- toYaml $containerValues.command | nindent 10 }}
         {{- end }}
         {{- if $containerValues.args }}
-        args: {{ $containerValues.args | nindent 10 }}
+        args:
+        {{- toYaml $containerValues.args | nindent 10 }}
         {{- end }}
         envFrom:
         {{- if $containerValues.configs}}
