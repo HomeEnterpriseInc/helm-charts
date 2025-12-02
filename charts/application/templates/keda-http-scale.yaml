@@ -1,0 +1,31 @@
+{{- if $.Values.containers -}}
+{{- range $containerName, $containerValues :=  $.Values.containers }}
+{{- if $containerValues.services -}}
+{{- range $serviceName, $serviceValues :=  $containerValues.services }}
+{{- if and $serviceValues.kedaHttpScale $serviceValues.kedaHttpScale.enable -}}
+---
+kind: HTTPScaledObject
+apiVersion: http.keda.sh/v1alpha1
+metadata:
+  name: {{ include "application.name" $ }}-{{ $containerName }}-{{ $serviceName }}
+spec:
+  hosts:
+    - {{ include "application.name" $ }}-{{ $containerName }}-{{ $serviceName }}.{{ $.Release.Namespace }}
+  scaleTargetRef:
+    name: {{ include "application.name" $ }}
+    kind: Deployment
+    apiVersion: apps/v1
+    service: {{ include "application.name" $ }}-{{ $containerName }}-{{ $serviceName }}
+    port: {{ $serviceValues.port | default 8080 }}
+  replicas:
+    min: {{ $serviceValues.kedaHttpScale.minScale | default 0 }}
+    max: {{ $serviceValues.kedaHttpScale.maxScale | default 5 }}
+  scaledownPeriod: {{ $serviceValues.kedaHttpScale.scaleDownPeriod | default 300 }}s
+  scalingMetric:
+    requestRate:
+      targetValue: {{ $serviceValues.kedaHttpScale.targetValue | default 5 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

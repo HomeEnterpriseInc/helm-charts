@@ -1,0 +1,25 @@
+{{- if $.Values.containers -}}
+{{- range $containerName, $containerValues :=  $.Values.containers }}
+{{- if $containerValues.services -}}
+{{- range $serviceName, $serviceValues :=  $containerValues.services }}
+{{- if and $serviceValues.kedaHttpScale $serviceValues.kedaHttpScale.enable -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "application.name" $ }}-{{ $containerName }}-{{ $serviceName }}-keda-proxy
+  labels:
+    {{- include "application.labels" $ | nindent 4 }}
+spec:
+  type: ExternalName
+  externalName: {{ $serviceValues.kedaHttpScale.interceptorService | default $.Values.kedaHttpScaleDefaults.interceptorService }}
+  ports:
+  - port: {{ $serviceValues.port }}
+    targetPort: {{ $serviceValues.port }}
+    protocol: {{ $serviceValues.proto | default "TCP" }}
+    name: {{ $serviceName }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

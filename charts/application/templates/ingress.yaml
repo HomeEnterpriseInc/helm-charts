@@ -30,7 +30,11 @@ spec:
             pathType: {{ $ingressValues.pathType }}
             backend:
               service:
+                {{- if $serviceValues.kedaHttpScale.enable }}
+                name:  {{ include "application.name" $ }}-{{ $containerName }}-{{ $serviceName }}-keda-proxy
+                {{- else }}
                 name:  {{ include "application.name" $ }}-{{ $containerName }}-{{ $serviceName }}
+                {{- end }}
                 port:
                   number: {{ $serviceValues.port }}
 ---
