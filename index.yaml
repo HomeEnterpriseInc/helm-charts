@@ -125,6 +125,16 @@ entries:
   application:
   - apiVersion: v2
     appVersion: v0.1
+    created: "2025-12-02T22:25:43.057564011Z"
+    description: General Application Template
+    digest: 7f86e7d384f416e5a704f0be1724c76124097d94c256375d25b98c46beb47b26
+    name: application
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/application-0.1.36/application-0.1.36.tgz
+    version: 0.1.36
+  - apiVersion: v2
+    appVersion: v0.1
     created: "2025-12-02T18:03:53.641448654Z"
     description: General Application Template
     digest: bc27e262eb24cdf2b2f529cd9788eae548237bece836d8f6a665d0355c3c6495
@@ -2318,4 +2328,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2025-12-02T18:03:53.642166758Z"
+generated: "2025-12-02T22:25:43.058669818Z"
