@@ -20,7 +20,7 @@ spec:
   replicas:
     min: {{ $serviceValues.kedaHttpScale.minScale | default 0 }}
     max: {{ $serviceValues.kedaHttpScale.maxScale | default 5 }}
-  scaledownPeriod: {{ $serviceValues.kedaHttpScale.scaleDownPeriod | default 300 }}s
+  scaledownPeriod: {{ $serviceValues.kedaHttpScale.scaleDownPeriod | default 300 }}
   scalingMetric:
     requestRate:
       targetValue: {{ $serviceValues.kedaHttpScale.targetValue | default 5 }}

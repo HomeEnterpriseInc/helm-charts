@@ -29,3 +29,10 @@ overrideProbe: {}
 affinity: {}
 
 podAnnotations: {}
+
+# KEDA HTTP Add-on interceptor service configuration (global default)
+# The interceptor proxy is installed in the keda namespace by default
+kedaHttpScaleDefaults:
+  interceptorService: "keda-add-ons-http-interceptor-proxy.keda.svc.cluster.local"
+  # If your interceptor is in a different namespace, update this value
+  # interceptorService: "keda-add-ons-http-interceptor-proxy.your-namespace.svc.cluster.local"
