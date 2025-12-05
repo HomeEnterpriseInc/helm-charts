@@ -36,3 +36,36 @@ kedaHttpScaleDefaults:
   interceptorService: "keda-add-ons-http-interceptor-proxy.keda.svc.cluster.local"
   # If your interceptor is in a different namespace, update this value
   # interceptorService: "keda-add-ons-http-interceptor-proxy.your-namespace.svc.cluster.local"
+
+# KEDA HTTP Scale Configuration Documentation
+# ============================================
+# Configure HTTP-based scaling for services using Kedify HTTP Add-on
+# Documentation: https://docs.kedify.io/scalers/http-scaler/
+#
+# Uses HTTPScaledObject (http.keda.sh/v1alpha1) resource
+# Hosts are AUTOMATICALLY extracted from ingress configuration
+#
+# Per-service configuration example (add to your containers.<container>.services.<service>):
+#   kedaHttpScale:
+#     enable: true                    # Enable HTTP scaling for this service
+#     minScale: 0                     # Minimum replicas (0 enables scale-to-zero)
+#     maxScale: 5                     # Maximum replicas
+#     scaleDownPeriod: 300            # Seconds to wait before scaling down
+#
+#     # Routing Configuration
+#     pathPrefixes: "/"               # Path prefixes to monitor (default: "/")
+#                                      # HOSTS ARE AUTO-EXTRACTED FROM INGRESS CONFIG!
+#
+#     # Scaling Metrics (choose one)
+#     scalingMetric: "requestRate"    # "requestRate" or "concurrency" (default: requestRate)
+#
+#     # For requestRate metric:
+#     targetValue: 100                # Target requests per second per replica
+#     granularity: "1s"               # Request rate measurement interval (default: 1s)
+#     window: "1m"                    # Time window for rate calculation (default: 1m)
+#
+#     # For concurrency metric:
+#     # targetValue: 100              # Target concurrent requests per replica
+#
+#     # Optional cooldown between scale-down events
+#     initialCooldownPeriod: 60       # Initial cooldown in seconds (optional)
