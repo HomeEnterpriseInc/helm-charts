@@ -30,6 +30,8 @@ affinity: {}
 
 podAnnotations: {}
 
+# nodeName: ""  # Specify a node name to pin the pod to a specific node (optional)
+
 # KEDA HTTP Add-on interceptor service configuration (global default)
 # The interceptor proxy is installed in the keda namespace by default
 kedaHttpScaleDefaults:
