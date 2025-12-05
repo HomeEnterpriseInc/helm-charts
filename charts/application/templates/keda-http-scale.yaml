@@ -4,13 +4,33 @@
 {{- range $serviceName, $serviceValues :=  $containerValues.services }}
 {{- if and $serviceValues.kedaHttpScale $serviceValues.kedaHttpScale.enable -}}
 ---
-kind: HTTPScaledObject
 apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
 metadata:
   name: {{ include "application.name" $ }}-{{ $containerName }}-{{ $serviceName }}
 spec:
+  {{- if $serviceValues.ingress }}
+  {{- $hostList := list }}
+  {{- range $ingressValues := $serviceValues.ingress }}
+  {{- if $ingressValues.enable }}
+  {{- $hostList = append $hostList $ingressValues.host }}
+  {{- end }}
+  {{- end }}
+  hosts:
+  {{- range $host := $hostList }}
+    - {{ $host }}
+  {{- end }}
+  {{- else }}
   hosts:
     - {{ include "application.name" $ }}-{{ $containerName }}-{{ $serviceName }}.{{ $.Release.Namespace }}
+  {{- end }}
+  {{- if $serviceValues.kedaHttpScale.pathPrefixes }}
+  pathPrefixes:
+    - {{ $serviceValues.kedaHttpScale.pathPrefixes | quote }}
+  {{- else }}
+  pathPrefixes:
+    - "/"
+  {{- end }}
   scaleTargetRef:
     name: {{ include "application.name" $ }}
     kind: Deployment
@@ -22,8 +42,22 @@ spec:
     max: {{ $serviceValues.kedaHttpScale.maxScale | default 5 }}
   scaledownPeriod: {{ $serviceValues.kedaHttpScale.scaleDownPeriod | default 300 }}
   scalingMetric:
+    {{- if eq (default "requestRate" $serviceValues.kedaHttpScale.scalingMetric) "requestRate" }}
     requestRate:
-      targetValue: {{ $serviceValues.kedaHttpScale.targetValue | default 5 }}
+      targetValue: {{ $serviceValues.kedaHttpScale.targetValue | default 100 }}
+      {{- if $serviceValues.kedaHttpScale.granularity }}
+      granularity: {{ $serviceValues.kedaHttpScale.granularity | quote }}
+      {{- end }}
+      {{- if $serviceValues.kedaHttpScale.window }}
+      window: {{ $serviceValues.kedaHttpScale.window | quote }}
+      {{- end }}
+    {{- else if eq $serviceValues.kedaHttpScale.scalingMetric "concurrency" }}
+    concurrency:
+      targetValue: {{ $serviceValues.kedaHttpScale.targetValue | default 100 }}
+    {{- end }}
+  {{- if $serviceValues.kedaHttpScale.initialCooldownPeriod }}
+  initialCooldownPeriod: {{ $serviceValues.kedaHttpScale.initialCooldownPeriod }}
+  {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
