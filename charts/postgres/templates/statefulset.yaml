@@ -38,7 +38,6 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /var/lib/postgresql/data
-            subPath: {{ include "postgres.name" . }}
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       volumes:
