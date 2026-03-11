@@ -49,3 +49,11 @@ containers:
         persistentVolumeName: dev-kvm-pv
         hostPath: /dev/kvm
         mountPath: /dev/kvm
+      my-tls:
+        secretName: my-existing-secret   # mounts K8s Secret as volume
+        mountPath: /etc/tls
+        items:                           # optional: remap secret keys to paths
+          - key: tls.crt
+            path: fullchain.pem
+          - key: tls.key
+            path: privkey.pem
