@@ -2,7 +2,7 @@
 {{- range $containerName, $containerValues :=  .Values.containers }}
 {{- if $containerValues.volumes }}
 {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
-{{- if not (or (hasKey $volumeValue "hostPath") (hasKey $volumeValue "secretName")) }}
+{{- if not (or (hasKey $volumeValue "hostPath") (hasKey $volumeValue "secretName") (hasKey $volumeValue "configMapName")) }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -10,7 +10,7 @@ metadata:
   name: {{ include "application.name" $ }}-{{ $containerName }}-{{ $volumeName }}
 spec:
   accessModes:
-    - {{ $volumeValue.accessMode }}
+    - {{ default "ReadWriteMany" $volumeValue.accessMode }}
   {{- if not $volumeValue.storageClassName }}
   volumeName: {{ $volumeValue.persistentVolumeName }}
   {{- end }}
@@ -19,7 +19,7 @@ spec:
   {{- end }}
   resources:
     requests:
-      storage: {{ $volumeValue.capacity | quote }}
+      storage: {{ default "1Gi" $volumeValue.capacity | quote }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -30,7 +30,7 @@ spec:
 {{- range $containerName, $containerValues :=  .Values.initContainers }}
 {{- if $containerValues.volumes }}
 {{- range $volumeName, $volumeValue :=  $containerValues.volumes }}
-{{- if not (or (hasKey $volumeValue "hostPath") (hasKey $volumeValue "secretName")) }}
+{{- if not (or (hasKey $volumeValue "hostPath") (hasKey $volumeValue "secretName") (hasKey $volumeValue "configMapName")) }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -38,7 +38,7 @@ metadata:
   name: {{ include "application.name" $ }}-{{ $containerName }}-{{ $volumeName }}
 spec:
   accessModes:
-    - {{ $volumeValue.accessMode }}
+    - {{ default "ReadWriteMany" $volumeValue.accessMode }}
   {{- if not $volumeValue.storageClassName }}
   volumeName: {{ $volumeValue.persistentVolumeName }}
   {{- end }}
@@ -47,7 +47,7 @@ spec:
   {{- end }}
   resources:
     requests:
-      storage: {{ $volumeValue.capacity | quote }}
+      storage: {{ default "1Gi" $volumeValue.capacity | quote }}
 {{- end }}
 {{- end }}
 {{- end }}
