@@ -159,6 +159,16 @@ spec:
                 path: {{ .path }}
               {{- end }}
             {{- end }}
+          {{- else if $volumeValue.configMapName }}
+          configMap:
+            name: {{ $volumeValue.configMapName }}
+            {{- if $volumeValue.items }}
+            items:
+              {{- range $volumeValue.items }}
+              - key: {{ .key }}
+                path: {{ .path }}
+              {{- end }}
+            {{- end }}
           {{- else if $volumeValue.hostPath }}
           hostPath:
             path: {{ $volumeValue.hostPath }}
@@ -178,6 +188,16 @@ spec:
           {{- if $volumeValue.secretName }}
           secret:
             secretName: {{ $volumeValue.secretName }}
+            {{- if $volumeValue.items }}
+            items:
+              {{- range $volumeValue.items }}
+              - key: {{ .key }}
+                path: {{ .path }}
+              {{- end }}
+            {{- end }}
+          {{- else if $volumeValue.configMapName }}
+          configMap:
+            name: {{ $volumeValue.configMapName }}
             {{- if $volumeValue.items }}
             items:
               {{- range $volumeValue.items }}
