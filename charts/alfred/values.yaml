@@ -1,0 +1,236 @@
+# =============================================================================
+# Alfred AI Home Assistant - Helm Values
+# =============================================================================
+#
+# Parameters are organized into REQUIRED and OPTIONAL sections.
+# Alfred can self-configure many optional parameters at runtime via chat —
+# the principal can say "add a user", "create a plugin", etc. and Alfred
+# will ask for needed details and update its own config.
+#
+# Minimum viable install:
+#   helm install alfred ./helm/alfred \
+#     --set secrets.anthropicApiKey="sk-ant-..." \
+#     --set secrets.vaultMasterKey="<64-char-hex>" \
+#     --set secrets.postgresPassword="<password>" \
+#     --set secrets.redisPassword="<password>" \
+#     --set secrets.rabbitmqPassword="<password>" \
+#     --set secrets.matrixBotPassword="<password>" \
+#     --set secrets.matrixAccessToken="<token>"
+#
+# =============================================================================
+
+# =============================================================================
+# REQUIRED SECRETS — Alfred will NOT start without these
+# =============================================================================
+secrets:
+  # Anthropic API key — powers all AI reasoning (Claude API)
+  # Get from: https://console.anthropic.com/
+  anthropicApiKey: ""          # REQUIRED
+
+  # Vault master key — AES-256 encryption for PII storage
+  # Generate with: openssl rand -hex 32
+  vaultMasterKey: ""           # REQUIRED
+
+  # Core database passwords — needed for kernel infrastructure
+  postgresPassword: ""         # REQUIRED
+  redisPassword: ""            # REQUIRED
+  rabbitmqPassword: ""         # REQUIRED
+
+  # Matrix/Dendrite credentials — needed for chat interface, notifications, user provisioning
+  matrixBotPassword: ""        # REQUIRED
+  matrixAccessToken: ""        # REQUIRED
+
+  # ---------------------------------------------------------------------------
+  # OPTIONAL SECRETS — enable specific features, can be added post-install
+  # Alfred can prompt the principal for these via chat and self-configure.
+  # Add later with: helm upgrade alfred ./helm/alfred --set secrets.xxxKey="..."
+  # ---------------------------------------------------------------------------
+
+  # MongoDB (needed for: document-heavy plugins)
+  mongodbPassword: ""          # Optional — only if using MongoDB
+
+  # Parcel tracking API (needed for: parcel_tracker plugin)
+  # Get from: https://www.17track.net/en/apiuser
+  track17ApiKey: ""            # Optional — parcel_tracker plugin
+
+  # Flight search API (needed for: flight_hunter plugin)
+  # Get from: https://tequila.kiwi.com/
+  kiwiApiKey: ""               # Optional — flight_hunter plugin
+
+  # Memory provider (needed for: persistent user memory)
+  # Get from: https://memmachine.ai
+  memmachineApiKey: ""         # Optional — memory_provider plugin
+
+# =============================================================================
+# REQUIRED INFRASTRUCTURE — core services that must run
+# =============================================================================
+
+# -- Alfred application -------------------------------------------------------
+alfred:
+  image:
+    repository: alfred         # REQUIRED — your container registry image
+    tag: latest                # REQUIRED — image tag
+    pullPolicy: IfNotPresent
+  replicas: 1
+  resources:
+    requests:
+      memory: "2Gi"
+      cpu: "2"
+    limits:
+      memory: "4Gi"            # Minimum 4Gi recommended (CC-14)
+      cpu: "4"                 # Minimum 4 CPU recommended (CC-14)
+  env:
+    LOG_LEVEL: "info"
+  service:
+    type: ClusterIP
+    port: 8080
+  persistence:
+    enabled: true              # REQUIRED — Alfred writes config + skills to disk
+    size: 10Gi
+    storageClass: ""
+
+# -- PostgreSQL (REQUIRED) ----------------------------------------------------
+# Primary data store for: audit log, vault, gatekeeper rules, plugin tables
+postgresql:
+  enabled: true                # REQUIRED — cannot be disabled
+  auth:
+    username: alfred
+    password: ""               # Set via secrets.postgresPassword
+    database: alfred
+  persistence:
+    enabled: true
+    size: 20Gi
+    storageClass: ""
+  image:
+    repository: pgvector/pgvector  # Includes pgcrypto + pgvector extensions
+    tag: "pg16"
+  service:
+    port: 5432
+
+# -- Redis (REQUIRED) ---------------------------------------------------------
+# Used for: caching, gatekeeper rule cache, rate limiting, deduplication
+redis:
+  enabled: true                # REQUIRED — cannot be disabled
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClass: ""
+  maxMemory: "1gb"
+  evictionPolicy: "allkeys-lru"
+  image:
+    repository: redis
+    tag: "7-alpine"
+  service:
+    port: 6379
+
+# -- RabbitMQ (REQUIRED) ------------------------------------------------------
+# Used for: event bus (inter-plugin communication), durable message queues
+rabbitmq:
+  enabled: true                # REQUIRED — cannot be disabled
+  auth:
+    username: alfred
+    password: ""               # Set via secrets.rabbitmqPassword
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: ""
+  image:
+    repository: rabbitmq
+    tag: "3-management-alpine"
+  service:
+    amqpPort: 5672
+    managementPort: 15672
+
+# -- Dendrite (Matrix homeserver) — REQUIRED ------------------------------------
+# Alfred's primary chat interface. Required by: notification_manager,
+# user_manager, onboarding_manager. Without Dendrite, Alfred cannot deliver
+# messages, provision users, or conduct onboarding conversations.
+dendrite:
+  enabled: true                # REQUIRED — cannot be disabled
+  serverName: "alfred.local"   # Your Matrix server domain
+  database:
+    host: ""                   # Defaults to postgresql service
+    name: dendrite
+  image:
+    repository: matrixdotorg/dendrite-monolith
+    tag: latest
+  persistence:
+    mediaSize: 10Gi
+    storageClass: ""
+  service:
+    port: 8008
+
+# -- ntfy (push notifications) — REQUIRED -------------------------------------
+# Used for: urgent push notifications (bypasses Matrix for time-critical alerts)
+ntfy:
+  enabled: true                # REQUIRED — cannot be disabled
+  image:
+    repository: binwiederhier/ntfy
+    tag: latest
+  service:
+    port: 80
+
+# =============================================================================
+# OPTIONAL INFRASTRUCTURE — enable as needed
+# =============================================================================
+# These services can be enabled later. Alfred will detect their availability
+# and activate the corresponding plugins automatically.
+
+# -- mautrix-whatsapp (WhatsApp bridge) — OPTIONAL ----------------------------
+# Enables: Users can message Alfred via WhatsApp
+# Without this: Users must use Matrix client (Element X) directly
+mautrixWhatsapp:
+  enabled: false               # Disabled by default — enable when needed
+  image:
+    repository: dock.mau.dev/mautrix/whatsapp
+    tag: latest
+  service:
+    port: 29318
+
+# -- Ingress — OPTIONAL -------------------------------------------------------
+# Enables: External access to Dendrite + ntfy via TLS
+# Without this: Services accessible only within the cluster
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  hosts:
+    - host: matrix.alfred.local  # Your Matrix domain
+      service: dendrite
+      port: 8008
+    - host: ntfy.alfred.local    # Your ntfy domain
+      service: ntfy
+      port: 80
+  tls:
+    - secretName: alfred-tls
+      hosts:
+        - matrix.alfred.local
+        - ntfy.alfred.local
+
+# =============================================================================
+# SELF-CONFIGURED AT RUNTIME — Alfred manages these via chat
+# =============================================================================
+# The following are configured by Alfred itself when the principal interacts
+# via chat. You do NOT need to set these in values.yaml:
+#
+# - Users (alfred.yaml): "Add my wife as a family member"
+#   → Alfred asks for location, timezone, currency, bridge preference
+#   → Creates Matrix account, rooms, memory identity, skills file
+#   → Updates alfred.yaml on the PVC (survives restarts)
+#
+# - Plugins: "Create a plugin to track grocery prices"
+#   → Alfred generates code via Claude Code CLI
+#   → Validates, commits to git, activates
+#
+# - Skills/Knowledge: "Remember that I prefer window seats on flights"
+#   → Stored in skills/*.md files (git-tracked)
+#   → Used as context for future AI responses
+#
+# - User Preferences: Collected during onboarding
+#   → Interests, food prefs, brands, news topics, notification frequency
+#   → Stored in memmachine.ai memory
+#
+# - Gatekeeper Rules: "Allow Alfred to access amazon.co.uk"
+#   → Stored in PostgreSQL approved_sources table
+#
+# =============================================================================

@@ -1,0 +1,160 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "alfred.fullname" . }}
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: alfred
+spec:
+  replicas: {{ .Values.alfred.replicas }}
+  selector:
+    matchLabels:
+      {{- include "alfred.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: alfred
+  template:
+    metadata:
+      labels:
+        {{- include "alfred.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: alfred
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+    spec:
+      initContainers:
+        # Seed alfred.yaml from ConfigMap into writable volume on first boot.
+        # If the file already exists on the PVC (from a previous run or Alfred
+        # self-update), it is preserved — the ConfigMap is only the initial seed.
+        - name: seed-config
+          image: "{{ .Values.alfred.image.repository }}:{{ .Values.alfred.image.tag }}"
+          command: ["sh", "-c"]
+          args:
+            - |
+              if [ ! -f /data/config/alfred.yaml ]; then
+                echo "Seeding alfred.yaml from ConfigMap (first boot)"
+                mkdir -p /data/config
+                cp /seed-config/alfred.yaml /data/config/alfred.yaml
+              else
+                echo "alfred.yaml already exists on PVC — preserving runtime config"
+              fi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: config-seed
+              mountPath: /seed-config
+              readOnly: true
+      containers:
+        - name: alfred
+          image: "{{ .Values.alfred.image.repository }}:{{ .Values.alfred.image.tag }}"
+          imagePullPolicy: {{ .Values.alfred.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            # ---------------------------------------------------------------
+            # REQUIRED secrets — Alfred will not start without these
+            # ---------------------------------------------------------------
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: anthropic-api-key
+            - name: VAULT_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: vault-master-key
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: postgres-password
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: redis-password
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: rabbitmq-password
+            - name: MATRIX_BOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: matrix-bot-password
+            - name: MATRIX_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: matrix-access-token
+            # ---------------------------------------------------------------
+            # OPTIONAL secrets — needed for specific features
+            # ---------------------------------------------------------------
+            {{- if .Values.secrets.mongodbPassword }}
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: mongodb-password
+            {{- end }}
+            {{- if .Values.secrets.track17ApiKey }}
+            - name: TRACK17_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: track17-api-key
+            {{- end }}
+            {{- if .Values.secrets.kiwiApiKey }}
+            - name: KIWI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: kiwi-api-key
+            {{- end }}
+            {{- if .Values.secrets.memmachineApiKey }}
+            - name: MEMMACHINE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: memmachine-api-key
+            {{- end }}
+            - name: LOG_LEVEL
+              value: {{ .Values.alfred.env.LOG_LEVEL | quote }}
+            # Tell Alfred to use the writable config path
+            - name: ALFRED_CONFIG_PATH
+              value: "/data/config/alfred.yaml"
+          resources:
+            requests:
+              memory: {{ .Values.alfred.resources.requests.memory | quote }}
+              cpu: {{ .Values.alfred.resources.requests.cpu | quote }}
+            limits:
+              memory: {{ .Values.alfred.resources.limits.memory | quote }}
+              cpu: {{ .Values.alfred.resources.limits.cpu | quote }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "alfred.fullname" . }}-data
+        - name: config-seed
+          configMap:
+            name: {{ include "alfred.fullname" . }}-config

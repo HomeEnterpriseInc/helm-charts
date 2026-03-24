@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "alfred.fullname" . }}
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: alfred
+spec:
+  type: {{ .Values.alfred.service.type }}
+  ports:
+    - port: {{ .Values.alfred.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "alfred.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: alfred

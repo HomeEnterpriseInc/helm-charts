@@ -1,0 +1,80 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "alfred.fullname" . }}-external
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - secretName: {{ .secretName }}
+      hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- if eq .service "dendrite" }}
+          # Dendrite (Matrix) - external with TLS
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "alfred.fullname" $ }}-dendrite
+                port:
+                  number: {{ .port }}
+          {{- end }}
+          {{- if eq .service "ntfy" }}
+          # ntfy (push notifications) - external with TLS
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "alfred.fullname" $ }}-ntfy
+                port:
+                  number: {{ .port }}
+          {{- end }}
+    {{- end }}
+---
+# Internal-only NetworkPolicy: all other services are cluster-internal
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "alfred.fullname" . }}-internal-only
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "alfred.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow all traffic within the namespace (cluster-internal)
+    - from:
+        - podSelector: {}
+    # Allow ingress controller to reach Dendrite and ntfy
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8008
+        - protocol: TCP
+          port: 80
+{{- end }}

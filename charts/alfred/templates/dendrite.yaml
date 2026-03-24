@@ -1,0 +1,167 @@
+{{- if .Values.dendrite.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "alfred.fullname" . }}-dendrite
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: dendrite
+spec:
+  serviceName: {{ include "alfred.fullname" . }}-dendrite
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "alfred.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: dendrite
+  template:
+    metadata:
+      labels:
+        {{- include "alfred.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: dendrite
+    spec:
+      containers:
+        - name: dendrite
+          image: "{{ .Values.dendrite.image.repository }}:{{ .Values.dendrite.image.tag }}"
+          args:
+            - "--tls-cert=/etc/dendrite/tls/tls.crt"
+            - "--tls-key=/etc/dendrite/tls/tls.key"
+            - "--really-enable-open-registration"
+          ports:
+            - name: http
+              containerPort: 8008
+              protocol: TCP
+            - name: https
+              containerPort: 8448
+              protocol: TCP
+          env:
+            - name: DENDRITE_SERVER_NAME
+              value: {{ .Values.dendrite.serverName | quote }}
+            - name: DENDRITE_DATABASE_HOST
+              value: {{ .Values.dendrite.database.host | default (include "alfred.postgresql.host" .) | quote }}
+            - name: DENDRITE_DATABASE_NAME
+              value: {{ .Values.dendrite.database.name | quote }}
+            - name: DENDRITE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: postgres-password
+          volumeMounts:
+            - name: dendrite-config
+              mountPath: /etc/dendrite
+            - name: media
+              mountPath: /var/dendrite/media
+            - name: jetstream
+              mountPath: /var/dendrite/jetstream
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          livenessProbe:
+            httpGet:
+              path: /_dendrite/monitor/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /_dendrite/monitor/health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: dendrite-config
+          configMap:
+            name: {{ include "alfred.fullname" . }}-dendrite-config
+        - name: media
+          persistentVolumeClaim:
+            claimName: {{ include "alfred.fullname" . }}-matrix-media
+        - name: jetstream
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "alfred.fullname" . }}-dendrite
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: dendrite
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.dendrite.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 8448
+      targetPort: https
+      protocol: TCP
+      name: https
+  selector:
+    {{- include "alfred.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: dendrite
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "alfred.fullname" . }}-dendrite-config
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: dendrite
+data:
+  dendrite.yaml: |
+    version: 2
+
+    global:
+      server_name: {{ .Values.dendrite.serverName | quote }}
+      private_key: matrix_key.pem
+      key_validity_period: 168h0m0s
+      database:
+        connection_string: "postgresql://{{ .Values.postgresql.auth.username }}:$(DENDRITE_DATABASE_PASSWORD)@{{ .Values.dendrite.database.host | default (include "alfred.postgresql.host" .) }}:{{ .Values.postgresql.service.port }}/{{ .Values.dendrite.database.name }}?sslmode=disable"
+        max_open_conns: 90
+        max_idle_conns: 5
+        conn_max_lifetime: -1
+      jetstream:
+        storage_path: /var/dendrite/jetstream
+      metrics:
+        enabled: false
+
+    app_service_api:
+      database:
+        connection_string: "postgresql://{{ .Values.postgresql.auth.username }}:$(DENDRITE_DATABASE_PASSWORD)@{{ .Values.dendrite.database.host | default (include "alfred.postgresql.host" .) }}:{{ .Values.postgresql.service.port }}/{{ .Values.dendrite.database.name }}?sslmode=disable"
+
+    client_api:
+      registration_disabled: false
+
+    federation_api:
+      database:
+        connection_string: "postgresql://{{ .Values.postgresql.auth.username }}:$(DENDRITE_DATABASE_PASSWORD)@{{ .Values.dendrite.database.host | default (include "alfred.postgresql.host" .) }}:{{ .Values.postgresql.service.port }}/{{ .Values.dendrite.database.name }}?sslmode=disable"
+
+    key_server:
+      database:
+        connection_string: "postgresql://{{ .Values.postgresql.auth.username }}:$(DENDRITE_DATABASE_PASSWORD)@{{ .Values.dendrite.database.host | default (include "alfred.postgresql.host" .) }}:{{ .Values.postgresql.service.port }}/{{ .Values.dendrite.database.name }}?sslmode=disable"
+
+    media_api:
+      base_path: /var/dendrite/media
+      max_file_size_bytes: 10485760
+      database:
+        connection_string: "postgresql://{{ .Values.postgresql.auth.username }}:$(DENDRITE_DATABASE_PASSWORD)@{{ .Values.dendrite.database.host | default (include "alfred.postgresql.host" .) }}:{{ .Values.postgresql.service.port }}/{{ .Values.dendrite.database.name }}?sslmode=disable"
+
+    room_server:
+      database:
+        connection_string: "postgresql://{{ .Values.postgresql.auth.username }}:$(DENDRITE_DATABASE_PASSWORD)@{{ .Values.dendrite.database.host | default (include "alfred.postgresql.host" .) }}:{{ .Values.postgresql.service.port }}/{{ .Values.dendrite.database.name }}?sslmode=disable"
+
+    sync_api:
+      database:
+        connection_string: "postgresql://{{ .Values.postgresql.auth.username }}:$(DENDRITE_DATABASE_PASSWORD)@{{ .Values.dendrite.database.host | default (include "alfred.postgresql.host" .) }}:{{ .Values.postgresql.service.port }}/{{ .Values.dendrite.database.name }}?sslmode=disable"
+
+    user_api:
+      database:
+        connection_string: "postgresql://{{ .Values.postgresql.auth.username }}:$(DENDRITE_DATABASE_PASSWORD)@{{ .Values.dendrite.database.host | default (include "alfred.postgresql.host" .) }}:{{ .Values.postgresql.service.port }}/{{ .Values.dendrite.database.name }}?sslmode=disable"
+
+    mscs:
+      database:
+        connection_string: "postgresql://{{ .Values.postgresql.auth.username }}:$(DENDRITE_DATABASE_PASSWORD)@{{ .Values.dendrite.database.host | default (include "alfred.postgresql.host" .) }}:{{ .Values.postgresql.service.port }}/{{ .Values.dendrite.database.name }}?sslmode=disable"
+{{- end }}

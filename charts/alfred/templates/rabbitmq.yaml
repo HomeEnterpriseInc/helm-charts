@@ -1,0 +1,193 @@
+{{- if .Values.rabbitmq.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "alfred.fullname" . }}-rabbitmq
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: rabbitmq
+spec:
+  serviceName: {{ include "alfred.fullname" . }}-rabbitmq
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "alfred.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: rabbitmq
+  template:
+    metadata:
+      labels:
+        {{- include "alfred.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: "{{ .Values.rabbitmq.image.repository }}:{{ .Values.rabbitmq.image.tag }}"
+          ports:
+            - name: amqp
+              containerPort: 5672
+              protocol: TCP
+            - name: management
+              containerPort: 15672
+              protocol: TCP
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: {{ .Values.rabbitmq.auth.username | quote }}
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "alfred.fullname" . }}-secrets
+                  key: rabbitmq-password
+            # Enable durable queues by default
+            - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS
+              value: "+S 2:2 +sbwt none"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          livenessProbe:
+            exec:
+              command:
+                - rabbitmq-diagnostics
+                - -q
+                - ping
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - rabbitmq-diagnostics
+                - -q
+                - check_running
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/rabbitmq/mnesia
+            - name: config
+              mountPath: /etc/rabbitmq/conf.d/20-custom.conf
+              subPath: rabbitmq.conf
+              readOnly: true
+            - name: definitions
+              mountPath: /etc/rabbitmq/definitions.json
+              subPath: definitions.json
+              readOnly: true
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "alfred.fullname" . }}-rabbitmq
+        - name: config
+          configMap:
+            name: {{ include "alfred.fullname" . }}-rabbitmq-config
+        - name: definitions
+          configMap:
+            name: {{ include "alfred.fullname" . }}-rabbitmq-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "alfred.fullname" . }}-rabbitmq
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: rabbitmq
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.rabbitmq.service.amqpPort }}
+      targetPort: amqp
+      protocol: TCP
+      name: amqp
+    - port: {{ .Values.rabbitmq.service.managementPort }}
+      targetPort: management
+      protocol: TCP
+      name: management
+  selector:
+    {{- include "alfred.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: rabbitmq
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "alfred.fullname" . }}-rabbitmq-config
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: rabbitmq
+data:
+  rabbitmq.conf: |
+    # Durable queues and persistence
+    queue.default.durable = true
+    queue.default.auto_delete = false
+
+    # Management plugin
+    management.load_definitions = /etc/rabbitmq/definitions.json
+
+    # Limits
+    vm_memory_high_watermark.relative = 0.7
+    disk_free_limit.relative = 1.5
+
+  definitions.json: |
+    {
+      "vhosts": [
+        {"name": "/"}
+      ],
+      "queues": [
+        {
+          "name": "alfred.events",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {}
+        },
+        {
+          "name": "alfred.tasks",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {}
+        },
+        {
+          "name": "alfred.notifications",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {}
+        }
+      ],
+      "exchanges": [
+        {
+          "name": "alfred.exchange",
+          "vhost": "/",
+          "type": "topic",
+          "durable": true,
+          "auto_delete": false
+        }
+      ],
+      "bindings": [
+        {
+          "source": "alfred.exchange",
+          "vhost": "/",
+          "destination": "alfred.events",
+          "destination_type": "queue",
+          "routing_key": "event.#"
+        },
+        {
+          "source": "alfred.exchange",
+          "vhost": "/",
+          "destination": "alfred.tasks",
+          "destination_type": "queue",
+          "routing_key": "task.#"
+        },
+        {
+          "source": "alfred.exchange",
+          "vhost": "/",
+          "destination": "alfred.notifications",
+          "destination_type": "queue",
+          "routing_key": "notify.#"
+        }
+      ]
+    }
+{{- end }}

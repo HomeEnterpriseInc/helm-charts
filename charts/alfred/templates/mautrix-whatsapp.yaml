@@ -1,0 +1,105 @@
+{{- if .Values.mautrixWhatsapp.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "alfred.fullname" . }}-mautrix-whatsapp
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mautrix-whatsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "alfred.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: mautrix-whatsapp
+  template:
+    metadata:
+      labels:
+        {{- include "alfred.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: mautrix-whatsapp
+    spec:
+      containers:
+        - name: mautrix-whatsapp
+          image: "{{ .Values.mautrixWhatsapp.image.repository }}:{{ .Values.mautrixWhatsapp.image.tag }}"
+          ports:
+            - name: http
+              containerPort: 29318
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /data/config.yaml
+              subPath: config.yaml
+              readOnly: true
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "alfred.fullname" . }}-mautrix-whatsapp-config
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "alfred.fullname" . }}-mautrix-whatsapp
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mautrix-whatsapp
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.mautrixWhatsapp.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "alfred.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: mautrix-whatsapp
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "alfred.fullname" . }}-mautrix-whatsapp-config
+  labels:
+    {{- include "alfred.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mautrix-whatsapp
+data:
+  config.yaml: |
+    homeserver:
+      address: "http://{{ include "alfred.dendrite.host" . }}:{{ .Values.dendrite.service.port }}"
+      domain: {{ .Values.dendrite.serverName | quote }}
+
+    appservice:
+      address: "http://{{ include "alfred.fullname" . }}-mautrix-whatsapp:{{ .Values.mautrixWhatsapp.service.port }}"
+      hostname: "0.0.0.0"
+      port: {{ .Values.mautrixWhatsapp.service.port }}
+      database:
+        type: postgres
+        uri: "postgresql://{{ .Values.postgresql.auth.username }}:$(POSTGRES_PASSWORD)@{{ include "alfred.postgresql.host" . }}:{{ .Values.postgresql.service.port }}/mautrix_whatsapp?sslmode=disable"
+
+    bridge:
+      username_template: "whatsapp_{{`{{.}}`}}"
+      displayname_template: "{{`{{.PushName}}`}} (WA)"
+      personal_filtering_spaces: true
+      delivery_receipts: true
+      portal_message_buffer: 128
+      encryption:
+        allow: true
+        default: true
+        require: false
+        appservice: false
+
+    logging:
+      min_level: warn
+      writers:
+        - type: stdout
+          format: pretty-colored
+{{- end }}
