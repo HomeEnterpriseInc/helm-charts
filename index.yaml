@@ -122,6 +122,17 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/adguard-0.1/adguard-0.1.tgz
     version: "0.1"
+  alfred:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-03-24T22:59:20.358310873Z"
+    description: Alfred AI Home Assistant
+    digest: dbb1c5422424483582c13c566336e9ab39321f18ff240278a1e23ef00556c4b5
+    name: alfred
+    type: application
+    urls:
+    - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/alfred-0.1.0/alfred-0.1.0.tgz
+    version: 0.1.0
   application:
   - apiVersion: v2
     appVersion: v0.1
@@ -2398,4 +2409,4 @@ entries:
     urls:
     - https://github.com/HomeEnterpriseInc/helm-charts/releases/download/wordpress-0.1/wordpress-0.1.tgz
     version: "0.1"
-generated: "2026-03-19T14:44:38.255764261Z"
+generated: "2026-03-24T22:59:20.359018867Z"
